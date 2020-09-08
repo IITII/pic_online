@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",
     "vue": "^2.6.11",
+    "vue-waterfall-easy": "^2.4.4",
     "vuejs-logger": "^1.5.4"
   },
   "devDependencies": {

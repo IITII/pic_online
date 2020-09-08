@@ -26,6 +26,7 @@
             :filter-node-method="filterNode"
             :props="defaultProps"
             class="filter-tree"
+            :empty-text="empty_text"
             default-expand-all
             @node-click="handleNodeClick">
         </el-tree>
@@ -52,7 +53,16 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data);
+      // 判断是否为 '叶子节点'
+      if (data.children.length === 0) {
+        this.$emit('pic_node_click', data.id);
+      } else {
+        this.$notify({
+          title: '警告',
+          message: '请选择有效节点，即不可再展开节点',
+          type: 'warning'
+        });
+      }
     },
     handleClose(done) {
       done();
@@ -67,6 +77,7 @@ export default {
   },
   data() {
     return {
+      empty_text: "...",
       windows_href: "",
       drawer: false,
       direction: 'ltr',

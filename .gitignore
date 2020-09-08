@@ -5,6 +5,7 @@ node_modules
 .vs
 .vscode
 tmp
+public/pic
 
 
 # local env files
