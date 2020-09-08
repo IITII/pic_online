@@ -11,6 +11,8 @@
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
     "vue": "^2.6.11",
     "vue-waterfall-easy": "^2.4.4",
     "vuejs-logger": "^1.5.4"

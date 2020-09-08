@@ -30,7 +30,7 @@
             default-expand-all
             @node-click="handleNodeClick">
         </el-tree>
-
+        <pic_footer/>
       </div>
 
     </el-drawer>
@@ -39,8 +39,13 @@
 </template>
 
 <script>
+import pic_footer from "@/components/pic_footer";
+
 export default {
   name: "nav_bar",
+  components: {
+    pic_footer,
+  },
   props: {
     tree_data: {
       required: true
