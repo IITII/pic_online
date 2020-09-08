@@ -23,6 +23,19 @@ export default {
       type: [Array],
       required: true
     }
+  },
+  watch: {
+    // Watch for props, if urls length
+    // equal zero throws waring
+    urls: function (new_val) {
+      if (new_val.length === 0) {
+        this.$notify({
+          title: '警告',
+          message: '节点为空',
+          type: 'warning'
+        });
+      }
+    }
   }
 }
 </script>

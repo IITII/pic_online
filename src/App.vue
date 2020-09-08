@@ -55,17 +55,19 @@ export default {
       keyMap: [],
       tree_data: {},
       node_id: 1,
-      pic_urls: '',
     }
   },
   methods: {
     update_node_id: function (node_id) {
-      // console.log(`App.vue node id: ${node_id}`)
+      // console.log(`App.vue node id: ${node_id}`);
       this.node_id = node_id;
     },
     imgErrorEvent: function (imgItem) {
       console.log('图片加载错误', imgItem)
-    }
+    },
+    isNil: function (object) {
+      return object == null;
+    },
   },
   computed: {
     /**
@@ -75,7 +77,8 @@ export default {
     update_urls_by_node_id: function () {
       let map = new Map(this.keyMap);
       let string = map.get(this.node_id);
-      if (string === undefined || string === null || string.length === 0) {
+      console.log(`node_id: ${this.node_id}, value: ${string}`);
+      if (this.isNil(string)) {
         return [];
       }
       return string;
@@ -85,11 +88,7 @@ export default {
      * @return {[]|*[]}
      */
     render_waterfall_by_urls: function () {
-      let map = new Map(this.keyMap);
-      let string = map.get(this.node_id);
-      if (string === undefined || string === null || string.length === 0) {
-        return [];
-      }
+      let string = this.update_urls_by_node_id;
       let tmp = [];
       string.forEach(e => {
         tmp.push({
@@ -100,7 +99,7 @@ export default {
       });
       // console.log(tmp);
       return tmp;
-    }
+    },
   },
   mounted() {
     pic_axios.get('files')
