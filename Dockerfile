@@ -5,5 +5,5 @@ WORKDIR /pic_online
 RUN npm install && \
 apt clean && \
 cd ../
-EXPOSE 3000
-CMD ["npm","start"]
+EXPOSE 8080
+CMD ["npm","serve"]

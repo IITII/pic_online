@@ -4,11 +4,19 @@
     <!--    <el-radio-group v-model="direction">-->
     <!--      <el-radio label="ltr">从左往右开</el-radio>-->
     <!--    </el-radio-group>-->
-
-    <el-button style="width: 100%" type="primary" @click="drawer = true">
-      点我打开
-    </el-button>
-
+    <div style="display: inline">
+      <el-button style="width: 50%" type="primary" @click="drawer = true">
+        点我打开
+      </el-button>
+      <el-checkbox
+          :checked="checked_box"
+          border
+          style="margin-left: 5%"
+          @change="handleCheckBox"
+      >
+        显示标题
+      </el-checkbox>
+    </div>
     <el-drawer
         :before-close="handleClose"
         :direction="direction"
@@ -66,6 +74,10 @@ export default {
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
+    },
+    handleCheckBox: function (value) {
+      // console.log(`handleCheckBox ${value}`);
+      this.$emit('pic_handle_checkbox', value);
     }
   },
   mounted() {
@@ -73,6 +85,7 @@ export default {
   },
   data() {
     return {
+      checked_box: false,
       empty_text: "...",
       windows_href: "",
       drawer: false,

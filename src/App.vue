@@ -5,7 +5,12 @@
         <pic_nav_bar
             :tree_data="tree_data"
             @pic_node_click="update_node_id"
+            @pic_handle_checkbox="change_img_info"
         />
+        <!--        <pic_nav_bar-->
+        <!--            :tree_data="tree_data"-->
+        <!--            @pic_node_click="update_node_id"-->
+        <!--        />-->
       </el-header>
       <el-main id="water-fall">
         <div id="content">
@@ -14,11 +19,22 @@
               link-range="img"
               @imgError="imgErrorEvent"
               @scrollReachBottom="getData"
+              v-if="img_urls.length !== 0"
+              :loadingDotCount="loadingDotCount"
           >
-            <span slot-scope="props" class="some-info">
+            <span
+                v-show="img_info"
+                slot-scope="props"
+                class="some-info"
+            >
               {{ props.value.info }}
             </span>
+            <div slot="waterfall-over">waterfall-over</div>
+
           </vue-waterfall-easy>
+          <span v-if="show">
+              真的一张也没有了
+            </span>
           <!--          <el-divider></el-divider>-->
           <!--          <pic_view_list-->
           <!--              v-if="false"-->
@@ -59,13 +75,24 @@ export default {
       PRE_MAX: 10,
       img_urls: [],
       current_img_array: [],
+      loadingDotCount: 3,
+      img_info: false,
     }
   },
   methods: {
     update_node_id: function (node_id) {
-      // console.log(`App.vue node id: ${node_id}`);
-      this.node_id = node_id;
-      this.image_group = 0;
+      // console.log(`App.vue node id: ${node_id},this.node_id:${this.node_id}`);
+      if (node_id !== this.node_id) {
+        // Reset value
+        this.image_group = 0;
+        this.loadingDotCount = 3;
+        this.img_urls = new Map(this.keyMap).get(node_id);
+        this.node_id = node_id;
+        this.current_img_array = [];
+        this.getData();
+      } else {
+        this.node_id = node_id;
+      }
     },
     imgErrorEvent: function (imgItem) {
       console.log('图片加载错误', imgItem)
@@ -73,9 +100,11 @@ export default {
     isNil: function (object) {
       return object == null;
     },
-    getData: function () {
+    getData: function (low = null) {
       this.image_group++;
-      let low = (this.image_group - 1) * this.PRE_MAX;
+      low = low === null
+          ? (this.image_group - 1) * this.PRE_MAX
+          : low;
       let high = this.image_group * this.PRE_MAX;
       // console.log(`high: ${high},length: ${this.img_urls.length}`);
       if (low <= this.img_urls.length) {
@@ -84,9 +113,15 @@ export default {
         this.current_img_array = this.current_img_array.concat(data);
       }
       if (high > this.img_urls.length) {
-        console.log("waterfall over");
-        this.$refs.waterfall.waterfallOver();
+        // console.log("waterfall over");
+        // this.$refs.waterfall.waterfallOver();
+        this.loadingDotCount = 0;
       }
+    },
+    change_img_info: function (value) {
+      // console.log(`change_img_info:${value}`);
+      this.img_info = value;
+      // TODO: render waterfall after change
     }
   },
   computed: {
@@ -103,11 +138,8 @@ export default {
       }
       return string;
     },
-  },
-  watch: {
-    node_id: function (new_val) {
-      let map = new Map(this.keyMap);
-      this.img_urls = map.get(new_val);
+    show: function () {
+      return this.image_group * this.PRE_MAX > this.img_urls.length;
     }
   },
   mounted() {
@@ -174,7 +206,7 @@ body,
   #content {
     position: absolute;
     top: 32px;
-    bottom: 0;
+    bottom: 24px;
     width: 100%;
   }
 }
