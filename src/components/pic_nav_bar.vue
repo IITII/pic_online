@@ -21,7 +21,9 @@
         :before-close="handleClose"
         :direction="direction"
         :title="windows_href"
-        :visible.sync="drawer">
+        :visible.sync="drawer"
+        class="over-flow-y"
+    >
       <div>
         <el-input
             v-model="filterText"
@@ -102,5 +104,9 @@ export default {
 </script>
 
 <style scoped>
+
+.over-flow-y {
+  overflow-y: auto;
+}
 
 </style>
