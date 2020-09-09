@@ -22,7 +22,6 @@
         :direction="direction"
         :title="windows_href"
         :visible.sync="drawer"
-        class="over-flow-y"
     >
       <div>
         <el-input
@@ -103,10 +102,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<!--为了使 css 样式透传，去除了 scope-->
+<!--See: https://vue-loader-v14.vuejs.org/zh-cn/features/scoped-css.html-->
+<style lang="scss">
 
-.over-flow-y {
-  overflow-y: auto;
+/*1.显示滚动条：当内容超出容器的时候，可以拖动：*/
+.el-drawer__body {
+  overflow: auto;
 }
 
+/*2.隐藏滚动条，太丑了*/
+.el-drawer__container ::-webkit-scrollbar {
+  display: none;
+}
 </style>
