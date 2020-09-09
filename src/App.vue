@@ -9,8 +9,8 @@
       </el-header>
       <el-main id="water-fall">
         <div id="content">
-          <vue_waterfall_easy
-              :imgs-arr="render_waterfall_by_urls"
+          <vue-waterfall-easy
+              :imgs-arr="current_img_array"
               link-range="img"
               @imgError="imgErrorEvent"
               @scrollReachBottom="getData"
@@ -18,8 +18,7 @@
             <span slot-scope="props" class="some-info">
               {{ props.value.info }}
             </span>
-            <div slot="waterfall-over">waterfall-over</div>
-          </vue_waterfall_easy>
+          </vue-waterfall-easy>
           <!--          <el-divider></el-divider>-->
           <!--          <pic_view_list-->
           <!--              v-if="false"-->
@@ -33,11 +32,8 @@
 
 <script>
 import pic_nav_bar from "@/components/pic_nav_bar";
-import vue_waterfall_easy from "vue-waterfall-easy";
-// import pic_view_list from "@/views/pic_view_list";
+import vueWaterfallEasy from "vue-waterfall-easy";
 import axios from 'axios';
-
-const path = require('path');
 
 const op = {
   baseURL: "http://127.0.0.1:3000/",
@@ -52,14 +48,14 @@ export default {
   components: {
     // pic_view_list,
     pic_nav_bar,
-    vue_waterfall_easy
+    vueWaterfallEasy
   },
   data() {
     return {
       keyMap: [],
       tree_data: {},
       node_id: 1,
-      image_group: 1,
+      image_group: 0,
       PRE_MAX: 10,
       img_urls: [],
       current_img_array: [],
@@ -79,16 +75,17 @@ export default {
     },
     getData: function () {
       this.image_group++;
-      console.log(this.image_group);
+      let low = (this.image_group - 1) * this.PRE_MAX;
       let high = this.image_group * this.PRE_MAX;
-      console.log(`high: ${high},length: ${this.img_urls.length}`)
+      // console.log(`high: ${high},length: ${this.img_urls.length}`);
+      if (low <= this.img_urls.length) {
+        // console.log("low<");
+        let data = this.img_urls.slice(low, high);
+        this.current_img_array = this.current_img_array.concat(data);
+      }
       if (high > this.img_urls.length) {
-        console.log(">");
-        this.current_img_array = this.img_urls;
+        console.log("waterfall over");
         this.$refs.waterfall.waterfallOver();
-      } else if (high < this.img_urls.length) {
-        console.log("<");
-        this.current_img_array = this.img_urls.slice(0, high);
       }
     }
   },
@@ -105,26 +102,6 @@ export default {
         return [];
       }
       return string;
-    },
-    /**
-     * re-calc for waterfall
-     * @return {[]|*[]}
-     */
-    render_waterfall_by_urls: function () {
-      let tmp = [];
-      this.img_urls.forEach(e => {
-        let info = path.basename(e).split(".");
-        // remove extend name
-        info.pop();
-        info = info.join('.');
-        tmp.push({
-          src: e,
-          href: e,
-          info: info,
-        });
-      });
-      // console.log(`waterfall: ${JSON.stringify(tmp)}`);
-      return tmp;
     },
   },
   watch: {
@@ -143,8 +120,7 @@ export default {
             // update to img_urls
             let map = new Map(this.keyMap);
             this.img_urls = map.get(this.node_id);
-            // Init array
-            this.current_img_array = this.img_urls.slice(0, this.PRE_MAX);
+            this.getData();
           } else {
             console.error({
               status: res.status,
