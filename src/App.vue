@@ -1,29 +1,28 @@
 <template>
   <div id="app" class="full-height">
     <el-container class="full-height">
-      <el-header>
+      <el-header class="aside">
         <pic_nav_bar
             :tree_data="tree_data"
             @pic_node_click="update_node_id"
             @pic_handle_checkbox="change_img_info"
         />
-        <!--        <pic_nav_bar-->
-        <!--            :tree_data="tree_data"-->
-        <!--            @pic_node_click="update_node_id"-->
-        <!--        />-->
       </el-header>
       <el-main id="water-fall">
+        <!--        <div id="water-fall">-->
         <div id="content">
           <vue-waterfall-easy
-              :imgs-arr="current_img_array"
+              v-if="water_fall.img_urls.length !== 0"
               link-range="img"
               @imgError="imgErrorEvent"
               @scrollReachBottom="getData"
-              v-if="img_urls.length !== 0"
-              :loadingDotCount="loadingDotCount"
+              :imgs-arr="water_fall.current_img_array"
+              :loadingDotCount="water_fall.loadingDotCount"
+              :loadingTimeOut="water_fall.loadingTimeOut"
+              :reachBottomDistance="reach_bottom_distance"
           >
             <span
-                v-show="img_info"
+                v-show="water_fall.img_info"
                 slot-scope="props"
                 class="some-info"
             >
@@ -41,6 +40,7 @@
           <!--              :urls="update_urls_by_node_id"-->
           <!--          />-->
         </div>
+        <!--        </div>-->
       </el-main>
     </el-container>
   </div>
@@ -50,14 +50,14 @@
 import pic_nav_bar from "@/components/pic_nav_bar";
 import vueWaterfallEasy from "vue-waterfall-easy";
 import axios from 'axios';
+import cookies_op from "@/utils/cookies_op";
 
-const op = {
-  baseURL: "http://127.0.0.1:3000/",
-  timeout: 5000,
-  timeoutErrorMessage: 'timeout',
-  proxy: null,
+axios.defaults.timeout = 2000;
+axios.defaults.timeoutErrorMessage = 'timeout';
+
+const cookies_name = {
+  requestURL: 'request_url',
 };
-const pic_axios = axios.create(op);
 
 export default {
   name: 'app',
@@ -71,12 +71,19 @@ export default {
       keyMap: [],
       tree_data: {},
       node_id: 1,
-      image_group: 0,
-      PRE_MAX: 10,
-      img_urls: [],
-      current_img_array: [],
-      loadingDotCount: 3,
-      img_info: false,
+      //See: https://github.com/lfyfly/vue-waterfall-easy/blob/master/README-CN.md#3-%E7%BB%84%E4%BB%B6%E5%8F%82%E6%95%B0
+      water_fall: {
+        image_group: 0,
+        PRE_MAX: 10,
+        img_urls: [],
+        current_img_array: [],
+        loadingDotCount: 3,
+        img_info: false,
+        loadingTimeOut: 500,
+      },
+      axios: {
+        requestURL: 'http://localhost:3000/files'
+      },
     }
   },
   methods: {
@@ -84,11 +91,11 @@ export default {
       // console.log(`App.vue node id: ${node_id},this.node_id:${this.node_id}`);
       if (node_id !== this.node_id) {
         // Reset value
-        this.image_group = 0;
-        this.loadingDotCount = 3;
-        this.img_urls = new Map(this.keyMap).get(node_id);
+        this.water_fall.image_group = 0;
+        this.water_fall.loadingDotCount = 3;
+        this.water_fall.img_urls = new Map(this.keyMap).get(node_id);
         this.node_id = node_id;
-        this.current_img_array = [];
+        this.water_fall.current_img_array = [];
         this.getData();
       } else {
         this.node_id = node_id;
@@ -101,26 +108,26 @@ export default {
       return object == null;
     },
     getData: function (low = null) {
-      this.image_group++;
+      this.water_fall.image_group++;
       low = low === null
-          ? (this.image_group - 1) * this.PRE_MAX
+          ? (this.water_fall.image_group - 1) * this.water_fall.PRE_MAX
           : low;
-      let high = this.image_group * this.PRE_MAX;
-      // console.log(`high: ${high},length: ${this.img_urls.length}`);
-      if (low <= this.img_urls.length) {
+      let high = this.water_fall.image_group * this.water_fall.PRE_MAX;
+      // console.log(`high: ${high},length: ${this.water_fall.img_urls.length}`);
+      if (low <= this.water_fall.img_urls.length) {
         // console.log("low<");
-        let data = this.img_urls.slice(low, high);
-        this.current_img_array = this.current_img_array.concat(data);
+        let data = this.water_fall.img_urls.slice(low, high);
+        this.water_fall.current_img_array = this.water_fall.current_img_array.concat(data);
       }
-      if (high > this.img_urls.length) {
+      if (high > this.water_fall.img_urls.length) {
         // console.log("waterfall over");
         // this.$refs.waterfall.waterfallOver();
-        this.loadingDotCount = 0;
+        this.water_fall.loadingDotCount = 0;
       }
     },
     change_img_info: function (value) {
       // console.log(`change_img_info:${value}`);
-      this.img_info = value;
+      this.water_fall.img_info = value;
       // TODO: render waterfall after change
     }
   },
@@ -139,35 +146,88 @@ export default {
       return string;
     },
     show: function () {
-      return this.image_group * this.PRE_MAX > this.img_urls.length;
-    }
+      return this.water_fall.image_group * this.water_fall.PRE_MAX > this.water_fall.img_urls.length;
+    },
+    reach_bottom_distance: function () {
+      const proportion = 0.3;
+      return screen.height * proportion;
+    },
   },
   mounted() {
-    pic_axios.get('files')
+    // load setting from cookies
+    cookies_op.parseCookies();
+    let tmp = cookies_op.getCookieValueByKey(cookies_name.requestURL);
+    if (tmp !== '') {
+      try {
+        new URL(tmp);
+        this.axios.requestURL = tmp;
+      } catch (e) {
+        this.$notify({
+          title: 'Cookies URL 解析失败',
+          message: `Error Info: ${e.message}, URL: ${tmp}`,
+          type: 'error'
+        });
+        this.$notify({
+          title: '警告',
+          message: `使用默认URL地址，URL: ${this.axios.requestURL}`,
+          type: 'warning'
+        });
+        // remove invalid cookies
+        cookies_op.deleteCookie(cookies_name.requestURL);
+      }
+    }
+    // request for data
+    axios.get(this.axios.requestURL)
         .then(res => {
           if (res.status === 200) {
-            let parse = res.data;
-            this.tree_data = parse.tree_data;
-            this.keyMap = parse.keyMap;
-            // update to img_urls
-            let map = new Map(this.keyMap);
-            this.img_urls = map.get(this.node_id);
-            this.getData();
+            try {
+              let parse = res.data;
+              this.tree_data = parse.tree_data;
+              this.keyMap = parse.keyMap;
+              // update to img_urls
+              let map = new Map(this.keyMap);
+              this.water_fall.img_urls = map.get(this.node_id);
+              this.getData();
+              this.$notify({
+                title: '成功',
+                message: "成功获取并解析数据!!!",
+                type: 'success'
+              });
+            } catch (e) {
+              this.$notify({
+                title: e.name,
+                message: "数据解析失败!!!",
+                type: 'warning'
+              });
+            }
           } else {
+            this.$notify({
+              title: '警告',
+              message: `加载失败!!! `
+                  + `Error Code: ${res.status}, `
+                  + `Error Message: ${res.statusText}`,
+              type: 'warning'
+            });
             console.error({
               status: res.status,
               statusText: res.statusText,
               body: res.data
             });
-            alert("加载失败!!!");
           }
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+          this.$notify({
+            title: e.name,
+            message: e.message,
+            type: 'error'
+          });
+          console.log(e);
+        });
   }
 }
 </script>
 
-<style lang="scss">
+<style scoped>
 #app {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -175,6 +235,15 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+.aside {
+  position: absolute;
+  width: 100%;
+}
+</style>
+
+<!--style for waterfall-->
+<style lang="scss">
 
 .full-height {
   height: 100%;
@@ -205,7 +274,7 @@ body,
 
   #content {
     position: absolute;
-    top: 32px;
+    top: 3px;
     bottom: 24px;
     width: 100%;
   }
@@ -214,6 +283,8 @@ body,
 #water-fall {
   overflow: auto;
   position: relative;
+  // rewrite el-main style
+  padding: 0;
 
   .some-info {
     line-height: 1.6;
