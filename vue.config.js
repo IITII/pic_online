@@ -6,9 +6,10 @@
 const path = require('path');
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? process.env.PIC_DEPLOY_FIR || '/pic/'
+    ? process.env.PIC_DEPLOY_FIR || '/waterfall/'
     : '/',
   outputDir: path.resolve(
     process.env.PIC_OUTPUT_DIR || './dist'
   ),
+  productionSourceMap: false,
 }

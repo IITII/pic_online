@@ -2,6 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import './plugins/element.js'
 import VueLogger from 'vuejs-logger';
+//Vue Router 路由管理
+import router from '@/routes/routes'
+// Vuex Vue store
+import store from '@/stores';
 // for draggable component
 // import VueDragResize from 'vue-drag-resize';
 
@@ -22,5 +26,7 @@ Vue.use(VueLogger, options);
 Vue.config.productionTip = false
 
 new Vue({
+  router,
+  store,
   render: h => h(App),
 }).$mount('#app')

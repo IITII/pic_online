@@ -13,18 +13,20 @@
     "element-ui": "^2.4.5",
     "vue": "^2.6.11",
     "vue-drag-resize": "^1.4.2",
+    "vue-router": "^3.4.6",
     "vue-waterfall-easy": "^2.4.4",
-    "vuejs-logger": "^1.5.4"
+    "vuejs-logger": "^1.5.4",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "sass": "^1.26.10",
-    "sass-loader": "^10.0.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
     "vue-cli-plugin-element": "~1.0.1",
     "vue-template-compiler": "^2.6.11"
   },

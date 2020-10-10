@@ -3,7 +3,7 @@
     <div class="float_container">
       <div class="control_btn">
         <div>
-          <el-tooltip class="item" content="打开侧栏" effect="dark" placement="left">
+          <el-tooltip :content="control_btn.drawer.tooltip" class="item" effect="dark" placement="left">
             <el-button circle
                        icon="el-icon-s-unfold"
                        type="primary"
@@ -12,66 +12,60 @@
           </el-tooltip>
         </div>
         <div>
-          <el-tooltip class="item" content="设置" effect="dark" placement="left">
+          <el-tooltip :content="control_btn.dialog.tooltip" class="item" effect="dark" placement="left">
             <el-button circle
                        icon="el-icon-setting"
                        type="info"
-                       @click="treeDrawer.visible = true"
+                       @click="setting_visible_sync = !setting_visible_sync"
             />
           </el-tooltip>
         </div>
-        <div>
-          <el-checkbox
-              :checked="checked_box"
-              border
-              @change="handleCheckBox"
-          >
-          </el-checkbox>
-        </div>
-        <div>
-          <el-backtop
-              target="#content"
-          />
-        </div>
       </div>
     </div>
-    <el-drawer
-        :before-close="handleClose"
-        :direction="treeDrawer.direction"
-        :modal="common.modal"
-        :size="drawer_size"
-        :title="common.windows_href"
-        :visible.sync="treeDrawer.visible"
-    >
-      <div>
-        <el-input
-            v-model="treeDrawer.filterText"
-            placeholder="输入关键字进行过滤">
-        </el-input>
+    <!--    drawer-->
+    <div>
+      <el-drawer
+          :before-close="handleClose"
+          :direction="treeDrawer.direction"
+          :modal="common.modal"
+          :size="drawer_size"
+          :title="common.windows_href"
+          :visible.sync="treeDrawer.visible"
+      >
+        <div>
+          <el-input
+              v-model="treeDrawer.filterText"
+              :placeholder="treeDrawer.placeHolder">
+          </el-input>
 
-        <el-tree
-            ref="tree"
-            :data="tree_data"
-            :filter-node-method="filterNode"
-            :props="defaultProps"
-            class="filter-tree"
-            :empty-text="common.empty_text"
-            default-expand-all
-            @node-click="handleNodeClick">
-        </el-tree>
-        <pic_footer/>
-      </div>
+          <el-tree
+              ref="tree"
+              :data="tree_data"
+              :empty-text="common.empty_text"
+              :filter-node-method="filterNode"
+              :props="defaultProps"
+              class="filter-tree"
+              default-expand-all
+              @node-click="handleNodeClick">
+          </el-tree>
+          <pic_footer/>
+        </div>
 
-    </el-drawer>
+      </el-drawer>
+    </div>
+    <!--    dialog-->
+    <setting/>
   </div>
 </template>
 
 <script>
 import pic_footer from "@/components/pic_footer";
+import setting from '@/components/setting';
 
 export default {
   name: "nav_bar",
   components: {
+    setting,
     pic_footer,
   },
   props: {
@@ -80,7 +74,20 @@ export default {
     }
   },
   watch: {
-    filterText(val) {
+    /**
+     * 通过对内部属性 filterText 使用 computed 和 watch 进行计算和监听
+     * 当然如果使用单引号或者双引号将变量名称包裹也是可以实现的，比如：
+     * <code>
+     *   watch:{
+     *     "treeDrawer.filterText": function(){
+     *        // do something
+     *     }
+     *   }
+     * </code>
+     * @param val
+     */
+    filter_text_computed(val) {
+      this.$log.debug(`Filtering ${val}`);
       this.$refs.tree.filter(val);
     }
   },
@@ -92,20 +99,28 @@ export default {
       done();
     },
     filterNode(value, data) {
-      if (!value) return true;
+      this.$log.debug(`Filtering Node ${value}`);
+      if (!value) {
+        return true;
+      }
       return data.label.indexOf(value) !== -1;
     },
-    handleCheckBox: function (value) {
-      // console.log(`handleCheckBox ${value}`);
-      this.$emit('pic_handle_checkbox', value);
-    }
   },
   mounted() {
     this.common.windows_href = window.location.href;
   },
   data() {
     return {
+      control_btn: {
+        drawer: {
+          tooltip: '打开侧栏',
+        },
+        dialog: {
+          tooltip: '设置',
+        },
+      },
       checked_box: false,
+      // setting_visible_sync: false,
       common: {
         empty_text: "...",
         windows_href: "",
@@ -115,14 +130,26 @@ export default {
         visible: false,
         direction: 'ltr',
         filterText: '',
+        placeHolder: '输入关键字进行过滤',
       },
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
     };
   },
   computed: {
+    filter_text_computed: function () {
+      return this.treeDrawer.filterText;
+    },
+    setting_visible_sync: {
+      get: function () {
+        return this.$store.getters['ui_control/showSettingDialog'];
+      },
+      set: function () {
+        return this.$store.dispatch('ui_control/reverseShowSettingDialog')
+      }
+    },
     drawer_size: function () {
       const userAgentInfo = navigator.userAgent;
       const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
