@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {isEmptyString, isUrl} from '@/utils/validate';
+import {isEmptyString} from '@/utils/validate';
 import {removeAll} from '@/utils/data_persistent';
 
 export default {
@@ -119,7 +119,8 @@ export default {
   },
   methods: {
     submit_setting: function () {
-      if (isEmptyString(this.form.url) || !isUrl(this.form.url)) {
+      // 需要考虑 url 不以 http 开头的情况
+      if (isEmptyString(this.form.url)) {
         this.$notify({
           title: '无效的URL',
           message: `请填写有效的URL`,

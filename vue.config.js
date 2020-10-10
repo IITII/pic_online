@@ -11,5 +11,5 @@ module.exports = {
   outputDir: path.resolve(
     process.env.PIC_OUTPUT_DIR || './dist'
   ),
-  productionSourceMap: false,
+  productionSourceMap: process.env.PIC_SOURCE_MAP || false,
 }

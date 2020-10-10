@@ -7,16 +7,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import local_op from '@/utils/data_persistent';
-import {isUrl} from '@/utils/validate';
 
 Vue.use(Vuex);
 
 const local_setting = local_op.get() || {};
 // console.log(`url: ${local_setting.url}, isUrl: ${isUrl(local_setting.url)}`);
 const state = {
-  url: isUrl(local_setting.url)
-    ? local_setting.url
-    : 'http://localhost:3000/files',
+  // 需要考虑 url 不以 http 开头的情况
+  url: local_setting.url || '../static/mock/data.json',
   method: ['GET', 'POST'].indexOf(local_setting.method) >= 0
     ? local_setting.method
     : 'GET',

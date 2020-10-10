@@ -6,6 +6,7 @@ node_modules
 .vscode
 tmp
 public/pic
+/public/static
 
 
 # local env files
@@ -19,8 +20,6 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
