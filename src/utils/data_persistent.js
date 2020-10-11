@@ -3,6 +3,7 @@
  * @date 2020/10/10 10:26
  * base on localStorage
  */
+
 'use strict';
 import {isJson} from '@/utils/validate';
 
@@ -26,6 +27,7 @@ export function set(val, key = default_key) {
  * @param key
  */
 export function update(val, key = default_key) {
+  // console.log(`val: ${JSON.stringify(val)}, key:${key}`);
   if (typeof val === 'object') {
     val = JSON.stringify(val);
   }
@@ -40,10 +42,9 @@ export function update(val, key = default_key) {
 export function get(key = default_key) {
   let tmp = localStorage.getItem(key);
   if (isJson(tmp)) {
-    return JSON.parse(tmp);
-  } else {
-    return tmp;
+    tmp = JSON.parse(tmp);
   }
+  return tmp || {};
 }
 
 /**

@@ -9,7 +9,7 @@ import local_op from '@/utils/data_persistent';
 
 Vue.use(Vuex);
 
-const local_setting = local_op.get() || {};
+let local_setting = local_op.get();
 const state = {
   // showPicTitle: local_setting.showPicTitle || false,
   showSettingDialog: local_setting.showSettingDialog || false,
@@ -52,6 +52,7 @@ const actions = {
   },
   setCheckboxGroup({commit}, arr) {
     commit('setCheckboxGroup', arr);
+    local_setting = local_op.get();
     local_setting.checkboxGroup = arr;
     local_op.update(local_setting);
   }

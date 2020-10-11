@@ -58,3 +58,39 @@ export function isUrl(url) {
 export function equalsIgnoreCase(str1, str2) {
   return str1.toUpperCase() === str2.toUpperCase();
 }
+
+/**
+ * 判断是否为电脑
+ * @return {boolean} true for pc
+ */
+export function isPC() {
+  const userAgentInfo = navigator.userAgent;
+  const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+  let isPc = true;
+  for (let v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      isPc = false;
+      break;
+    }
+  }
+  return isPc;
+}
+
+/**
+ * 自适应性布局
+ * @param pc 电脑端布局
+ * @param mobile 手机端布局
+ * @return {*} 适应性布局
+ */
+export function adaptiveLayout(pc, mobile) {
+  // 电脑端，drawer size 始终设置为 30%
+  if (isPC()) {
+    return pc;
+  }
+  // 手机端，进行 3:2 检测
+  if (screen.width * 3 > screen.height * 2) {
+    return pc;
+  } else {
+    return mobile;
+  }
+}

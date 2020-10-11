@@ -9,9 +9,14 @@
           :show-close="dialog.show_close"
           :title="dialog.title"
           :visible.sync="setting_visible_sync"
+          :fullscreen="dialog.fullscreen"
+          :width="dialog_width"
       >
         <el-form :model="form">
-          <el-form-item :label-width="formLabelWidth" label="URL">
+          <el-form-item
+              :label-width="formLabelWidth"
+              label="URL"
+          >
             <el-input
                 v-model="form.url"
                 autocomplete="off"
@@ -20,7 +25,10 @@
                 type="url"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-width="formLabelWidth" label="请求方式">
+          <el-form-item
+              :label-width="formLabelWidth"
+              label="请求方式"
+          >
             <el-select
                 v-model="form.method"
                 :span="dialog.span"
@@ -65,8 +73,8 @@
 </template>
 
 <script>
-import {isEmptyString} from '@/utils/validate';
-import {removeAll} from '@/utils/data_persistent';
+import {adaptiveLayout, isEmptyString} from '@/utils/validate';
+import {remove} from '@/utils/data_persistent';
 
 export default {
   name: "setting",
@@ -92,6 +100,7 @@ export default {
         show_close: true,
         center: true,
         span: 24,
+        fullscreen: false,
         methods: [
           {
             name: 'GET',
@@ -114,7 +123,7 @@ export default {
         method: '',
         checkbox_group_checked: [],
       },
-      formLabelWidth: '120px',
+      formLabelWidth: '5rem',
     }
   },
   methods: {
@@ -152,7 +161,7 @@ export default {
       this.$log.debug(`${this.checkbox_group_index}`)
     },
     removeAll: function () {
-      removeAll();
+      remove();
       this.$notify({
         title: '数据已清空',
         message: `请刷新查看结果`,
@@ -182,6 +191,10 @@ export default {
         });
         return tmp;
       },
+    },
+    dialog_width: function () {
+      const width = ['50%', '90%'];
+      return adaptiveLayout(width[0], width[1]);
     }
   },
   mounted() {

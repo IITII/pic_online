@@ -10,11 +10,12 @@ import local_op from '@/utils/data_persistent';
 
 Vue.use(Vuex);
 
-const local_setting = local_op.get() || {};
-// console.log(`url: ${local_setting.url}, isUrl: ${isUrl(local_setting.url)}`);
+let local_setting = local_op.get();
+// console.log(local_setting);
+// console.log(process.env);
 const state = {
   // 需要考虑 url 不以 http 开头的情况
-  url: local_setting.url || '../static/mock/data.json',
+  url: local_setting.url || process.env.VUE_APP_API_URL || '../static/mock/data.json',
   method: ['GET', 'POST'].indexOf(local_setting.method) >= 0
     ? local_setting.method
     : 'GET',
@@ -36,6 +37,7 @@ const actions = {
     commit('changeUrl', newUrl);
     // update localStorage data
     // maybe we need a debounce at here
+    local_setting = local_op.get();
     local_setting.url = newUrl;
     local_op.update(local_setting);
   },
@@ -43,6 +45,7 @@ const actions = {
     commit('changeMethod', method);
     // update localStorage data
     // maybe we need a debounce at here
+    local_setting = local_op.get();
     local_setting.method = method;
     local_op.update(local_setting);
   },

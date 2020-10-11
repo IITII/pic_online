@@ -61,6 +61,7 @@
 <script>
 import pic_footer from "@/components/pic_footer";
 import setting from '@/components/setting';
+import {adaptiveLayout} from '@/utils/validate';
 
 export default {
   name: "nav_bar",
@@ -151,26 +152,8 @@ export default {
       }
     },
     drawer_size: function () {
-      const userAgentInfo = navigator.userAgent;
-      const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
       const size = ['30%', '70%'];
-      let isPc = true;
-      for (let v = 0; v < Agents.length; v++) {
-        if (userAgentInfo.indexOf(Agents[v]) > 0) {
-          isPc = false;
-          break;
-        }
-      }
-      // 电脑端，drawer size 始终设置为 30%
-      if (isPc) {
-        return size[0];
-      }
-      // 手机端，进行 3:2 检测
-      if (screen.width * 3 > screen.height * 2) {
-        return size[0];
-      } else {
-        return size[1];
-      }
+      return adaptiveLayout(size[0], size[1]);
     }
   }
 }
