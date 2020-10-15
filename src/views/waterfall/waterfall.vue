@@ -43,7 +43,7 @@
 import pic_nav_bar from "@/components/pic_nav_bar";
 import vueWaterfallEasy from "vue-waterfall-easy";
 import axios from 'axios';
-import {equalsIgnoreCase} from '@/utils/validate';
+import {equalsIgnoreCase, isNil} from '@/utils/validate';
 
 export default {
   name: 'pic_waterfall',
@@ -96,9 +96,6 @@ export default {
         type: 'warning'
       });
     },
-    isNil: function (object) {
-      return object == null;
-    },
     getData: function (low = null) {
       this.water_fall.image_group++;
       low = low === null
@@ -121,7 +118,13 @@ export default {
       // console.log(`change_img_info:${value}`);
       this.water_fall.img_info = value;
       // TODO: render waterfall after change
-    }
+    },
+    beforeunloadFn: function () {
+      this.$log.debug(`refresh or close, saving node_id: ${this.node_id}`);
+      this.$store.dispatch('ui_control/setTreeNodeId', this.node_id);
+      // show dialog when user try to refresh page
+      // e.returnValue = 'dialog';
+    },
   },
   computed: {
     /**
@@ -131,7 +134,7 @@ export default {
       let map = new Map(this.keyMap);
       let string = map.get(this.node_id);
       // console.log(`node_id: ${this.node_id}, value: ${string}`);
-      if (this.isNil(string)) {
+      if (isNil(string)) {
         return [];
       }
       return string;
@@ -148,7 +151,7 @@ export default {
       return tmp.indexOf(0) >= 0;
     }
   },
-  mounted() {
+  beforeMount() {
     // this.$notify({
     //   title: 'Cookies URL 解析失败',
     //   message: `Error Info: ${e.message}, URL: ${tmp}`,
@@ -162,6 +165,9 @@ export default {
     // init
     axios.defaults.timeout = this.axios.timeout;
     axios.defaults.timeoutErrorMessage = this.axios.timeoutErrorMessage;
+    let localStorageNodeId = this.$store.getters['ui_control/treeNodeId'];
+    this.$log.debug(localStorageNodeId);
+    this.node_id = localStorageNodeId;
     let tmp;
     let method = this.$store.getters['api_setting/method'];
     let url = this.$store.getters['api_setting/url'];
@@ -216,6 +222,12 @@ export default {
           });
           console.log(e);
         });
+  },
+  created() {
+    window.addEventListener('beforeunload', e => this.beforeunloadFn(e));
+  },
+  destroyed() {
+    window.removeEventListener('beforeunload', e => this.beforeunloadFn(e));
   }
 }
 </script>

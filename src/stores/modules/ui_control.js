@@ -14,11 +14,13 @@ const state = {
   // showPicTitle: local_setting.showPicTitle || false,
   showSettingDialog: local_setting.showSettingDialog || false,
   checkboxGroup: local_setting.checkboxGroup || [],
+  treeNodeId: local_setting.treeNodeId || 1,
 };
 const getters = {
   // showPicTitle: state => state.showPicTitle,
   showSettingDialog: state => state.showSettingDialog,
   checkboxGroup: state => state.checkboxGroup,
+  treeNodeId: state => state.treeNodeId,
 };
 const mutations = {
   // reverseShowPicTitle(state) {
@@ -33,6 +35,9 @@ const mutations = {
   setCheckboxGroup(state, arr) {
     state.checkboxGroup = arr;
   },
+  setTreeNodeId(state, nodeId) {
+    state.treeNodeId = nodeId;
+  }
 };
 const actions = {
   // reverseShowPicTitle({commit}) {
@@ -55,7 +60,13 @@ const actions = {
     local_setting = local_op.get();
     local_setting.checkboxGroup = arr;
     local_op.update(local_setting);
-  }
+  },
+  setTreeNodeId({commit}, nodeId) {
+    commit('setTreeNodeId');
+    local_setting = local_op.get();
+    local_setting.treeNodeId = nodeId;
+    local_op.update(local_setting);
+  },
 };
 
 export default {

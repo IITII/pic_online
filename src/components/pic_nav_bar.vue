@@ -94,6 +94,7 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
+      this.$log.debug(data.id);
       this.$emit('pic_node_click', data.id);
     },
     handleClose(done) {
