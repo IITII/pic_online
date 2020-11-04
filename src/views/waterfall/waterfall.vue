@@ -4,6 +4,7 @@
       <el-header class="aside">
         <pic_nav_bar
             :tree_data="tree_data"
+            :load_more="getData"
             @pic_handle_checkbox="change_img_info"
             @pic_node_click="update_node_id"
         />
@@ -30,9 +31,9 @@
             <div slot="waterfall-over">waterfall-over</div>
 
           </vue-waterfall-easy>
-          <span v-if="show">
-              真的一张也没有了
-            </span>
+          <!--          <span v-if="show">-->
+          <!--              真的一张也没有了-->
+          <!--            </span>-->
         </div>
       </el-main>
     </el-container>
@@ -97,11 +98,14 @@ export default {
       });
     },
     getData: function (low = null) {
+      this.$log.debug(`Load more urls, group: ${this.water_fall.image_group + 1}`);
+      this.$log.debug(`Param type is ${typeof low}`);
       this.water_fall.image_group++;
-      low = low === null
-          ? (this.water_fall.image_group - 1) * this.water_fall.PRE_MAX
-          : low;
+      if (typeof low !== 'number') {
+        low = (this.water_fall.image_group - 1) * this.water_fall.PRE_MAX
+      }
       let high = this.water_fall.image_group * this.water_fall.PRE_MAX;
+      this.$log.debug(`low: ${low}, high: ${high}`);
       // console.log(`high: ${high},length: ${this.water_fall.img_urls.length}`);
       if (low <= this.water_fall.img_urls.length) {
         // console.log("low<");
@@ -112,6 +116,25 @@ export default {
         // console.log("waterfall over");
         // this.$refs.waterfall.waterfallOver();
         this.water_fall.loadingDotCount = 0;
+        let notify = {
+          title: "",
+          message: "",
+        };
+        if ((this.water_fall.image_group - 3) * this.water_fall.PRE_MAX < this.water_fall.img_urls.length) {
+          notify.title = "到底了哦~";
+          notify.message = "都被你看光了~";
+        } else if ((this.water_fall.image_group - 10) * this.water_fall.PRE_MAX < this.water_fall.img_urls.length) {
+          notify.title = "真的没了!!!";
+          notify.message = "别刷了，真的一张都没有了!!!";
+        } else {
+          notify.title = "你不累吗？";
+          notify.message = "我挺累的~~";
+        }
+        this.$notify({
+          title: notify.title,
+          message: notify.message,
+          type: 'warning'
+        });
       }
     },
     change_img_info: function (value) {
@@ -139,9 +162,9 @@ export default {
       }
       return string;
     },
-    show: function () {
-      return this.water_fall.image_group * this.water_fall.PRE_MAX > this.water_fall.img_urls.length;
-    },
+    // show: function () {
+    //   return this.water_fall.image_group * this.water_fall.PRE_MAX > this.water_fall.img_urls.length;
+    // },
     reach_bottom_distance: function () {
       const proportion = 0.3;
       return screen.height * proportion;
@@ -261,7 +284,8 @@ body,
   .waterfall_content {
     position: absolute;
     top: 3px;
-    bottom: 24px;
+    bottom: 3px;
+    //bottom: 24px;
     width: 100%;
   }
 }

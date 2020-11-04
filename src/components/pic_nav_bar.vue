@@ -3,6 +3,15 @@
     <div class="float_container">
       <div class="control_btn">
         <div>
+          <el-tooltip :content="control_btn.load_more.tooltip" class="item" effect="dark" placement="left">
+            <el-button circle
+                       icon="el-icon-bicycle"
+                       type="warning"
+                       @click="load_more"
+            />
+          </el-tooltip>
+        </div>
+        <div>
           <el-tooltip :content="control_btn.drawer.tooltip" class="item" effect="dark" placement="left">
             <el-button circle
                        icon="el-icon-s-unfold"
@@ -72,7 +81,11 @@ export default {
   props: {
     tree_data: {
       required: true
-    }
+    },
+    load_more: {
+      type: Function,
+      required: true,
+    },
   },
   watch: {
     /**
@@ -114,6 +127,9 @@ export default {
   data() {
     return {
       control_btn: {
+        load_more: {
+          tooltip: '手动加载图片',
+        },
         drawer: {
           tooltip: '打开侧栏',
         },
