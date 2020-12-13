@@ -1,6 +1,7 @@
 .DS_Store
 .thumbs.db
 node_modules
+/src/store/store-flag.d.ts
 
 # Quasar core related directories
 .quasar

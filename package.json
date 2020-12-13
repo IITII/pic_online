@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
+    "build": "quasar build",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
@@ -15,7 +16,11 @@
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "vue": "^2.6.12",
+    "vue-i18n": "^8.0.0",
+    "vue-waterfall-easy": "^2.4.4",
+    "vuejs-logger": "^1.5.5",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

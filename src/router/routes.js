@@ -1,10 +1,21 @@
-
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/indexLayout'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      {
+        path: '',
+        component: () => import('layouts/dashboard/MainLayout'),
+        children: [
+          {
+            path: '',
+            redirect: '/waterfall'
+          }, {
+            path: '/waterfall',
+            component: () => import('pages/waterfall')
+          }
+        ]
+      }
     ]
   },
 

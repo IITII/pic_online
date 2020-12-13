@@ -19,7 +19,8 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-
+      'logger',
+      'eventBus',
       'i18n',
       'axios'
     ],
@@ -56,8 +57,14 @@ module.exports = function (/* ctx */) {
 
       // rtl: false, // https://quasar.dev/options/rtl-support
       // preloadChunks: true,
-      // showProgress: false,
-      // gzip: true,
+      showProgress: true,
+      gzip: true,
+      sourceMap: process.env.DEBUGGING || true,
+      // sourceMap: process.env.DEBUGGING || false,
+      minify: process.env.DEBUGGING || false,
+      // minify: process.env.DEBUGGING || true,
+      publicPath: process.env.PIC_DEPLOY_FIR || '/',
+      distDir: undefined,
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
@@ -85,7 +92,15 @@ module.exports = function (/* ctx */) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
+      config: {
+        notify: {
+          html: false,
+          position: 'top-right',
+          timeout: 2500,
+          // closeBtn: true
+          closeBtn: 'x'
+        }
+      },
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
@@ -100,7 +115,12 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'LocalStorage',
+        'SessionStorage',
+        'Notify',
+        'Dialog'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -109,7 +129,8 @@ module.exports = function (/* ctx */) {
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
-      pwa: false
+      pwa: true,
+      manualHydration: false
     },
 
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
