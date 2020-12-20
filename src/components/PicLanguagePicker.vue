@@ -4,6 +4,8 @@
       v-model="lang"
       :options="langOptions"
       color="pink"
+      :dark="true"
+      :options-dark="false"
       dropdown-icon="translate"
       dense
       :options-dense="false"
