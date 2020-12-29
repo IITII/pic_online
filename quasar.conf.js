@@ -98,7 +98,7 @@ module.exports = function (/* ctx */) {
           position: 'top-right',
           timeout: 2500,
           // closeBtn: true
-          closeBtn: 'x'
+          closeBtn: '×'
         }
       },
 

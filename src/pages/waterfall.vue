@@ -211,7 +211,7 @@ export default {
   },
   beforeMount () {
     // init variables before mount
-    this.$store.dispatch('apiSetting/setPicUrl', 'http://localhost:3000/private/pic')
+    // this.$store.dispatch('apiSetting/setPicUrl', 'http://localhost:3000/private/pic')
     this.resetConfig()
   },
   mounted () {

@@ -21,9 +21,6 @@
 export default {
   name: 'ToolButton',
   props: {
-    btnOb: {
-      type: Object
-    },
     btnOnClick: {
       type: Function,
       required: true

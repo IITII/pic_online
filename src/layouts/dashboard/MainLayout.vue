@@ -167,7 +167,7 @@ export default {
     }
   },
   beforeMount () {
-    this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')
+    // this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')
   },
   mounted () {
     const url = this.$store.getters['apiSetting/treeUrl']
@@ -198,7 +198,7 @@ export default {
       })
       .catch(e => {
         this.$q.notify({
-          message: '连接失败',
+          message: this.$t('connection_fail'),
           caption: `${e.message}`,
           type: 'negative'
         })

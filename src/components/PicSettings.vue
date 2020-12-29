@@ -1,7 +1,9 @@
 <template>
   <div>
     <q-dialog ref="dialog" @hide="onDialogHide">
-      <q-card>
+      <q-card
+        class="pic_settings_card"
+      >
 
         <q-tabs
           v-model="tab"
@@ -21,26 +23,17 @@
                       animated
         >
           <q-tab-panel name="api">
-            The QCard component is a great way to display important pieces of grouped content.
+            <pic-settings-api/>
           </q-tab-panel>
 
           <q-tab-panel name="ui">
-            With so much content to display at once, and often so little screen real-estate,
-            Cards have fast become the design pattern of choice for many companies, including
-            the likes of Google and Twitter.
+            <pic-settings-u-i/>
           </q-tab-panel>
           <q-tab-panel name="about">
-            <q-card
-              class="bg-secondary text-white"
-            >
-              <q-card-section>
-                <div class="text-h6☝︎">{{ authorInfo.repo.name }}</div>
-                <div class="text-subtitle3">Github@IITII</div>
-              </q-card-section>
-              <q-card-section>
-                {{ $t('repo_description') }}
-              </q-card-section>
-            </q-card>
+            <pic-settings-about
+              :name="authorInfo.repo.name"
+              :author="authorInfo.repo.author"
+            />
           </q-tab-panel>
         </q-tab-panels>
 
@@ -75,8 +68,17 @@ padding: 2px;
 </template>
 
 <script>
+import PicSettingsApi from 'components/pic_settings/PicSettingsApi'
+import PicSettingsUI from 'components/pic_settings/PicSettingsUI'
+import PicSettingsAbout from 'components/pic_settings/PicSettingsAbout'
+
 export default {
   name: 'PicSettings',
+  components: {
+    PicSettingsAbout,
+    PicSettingsUI,
+    PicSettingsApi
+  },
   data () {
     return {
       authorInfo: {
@@ -97,22 +99,26 @@ export default {
     // following method is REQUIRED
     // (don't change its name --> "show")
     show () {
+      this.$log.debug('show')
       this.$refs.dialog.show()
     },
 
     // following method is REQUIRED
     // (don't change its name --> "hide")
     hide () {
+      this.$log.debug('hide')
       this.$refs.dialog.hide()
     },
 
     onDialogHide () {
+      this.$log.debug('hide')
       // required to be emitted
       // when QDialog emits "hide" event
       this.$emit('hide')
     },
 
     onOKClick () {
+      this.$log.debug('onClick')
       // on OK, it is REQUIRED to
       // emit "ok" event (with optional payload)
       // before hiding the QDialog
@@ -124,6 +130,7 @@ export default {
     },
 
     onCancelClick () {
+      this.$log.debug('onCancelClick')
       // we just need to hide dialog
       this.hide()
     }
@@ -132,5 +139,8 @@ export default {
 </script>
 
 <style scoped>
+.pic_settings_card {
+  width: 30rem;
+}
 
 </style>

@@ -2,20 +2,63 @@
 // so you can safely delete all default props below
 
 export default {
-  failed: 'Action failed',
-  success: 'Action was successful',
-  filter: 'Input some key words to filter...',
-  404: 'Oops. Nothing here...',
-  api_setting: 'API Setting',
-  ui_setting: 'UI Setting',
+
+  // a
   about: 'About',
-  top: 'Goto Top ⬆️',
-  loadManual: 'Load Manually',
-  open_drawer: 'Open Drawer',
-  setting: 'Settings',
-  waterfallOver: 'No more picture...',
-  no_more_pic: 'Nothing...',
+  api_setting: 'API Setting',
+  // b
+  // c
+  connection_fail: 'Connection failed...',
+  // d
+  data_validate_error: 'Invalid data...',
+  do_not_touch: 'Don\'t modify this if you don\'t know what it means',
+  double_click_to_clean_all: 'Double Click to Clean All Data...',
+  // e
+  // f
+  failed: 'Action failed',
+  filter: 'Input some key words to filter...',
+  // g
+  // h
+  // i
   img_load_error: 'Failed to load picture',
+  img_title_max_length: 'Default max length for image title',
+  // j
+  // k
+  // l
+  loadManual: 'Load Manually',
+  // m
+  // n
+  no_more_pic: 'Nothing...',
+  node_key_value: 'NodeKey Value',
+  // o
+  // p
+  open_drawer: 'Open Drawer',
+  pic_request_method: 'Pic Api Request Method',
+  pic_request_url: 'Pic Api URL',
+  // q
+  // r
+  repo_description: 'A simple web site to improve your filling...',
+  reset: 'Reset',
+  reload_page: 'Reload page',
+  // s
+  submit: 'Submit',
+  success: 'Action was successful',
+  setting: 'Settings',
+  show_img_title_or_not: 'Show image title',
+  // t
+  top: 'Goto Top ⬆️',
+  tree_request_method: 'Tree Api Request Method',
+  tree_request_url: 'Tree Api URL',
+  // u
+  ui_setting: 'UI Setting',
+  // v
+  // w
+  waterfallOver: 'No more picture...',
   waterfall_load_error: 'Failed to fetch images...',
-  repo_description: 'A simple web site to improve your filling...'
+  waterfall_col: 'Max col for waterfall',
+  waterfall_stride: 'Stride for manual load more images count',
+  // x
+  // y
+  // z
+  404: 'Oops. Nothing here...'
 }
