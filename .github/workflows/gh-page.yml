@@ -2,7 +2,7 @@ name: Build and Deploy Github Pages
 on:
   push:
     branches:
-      - main
+      - quasar
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

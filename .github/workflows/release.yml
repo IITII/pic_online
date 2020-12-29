@@ -2,7 +2,7 @@ name: Build Release
 on:
   push:
     tags:
-      - 'v**'
+      - 'quasar-v**'
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
