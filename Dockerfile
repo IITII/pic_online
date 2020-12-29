@@ -3,7 +3,7 @@ RUN apt-get update && \
 apt install -y git && \
 git clone https://github.com/IITII/pic_online /pic_online && \
 cd /pic_online && \
-export PIC_DEPLOY_FIR=/ && \
+export PIC_DEPLOY_DIR=/ && \
 export PIC_OUTPUT_DIR=dist/ && \
 echo "VUE_APP_API_URL='static/mock/data.json'" > .env && \
 npm install && \
