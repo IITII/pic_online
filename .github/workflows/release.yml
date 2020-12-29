@@ -28,20 +28,19 @@ jobs:
 
       - name: Set Environment 🔨
         run: |
-          export PIC_DEPLOY_FIR=/
-          export PIC_OUTPUT_DIR=dist/
-          export RELEASE_NAME=${{ matrix.release_name }}
-          echo "VUE_APP_API_URL='static/mock/data.json'" > .env
+          sudo apt update && \
+          sudo apt install tree -y
+          sudo npm install -g @quasar/cli
 
       - name: Install and Build 🔧
         run: |
           npm install
-          npm run build
+          quasar build
       - name: Package Artifact 🎁
         run: |
-          export RELEASE_NAME=${{ matrix.release_name }}
+          export RELEASE_NAME=spa_${{ matrix.release_name }}
           mkdir ${RELEASE_NAME}
-          zip -r ${RELEASE_NAME}/${RELEASE_NAME}.zip dist/*
+          zip -r ${RELEASE_NAME}/${RELEASE_NAME}.zip dist/spa/*
           ls -alh ${RELEASE_NAME}
 
 #      - name: Get package name
