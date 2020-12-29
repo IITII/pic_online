@@ -64,7 +64,7 @@ module.exports = function (/* ctx */) {
       minify: process.env.DEBUGGING || false,
       // minify: process.env.DEBUGGING || true,
       publicPath: process.env.PIC_DEPLOY_FIR || '/',
-      distDir: undefined,
+      distDir: process.env.PIC_OUTPUT_DIR || undefined,
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
