@@ -2,7 +2,7 @@ name: Build Release
 on:
   push:
     tags:
-      - 'v**'
+      - "v1**"
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -20,11 +20,11 @@ jobs:
         with:
           persist-credentials: false
 
-#See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
-#      - name: Install build dependencies
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y zip git
+      #See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
+      #      - name: Install build dependencies
+      #        run: |
+      #          sudo apt-get update
+      #          sudo apt-get install -y zip git
 
       - name: Set Environment 🔨
         run: |
@@ -44,11 +44,11 @@ jobs:
           zip -r ${RELEASE_NAME}/${RELEASE_NAME}.zip dist/*
           ls -alh ${RELEASE_NAME}
 
-#      - name: Get package name
-#        id: get_package
-#        run: |
-#          export RELEASE_NAME="release"
-#          echo ::set-output name=NAME::$(ls . | grep ${RELEASE_NAME})
+      #      - name: Get package name
+      #        id: get_package
+      #        run: |
+      #          export RELEASE_NAME="release"
+      #          echo ::set-output name=NAME::$(ls . | grep ${RELEASE_NAME})
 
       - name: Upload Artifact 🚀
         uses: actions/upload-artifact@v2
