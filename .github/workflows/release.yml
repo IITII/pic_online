@@ -36,7 +36,7 @@ jobs:
           quasar build
       - name: Package Artifact 🎁
         run: |
-          export RELEASE_NAME=spa_${{ matrix.release_name }}
+          export RELEASE_NAME=${{ matrix.release_name }}
           mkdir ${RELEASE_NAME}
           zip -r ${RELEASE_NAME}/${RELEASE_NAME}.zip dist/spa/*
           ls -alh ${RELEASE_NAME}
