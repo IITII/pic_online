@@ -28,8 +28,6 @@ jobs:
 
       - name: Set Environment 🔨
         run: |
-          sudo apt update && \
-          sudo apt install tree -y
           sudo npm install -g @quasar/cli
 
       - name: Install and Build 🔧
