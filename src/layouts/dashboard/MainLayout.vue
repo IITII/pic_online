@@ -155,6 +155,17 @@ export default {
     expandNode: function (nodes) {
       this.$log.debug(nodes)
     },
+    beforeunloadFn: function (e) {
+      this.$log.debug(`before unload function ${e}`)
+      // // Cancel the event as stated by the standard.
+      // e.preventDefault()
+      // // Chrome requires returnValue to be set.
+      // e.returnValue = '233'
+    },
+    btn_click_nextNode: function () {
+      const currentNodeKey = this.$store.getters['uiControl/nodeKey']
+      this.update_selected(currentNodeKey + 1)
+    },
     update_selected: function (key) {
       this.$log.debug(key)
       this.$log.debug(key === null)
@@ -165,6 +176,14 @@ export default {
         this.$store.dispatch('uiControl/setSelectedNodeTitle', node.label)
       }
     }
+  },
+  created () {
+    window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
+    this.$bus.$on('btn_click_nextNode', this.btn_click_nextNode)
+  },
+  destroyed () {
+    window.removeEventListener('beforeunload', e => this.beforeunloadFn(e))
+    this.$bus.$off('btn_click_nextNode', this.btn_click_nextNode)
   },
   beforeMount () {
     // this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')

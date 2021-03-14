@@ -29,6 +29,7 @@ export default {
   loadManual: '手动加载',
   // m
   // n
+  next_one: '下一个',
   no_more_pic: '真的一张也没有了～',
   node_key_value: 'NodeKey 的值',
   // o

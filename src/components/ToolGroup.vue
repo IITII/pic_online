@@ -30,6 +30,12 @@ export default {
           tooltipMessage: this.$t('top')
         },
         {
+          btnOnClick: this.nextNode,
+          btnIcon: 'redo',
+          btnColor: 'cyan-5',
+          tooltipMessage: this.$t('next_one')
+        },
+        {
           btnOnClick: this.loadMore,
           btnIcon: 'replay_10',
           btnColor: 'warning',
@@ -81,6 +87,10 @@ export default {
     top: function () {
       this.$log.debug('goto top')
       this.$bus.$emit('btn_click_goto_top')
+    },
+    nextNode: function () {
+      this.$log.debug('nextNode')
+      this.$bus.$emit('btn_click_nextNode')
     },
     loadMore: function () {
       this.$log.debug('loadMore')

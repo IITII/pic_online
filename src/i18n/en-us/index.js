@@ -28,6 +28,7 @@ export default {
   loadManual: 'Load Manually',
   // m
   // n
+  next_one: 'Next',
   no_more_pic: 'Nothing...',
   node_key_value: 'NodeKey Value',
   // o
