@@ -27,31 +27,31 @@ export default {
           btnOnClick: this.top,
           btnIcon: 'navigation',
           btnColor: 'primary',
-          tooltipMessage: this.$t('top')
+          tooltipMessage: ''
         },
         {
           btnOnClick: this.nextNode,
           btnIcon: 'redo',
           btnColor: 'cyan-5',
-          tooltipMessage: this.$t('next_one')
+          tooltipMessage: ''
         },
         {
           btnOnClick: this.loadMore,
           btnIcon: 'replay_10',
           btnColor: 'warning',
-          tooltipMessage: this.$t('loadManual')
+          tooltipMessage: ''
         },
         {
           btnOnClick: this.leftDrawer,
           btnIcon: 'open_in_new',
           btnColor: 'pink-3',
-          tooltipMessage: this.$t('open_drawer')
+          tooltipMessage: ''
         },
         {
           btnOnClick: this.setting,
           btnIcon: 'settings',
           btnColor: 'secondary',
-          tooltipMessage: this.$t('setting')
+          tooltipMessage: ''
         }
       ]
     }
@@ -59,31 +59,31 @@ export default {
   computed: {
     refresh: function () {
       return this.$store.getters['uiControl/language']
-    },
-    top_computed: function () {
-      return this.$t('top')
-    },
-    loadManual_computed: function () {
-      return this.$t('loadManual')
-    },
-    open_drawer: function () {
-      return this.$t('open_drawer')
-    },
-    setting_computed: function () {
-      return this.$t('setting')
     }
   },
   watch: {
     refresh: function () {
-      // 直接写里面会因为数据有缓存，而导致不会即时更改
-      // 但目前，有没有想到啥其他方法，所以选择这种垃圾写法
-      this.toolButtonGroup[0].tooltipMessage = this.top_computed
-      this.toolButtonGroup[1].tooltipMessage = this.loadManual_computed
-      this.toolButtonGroup[2].tooltipMessage = this.open_drawer
-      this.toolButtonGroup[3].tooltipMessage = this.setting_computed
+      this.updateLanguageCache()
     }
   },
+  beforeMount () {
+    this.updateLanguageCache()
+  },
   methods: {
+    updateLanguageCache: function () {
+      // 直接写里面会因为数据有缓存，而导致不会即时更改
+      // 但目前，有没有想到啥其他方法，所以选择这种垃圾写法
+      const msgArr = [
+        this.$t('top'),
+        this.$t('next_one'),
+        this.$t('loadManual'),
+        this.$t('open_drawer'),
+        this.$t('setting')
+      ]
+      this.toolButtonGroup.forEach((btn, index) => {
+        btn.tooltipMessage = msgArr[index]
+      })
+    },
     top: function () {
       this.$log.debug('goto top')
       this.$bus.$emit('btn_click_goto_top')
