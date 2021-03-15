@@ -28,7 +28,6 @@
 <script>
 import PicLanguagePicker from 'components/PicLanguagePicker'
 export default {
-  // TODO: 修改顶部显示文字布局为面包屑，比如，`a > b > c` or `a -> b -> c`
   name: 'PicHeader',
   components: { PicLanguagePicker },
   methods: {

@@ -38,7 +38,21 @@
             :expanded.sync="tree.expanded"
             :selected.sync="tree.selectedNodeSync"
             @update:selected="update_selected"
-          />
+          >
+            <template v-slot:header-root="prop">
+              <div class="row items-center">
+                {{ prop.node.label }}
+                <q-badge
+                  v-if="prop.node.children.length > 0"
+                  :color="badge.color"
+                  :text-color="badge.text_color"
+                  class="q-ml-sm"
+                >
+                  {{ prop.node.children.length }}
+                </q-badge>
+              </div>
+            </template>
+          </q-tree>
         </div>
       </div>
     </q-drawer>
