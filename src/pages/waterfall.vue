@@ -11,6 +11,7 @@
       :reachBottomDistance="reach_bottom_distance"
       @imgError="imgErrorEvent"
       @scrollReachBottom="loadMore"
+      style="text-align: center"
     >
       <span
         v-if="show_pic_title"
@@ -79,8 +80,11 @@ export default {
       }, 1)
     },
     btn_click_goto_top: function () {
+      this.$log.debug(this.$refs.waterfall.$refs.scrollEl)
+      this.$log.debug(this.$refs.waterfall.$refs.scrollEl.scrollTop)
       this.$log.debug('btn_click_goto_top listener')
-      this.rebuildWaterfall()
+      // this.rebuildWaterfall()
+      this.$refs.waterfall.$refs.scrollEl.scrollTop = 0
     },
     resetConfig: function () {
       this.$log.debug('Reset config')
@@ -145,12 +149,15 @@ export default {
         case 'POST':
         default:
           this.$log.debug(`nodeKey: ${this.nodeKeyComputed}`)
-          this.$log.debug(`post data: ${JSON.stringify(postData)}`)
+          this.$log.debug(`Req: ${JSON.stringify(postData)}`)
           axios = this.$axios.post(url, postData)
           break
       }
       axios.then(res => {
-        this.$log.debug(`axios post response: ${JSON.stringify(res)}`)
+        this.$log.debug(`Res: ${JSON.stringify({
+          status: res.status,
+          data: res.data
+        })}`)
         this.water_fall.lowIndex = this.water_fall.highIndex
         this.water_fall.highIndex += this.stride
         return res.data
