@@ -6,7 +6,9 @@
         @reset="onReset"
         class="q-gutter-md"
       >
-        <q-card-section>
+        <q-card-section
+          class="margin0 padding0"
+        >
           <q-input
             v-model="nodeKey"
             :label="$t('node_key_value')"
@@ -37,17 +39,45 @@
             :rules="validate.rules.greaterThanZero"
           ></q-input>
         </q-card-section>
-        <q-card-section>
-          <q-toggle
-            v-model="showImgTitle"
-            checked-icon="check"
-            color="pink"
-            :label="`${$t('show_img_title_or_not')}: ${showImgTitle}`"
-            unchecked-icon="clear"
-          />
+        <q-card-section
+          class="margin0 padding0"
+        >
+          <q-list>
+            <q-item v-ripple tag="label">
+              <q-item-section>
+                <q-item-label>{{ $t('show_img_title_or_not') }}</q-item-label>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-toggle
+                  v-model="showImgTitle"
+                  checked-icon="check"
+                  color="pink"
+                  keep-color
+                  left-label
+                  unchecked-icon="clear"
+                />
+              </q-item-section>
+            </q-item>
+            <q-item v-ripple tag="label">
+              <q-item-section>
+                <q-item-label>{{ $t('skip_empty_dir') }}</q-item-label>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-toggle
+                  v-model="skipEmptyDir"
+                  checked-icon="check"
+                  color="pink"
+                  keep-color
+                  left-label
+                  unchecked-icon="clear"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
         </q-card-section>
         <q-card-actions
           align="right"
+          class="margin0 padding0"
         >
           <q-btn
             :label="$t('submit')"
@@ -73,6 +103,7 @@ export default {
     return {
       nodeKey: 0,
       showImgTitle: false,
+      skipEmptyDir: true,
       waterfallCol: 0,
       waterfallStride: 0,
       imgTitleMaxLength: 0,
@@ -92,6 +123,7 @@ export default {
     reset: function () {
       this.$log.debug('Reset form\'s values base on Vuex Store and localStorage')
       this.nodeKey = this.$store.getters['uiControl/nodeKey']
+      this.skipEmptyDir = this.$store.getters['uiControl/skipEmptyDir']
       this.waterfallCol = this.$store.getters['uiControl/waterfallCol']
       this.waterfallStride = this.$store.getters['uiControl/waterfallStride']
       this.imgTitleMaxLength = this.$store.getters['uiControl/imgTitleMaxLength']
@@ -100,6 +132,7 @@ export default {
     onSubmit: function () {
       this.$log.debug('submit')
       this.$store.dispatch('uiControl/setNodeKey', this.nodeKey)
+      this.$store.dispatch('uiControl/setSkipEmptyDir', this.skipEmptyDir)
       this.$store.dispatch('uiControl/setWaterfallCol', this.waterfallCol)
       this.$store.dispatch('uiControl/setWaterfallStride', this.waterfallStride)
       this.$store.dispatch('uiControl/setImgTitleMaxLength', this.imgTitleMaxLength)
@@ -155,4 +188,12 @@ export default {
 
 <style scoped>
 
+.margin0 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.padding0 {
+  padding-top: 0;
+}
 </style>

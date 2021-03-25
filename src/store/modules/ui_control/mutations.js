@@ -22,6 +22,10 @@ export function reverseLeftDrawerOpen (state) {
   state.leftDrawerOpen = !state.leftDrawerOpen
 }
 
+export function setSkipEmptyDir (state, skip) {
+  state.skipEmptyDir = skip
+}
+
 export function setSelectedNodeTitle (state, selectedNodeTitle) {
   state.selectedNodeTitle = selectedNodeTitle
 }

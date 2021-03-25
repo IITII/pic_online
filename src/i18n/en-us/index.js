@@ -13,6 +13,7 @@ export default {
   data_validate_error: 'Invalid data...',
   do_not_touch: 'Don\'t modify this if you don\'t know what it means',
   double_click_to_clean_all: 'Double Click to Clean All Data...',
+  disable_skip_empty_dir: 'You can disable it via "Setting -> UI -> Skip Empty Directory"',
   // e
   // f
   failed: 'Action failed',
@@ -46,6 +47,7 @@ export default {
   success: 'Action was successful',
   setting: 'Settings',
   show_img_title_or_not: 'Show image title',
+  skip_empty_dir: 'Skip Empty Directory',
   // t
   top: 'Goto Top ⬆️',
   tree_request_method: 'Tree Api Request Method',

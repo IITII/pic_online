@@ -31,6 +31,7 @@
 import ToolGroup from 'components/ToolGroup'
 import vueWaterfallEasy from 'vue-waterfall-easy'
 import PicSettings from 'components/PicSettings'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PageIndex',
@@ -75,7 +76,7 @@ export default {
         if (this.water_fall.img_urls.length === 0) {
           // 没有图片就加载
           // 为了防止因为空文件夹导致 waterfall 无限加载
-          this.loadMore()
+          this.loadMore(this.skipEmptyDir)
         }
       }, 1)
     },
@@ -133,7 +134,7 @@ export default {
           }
         })
     },
-    loadMore: function () {
+    loadMore: function (skipEmptyDir = false) {
       const url = this.$store.getters['apiSetting/picUrl']
       const method = this.$store.getters['apiSetting/picMethod']
       let axios
@@ -163,14 +164,15 @@ export default {
         return res.data
       })
         .then(res => {
-          this.water_fall.current_img_array = res
-          this.water_fall.img_urls = this
-            .water_fall.img_urls
-            .concat(this.convertToTree(res))
-          return res
-        })
-        .then(res => {
-          if (res.length < this.stride) {
+          if (res.length === 0 && skipEmptyDir) {
+            // skip empty node via simulation `NextNode Button` Click.
+            this.$bus.$emit('btn_click_nextNode')
+            this.$q.notify({
+              message: this.$t('skip_empty_dir'),
+              caption: this.$t('disable_skip_empty_dir'),
+              type: 'info'
+            })
+          } else if (res.length < this.stride) {
             this.$refs.waterfall.waterfallOver()
             this.$q.notify({
               message: this.$t('waterfallOver'),
@@ -178,6 +180,14 @@ export default {
               type: 'info'
             })
           }
+          return res
+        })
+        .then(res => {
+          this.water_fall.current_img_array = res
+          this.water_fall.img_urls = this
+            .water_fall.img_urls
+            .concat(this.convertToTree(res))
+          return res
         })
         .catch(e => {
           this.$q.notify({
@@ -189,24 +199,17 @@ export default {
     }
   },
   computed: {
-    nodeKeyComputed: function () {
-      return this.$store.getters['uiControl/nodeKey']
-    },
-    stride: function () {
-      return this.$store.getters['uiControl/waterfallStride']
-    },
+    ...mapState({
+      maxCols: state => state.uiControl.waterfallCol,
+      stride: state => state.uiControl.waterfallStride,
+      skipEmptyDir: state => state.uiControl.skipEmptyDir,
+      nodeKeyComputed: state => state.uiControl.nodeKey,
+      show_pic_title: state => state.uiControl.showImgTitle,
+      maxTitleLength: state => state.uiControl.imgTitleMaxLength
+    }),
     reach_bottom_distance: function () {
       const proportion = 0.3
       return screen.height * proportion
-    },
-    show_pic_title: function () {
-      return this.$store.getters['uiControl/showImgTitle']
-    },
-    maxTitleLength: function () {
-      return this.$store.getters['uiControl/imgTitleMaxLength']
-    },
-    maxCols: function () {
-      return this.$store.getters['uiControl/waterfallCol']
     }
   },
   watch: {
@@ -223,7 +226,7 @@ export default {
   },
   mounted () {
     this.$log.debug(this.$refs)
-    this.loadMore()
+    this.loadMore(this.skipEmptyDir)
   },
   created () {
     window.addEventListener('beforeunload', e => this.beforeunloadFn(e))

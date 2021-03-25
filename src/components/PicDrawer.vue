@@ -49,6 +49,13 @@
                 >
                   {{ prop.node.children.length }}
                 </q-badge>
+                <q-badge
+                  :text-color="badge.text_color"
+                  class="q-ml-sm"
+                  color="warning"
+                >
+                  {{ prop.node.fileCount }}
+                </q-badge>
               </div>
             </template>
           </q-tree>

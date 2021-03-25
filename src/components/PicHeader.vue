@@ -27,6 +27,8 @@
 
 <script>
 import PicLanguagePicker from 'components/PicLanguagePicker'
+import { mapState } from 'vuex'
+
 export default {
   name: 'PicHeader',
   components: { PicLanguagePicker },
@@ -36,11 +38,9 @@ export default {
     }
   },
   computed: {
-    selectNodeTitle: {
-      get: function () {
-        return this.$store.getters['uiControl/selectedNodeTitle']
-      }
-    }
+    ...mapState({
+      selectNodeTitle: state => state.uiControl.selectedNodeTitle
+    })
   }
 }
 </script>

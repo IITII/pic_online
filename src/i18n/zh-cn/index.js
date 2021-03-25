@@ -14,6 +14,7 @@ export default {
   data_validate_error: '数据有误，请重新填写',
   do_not_touch: '不清楚的情况下请勿修改',
   double_click_to_clean_all: '双击即可清除所有数据',
+  disable_skip_empty_dir: '您可以通过 "设置 -> UI -> 跳过空白图片文件夹" 禁用',
   // e
   failed: '操作失败了哦～',
   filter: '输入关键字以进行过滤...',
@@ -47,6 +48,7 @@ export default {
   success: '操作OK👌',
   setting: '设置',
   show_img_title_or_not: '显示图片标题',
+  skip_empty_dir: '跳过空白图片文件夹',
   // t
   top: '回到顶部 ⬆️',
   tree_request_method: 'Tree Api 请求方式',

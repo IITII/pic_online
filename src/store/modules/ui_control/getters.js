@@ -22,6 +22,10 @@ export function leftDrawerOpen (state) {
   return state.leftDrawerOpen
 }
 
+export function skipEmptyDir (state) {
+  return state.skipEmptyDir
+}
+
 export function selectedNodeTitle (state) {
   return state.selectedNodeTitle
 }

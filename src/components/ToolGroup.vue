@@ -13,6 +13,7 @@
 
 <script>
 import ToolButton from 'components/ToolButton'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ToolGroup',
@@ -57,9 +58,9 @@ export default {
     }
   },
   computed: {
-    refresh: function () {
-      return this.$store.getters['uiControl/language']
-    }
+    ...mapState({
+      refresh: state => state.uiControl.language
+    })
   },
   watch: {
     refresh: function () {

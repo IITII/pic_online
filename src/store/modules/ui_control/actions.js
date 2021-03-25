@@ -31,6 +31,11 @@ export function reverseLeftDrawerOpen ({ commit }) {
   persistent.uiSetItem(key, persistent.uiGetItem(key) !== 'true')
 }
 
+export function setSkipEmptyDir ({ commit }, skip) {
+  commit('setSkipEmptyDir', skip)
+  persistent.uiSetItem('skipEmptyDir', skip)
+}
+
 export function setSelectedNodeTitle ({ commit }, selectedNodeTitle) {
   commit('setSelectedNodeTitle', selectedNodeTitle)
   persistent.uiSetItem('selectedNodeTitle', selectedNodeTitle)

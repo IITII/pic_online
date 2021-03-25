@@ -16,6 +16,8 @@ const state = {
   imgTitleMaxLength: parseInt(persistent.uiGetItem('imgTitleMaxLength')) || 12,
   // 显示侧栏
   leftDrawerOpen: persistent.uiGetItem('leftDrawerOpen') === 'true',
+  // 跳过空白文件夹
+  skipEmptyDir: persistent.uiGetItem('skipEmptyDir') !== 'false',
   // 导航栏标题
   selectedNodeTitle: persistent.uiGetItem('selectedNodeTitle') || 'pic_online',
   // 默认自动展开节点深度
