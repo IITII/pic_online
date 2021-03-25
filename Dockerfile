@@ -1,14 +1,15 @@
 FROM node:slim as builder
 RUN apt-get update && \
-apt install -y git && \
+apt install -y git tree && \
 git clone https://github.com/IITII/pic_online /pic_online && \
 cd /pic_online && \
 git --no-pager log --oneline --decorate | head -n 7 && \
 npm install -g @quasar/cli && \
 export PIC_DEPLOY_DIR=/ && \
-export PIC_OUTPUT_DIR=dist/ && \
+export PIC_OUTPUT_DIR=dist/spa/ && \
 npm install && \
-npm run build
+npm run build && \
+tree ./dist
 
 FROM nginx:alpine
 LABEL maintainer="IITII <ccmejx@gmail.com>"

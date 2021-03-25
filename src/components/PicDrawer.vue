@@ -50,6 +50,7 @@
                   {{ prop.node.children.length }}
                 </q-badge>
                 <q-badge
+                  v-if="prop.node.hasOwnProperty('fileCount')"
                   :text-color="badge.text_color"
                   class="q-ml-sm"
                   color="warning"
