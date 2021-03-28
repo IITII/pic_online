@@ -21,6 +21,7 @@
             filled
             v-model="tree.filter"
             :label="$t('filter')"
+            @input="inputListener"
           >
             <template v-slot:append>
               <q-icon v-if="tree.filter !== ''" name="clear" class="cursor-pointer" @click="resetFilter"/>
@@ -67,6 +68,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'PicDrawer',
   data () {
@@ -75,8 +78,9 @@ export default {
       tree: {
         filter: '',
         nodes: [],
+        nodeKeyMap: new Map(),
         expanded: [],
-        selectedNodeSync: '',
+        selectedNodeSync: 1,
         dark: false
       },
       badge: {
@@ -86,6 +90,11 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      currentNodeKey: state => state.uiControl.nodeKey,
+      treeUrl: state => state.apiSetting.treeUrl,
+      treeMethod: state => state.apiSetting.treeMethod
+    }),
     leftDrawerSync: {
       get: function () {
         return this.$store.getters['uiControl/leftDrawerOpen']
@@ -107,60 +116,44 @@ export default {
     }
   },
   methods: {
-    updateExpandedNodeByNodesBfs: function (nodeArray, maxNodeCount = 16) {
-      let queue = [],
-        tmpQueue = [],
-        res = [],
-        tmpRes = [],
-        tmpNodeCount = 0
+    // Convert nodes to map
+    nodesToNodeKeyMap: function (nodes) {
+      const hashMap = new Map()
 
-      queue = queue.concat(nodeArray)
-
-      while (queue.length !== 0) {
-        const tmp = queue.shift()
-        tmpRes.push(tmp.nodeKey)
-        if (tmp.children !== undefined) {
-          if (tmp.children.length !== 0) {
-            tmpQueue = tmpQueue.concat(tmp.children)
-            tmpNodeCount += tmp.children.length
-          }
-          if (res.length + tmpNodeCount >= maxNodeCount) {
-            // 当根目录文件过多的时候，还是选择默认展开根目录
-            // 因为好歹会展开这个目录，还不如自动做这个任务
-            if (res.length === 0) {
-              continue
-            } else {
-              break
-            }
-          } else {
-            res = res.concat(tmpRes)
-            tmpRes = []
-          }
+      function dfs (node, parentNodeKey = Infinity, map = hashMap) {
+        if (parentNodeKey !== Infinity) {
+          map.set(node.nodeKey, parentNodeKey)
         }
-        if (queue.length === 0) {
-          queue = queue.concat(tmpQueue)
-          tmpQueue = []
+        if (Array.isArray(node.children) && node.children.length > 0) {
+          node.children.forEach(n => dfs(n, node.nodeKey))
         }
       }
-      return res
+
+      nodes.forEach(n => dfs(n))
+      return hashMap
     },
-    updateExpandedNodeByNodes: function (nodeArray, depth) {
-      let tmp = []
-      if (depth < 1) {
-        return []
+    // Get parent nodeKey of given nodeKey
+    nodeKeyMapToExpandNodes: function (nodeKey, root = 1) {
+      const map = this.tree.nodeKeyMap,
+        nodeKeyArr = [nodeKey]
+      let tmpNodeKey = nodeKey
+      while (tmpNodeKey !== root) {
+        // Get parent nodeKey value and add to arr
+        tmpNodeKey = map.get(tmpNodeKey)
+        nodeKeyArr.push(tmpNodeKey)
       }
-      nodeArray.forEach(node => {
-        // 对应上面的 node-key="nodeKey"
-        node.nodeKey !== undefined && tmp.push(node.nodeKey)
-        if (node.children !== undefined && node.children.length !== 0) {
-          tmp = tmp.concat(this.updateExpandedNodeByNodes(node.children, depth - 1))
-        }
-      })
-      return tmp
+      return nodeKeyArr
     },
     resetFilter: function () {
       this.tree.filter = ''
       this.$refs.filter.focus()
+    },
+    inputListener: function (value) {
+      if (value === '') {
+        this.tree.expanded = this.nodeKeyMapToExpandNodes(this.currentNodeKey)
+      } else {
+        this.$refs.qtree.expandAll()
+      }
     },
     expandNode: function (nodes) {
       this.$log.debug(nodes)
@@ -173,8 +166,7 @@ export default {
       // e.returnValue = '233'
     },
     btn_click_nextNode: function () {
-      const currentNodeKey = this.$store.getters['uiControl/nodeKey']
-      this.update_selected(currentNodeKey + 1)
+      this.update_selected(this.currentNodeKey + 1)
     },
     update_selected: function (key) {
       this.$log.debug(key)
@@ -184,6 +176,10 @@ export default {
         // 对应上面的 ref="qtree"
         const node = this.$refs.qtree.getNodeByKey(key)
         this.$store.dispatch('uiControl/setSelectedNodeTitle', node.label)
+        // Update expand nodeKeys
+        this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
+        // update select node
+        this.tree.selectedNodeSync = key
       }
     }
   },
@@ -199,10 +195,9 @@ export default {
     // this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')
   },
   mounted () {
-    const url = this.$store.getters['apiSetting/treeUrl']
-    const method = this.$store.getters['apiSetting/treeMethod']
+    const url = this.treeUrl
     let axios = null
-    switch (method) {
+    switch (this.treeMethod) {
       case 'GET':
         axios = this.$axios.get(url)
         break
@@ -217,16 +212,23 @@ export default {
       this.$log.debug(`Tree Res: ${JSON.stringify({
         status: res.status,
         data: res.data
-      })}`)
-      this.tree.expanded = this.updateExpandedNodeByNodesBfs(this.tree.nodes)
+      }).slice(0, 1000)}`)
+      // Update nodes
       this.tree.nodes = res.data
       return res.data
     })
       .then(res => {
-        this.$log.debug(`expandedNodes: ${this.updateExpandedNodeByNodesBfs(res)}`)
-        this.tree.expanded = this.updateExpandedNodeByNodesBfs(res)
+        // Update nodeKeyMap
+        this.tree.nodeKeyMap = this.nodesToNodeKeyMap(res)
         // 避免因为后台数据更新以后，前台标题信息没有及时更新
-        this.update_selected(this.$store.getters['uiControl/nodeKey'])
+        this.update_selected(this.currentNodeKey)
+        return res
+      })
+      .then(_ => {
+        // Update expand nodeKeys
+        const expanded = this.nodeKeyMapToExpandNodes(this.currentNodeKey)
+        this.$log.debug(`expandedNodes: ${expanded}`)
+        this.tree.expanded = expanded
       })
       .catch(e => {
         this.$q.notify({
