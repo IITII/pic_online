@@ -20,6 +20,11 @@ export function setShowSettingDialog ({ commit }, show) {
   persistent.uiSetItem('showSettingDialog', show)
 }
 
+export function setViewerPlayInterval ({ commit }, interval) {
+  commit('setViewerPlayInterval', interval)
+  persistent.uiSetItem('viewerPlayInterval', interval)
+}
+
 export function setShowImgTitle ({ commit }, showImgTitle) {
   commit('setShowImgTitle', showImgTitle)
   persistent.uiSetItem('showImgTitle', showImgTitle)

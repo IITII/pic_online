@@ -10,6 +10,9 @@ const state = {
   // 是否显示设置界面
   // deprecated
   showSettingDialog: persistent.uiGetItem('showSettingDialog') === 'true',
+  // v-viewer play interval (Unit: ms)
+  // The amount of time to delay between automatically cycling an image when playing.
+  viewerPlayInterval: persistent.uiGetItem('viewerPlayInterval') || 2000,
   // 是否显示图片标题
   showImgTitle: persistent.uiGetItem('showImgTitle') === 'true',
   // 默认最长图片标题长度

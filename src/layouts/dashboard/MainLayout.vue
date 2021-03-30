@@ -12,7 +12,7 @@
 
 <script>
 
-import PicHeader from 'components/PicHeader'
+import PicHeader from 'components/pic_navbars/PicHeader'
 import PicDrawer from 'components/PicDrawer'
 
 export default {

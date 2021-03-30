@@ -56,6 +56,7 @@ export default {
   // u
   ui_setting: 'UI 设置',
   // v
+  viewer_play_interval: '播放时自动切换图片的间隔（单位: ms）',
   // w
   waterfallOver: '都被你看光了哟～',
   waterfall_load_error: '图片信息加载失败',

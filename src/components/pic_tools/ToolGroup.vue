@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ToolButton from 'components/ToolButton'
+import ToolButton from 'components/pic_tools/ToolButton'
 import { mapState } from 'vuex'
 
 export default {

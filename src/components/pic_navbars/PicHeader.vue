@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import PicLanguagePicker from 'components/PicLanguagePicker'
+import PicLanguagePicker from 'components/pic_commons/PicLanguagePicker'
 import { mapState } from 'vuex'
 
 export default {

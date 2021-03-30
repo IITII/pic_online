@@ -14,6 +14,10 @@ export function showSettingDialog (state) {
   return state.showSettingDialog
 }
 
+export function viewerPlayInterval (state) {
+  return state.viewerPlayInterval
+}
+
 export function showImgTitle (state) {
   return state.showImgTitle
 }

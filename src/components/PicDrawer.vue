@@ -155,9 +155,6 @@ export default {
         this.$refs.qtree.expandAll()
       }
     },
-    expandNode: function (nodes) {
-      this.$log.debug(nodes)
-    },
     beforeunloadFn: function (e) {
       this.$log.debug(`before unload function ${e}`)
       // // Cancel the event as stated by the standard.

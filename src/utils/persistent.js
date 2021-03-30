@@ -4,6 +4,7 @@
  */
 'use strict'
 const general = 'pic_online_',
+  customPrefix = 'custom_',
   uiPrefix = 'ui_',
   apiPrefix = 'api_'
 
@@ -13,6 +14,14 @@ const getItem = key => {
 
 const setItem = (key, value) => {
   return localStorage.setItem(general + key, value)
+}
+
+const customGetItem = key => {
+  return getItem(customPrefix + key)
+}
+
+const customSetItem = (key, value) => {
+  return setItem(customPrefix + key, value)
 }
 
 const apiGetItem = key => {
@@ -32,6 +41,8 @@ const uiSetItem = (key, value) => {
 }
 
 export default {
+  customGetItem,
+  customSetItem,
   apiGetItem,
   apiSetItem,
   uiGetItem,

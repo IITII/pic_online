@@ -55,6 +55,7 @@ export default {
   // u
   ui_setting: 'UI Setting',
   // v
+  viewer_play_interval: 'Automatically Cycling Image Interval When playing (Unit: ms)',
   // w
   waterfallOver: 'No more picture...',
   waterfall_load_error: 'Failed to fetch images...',

@@ -1,6 +1,11 @@
 <template>
   <q-page class="flex flex-center full-height-width">
     <tool-group class="tool-group"/>
+    <pic-viewer
+      :images="water_fall.img_urls"
+      :visible.sync="viewer.visible"
+      @loadMore="loadMore"
+    />
     <vue-waterfall-easy
       ref="waterfall"
       v-if="water_fall.show"
@@ -9,6 +14,7 @@
       :loadingTimeOut="water_fall.loadingTimeOut"
       :loadingDotCount="water_fall.loadingDotCount"
       :reachBottomDistance="reach_bottom_distance"
+      @click="viewerNextLister"
       @imgError="imgErrorEvent"
       @scrollReachBottom="loadMore"
       style="text-align: center"
@@ -28,19 +34,25 @@
 </template>
 
 <script>
-import ToolGroup from 'components/ToolGroup'
+import PicSettings from 'components/pic_settings'
+import ToolGroup from 'components/pic_tools/ToolGroup'
+import PicViewer from 'components/pic_commons/PicViewer'
+
 import vueWaterfallEasy from 'vue-waterfall-easy'
-import PicSettings from 'components/PicSettings'
 import { mapState } from 'vuex'
 
 export default {
   name: 'PageIndex',
   components: {
+    PicViewer,
     ToolGroup,
     vueWaterfallEasy
   },
   data () {
     return {
+      viewer: {
+        visible: false
+      },
       water_fall: {
         // 使用 v-if 来通过重新创建和销毁组件的方式来实现类似于界面刷新的效果
         show: true,
@@ -68,6 +80,10 @@ export default {
       // e.preventDefault()
       // // Chrome requires returnValue to be set.
       // e.returnValue = '233'
+    },
+    viewerNextLister () {
+      this.$log.debug('clicked')
+      this.viewer.visible = true
     },
     rebuildWaterfall: function () {
       this.water_fall.show = false
@@ -129,7 +145,7 @@ export default {
           info = info.join('.').slice(0, this.maxTitleLength)
           return {
             src: _,
-            href: _,
+            // href: _,
             info
           }
         })
@@ -184,9 +200,7 @@ export default {
         })
         .then(res => {
           this.water_fall.current_img_array = res
-          this.water_fall.img_urls = this
-            .water_fall.img_urls
-            .concat(this.convertToTree(res))
+          this.water_fall.img_urls = this.water_fall.img_urls.concat(this.convertToTree(res))
           return res
         })
         .catch(e => {
@@ -225,7 +239,7 @@ export default {
     this.resetConfig()
   },
   mounted () {
-    this.$log.debug(this.$refs)
+    this.$log.warn(this.$refs)
     this.loadMore(this.skipEmptyDir)
   },
   created () {

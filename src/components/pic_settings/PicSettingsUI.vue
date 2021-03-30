@@ -38,6 +38,13 @@
             :lazy-rules="true"
             :rules="validate.rules.greaterThanZero"
           ></q-input>
+          <q-input
+            v-model="viewerPlayInterval"
+            :label="$t('viewer_play_interval')"
+            :lazy-rules="true"
+            :rules="validate.rules.greaterThanZero"
+            type="number"
+          ></q-input>
         </q-card-section>
         <q-card-section
           class="margin0 padding0"
@@ -107,6 +114,7 @@ export default {
       waterfallCol: 0,
       waterfallStride: 0,
       imgTitleMaxLength: 0,
+      viewerPlayInterval: 0,
       validate: {
         rules: {
           greaterThanZero: [
@@ -127,6 +135,7 @@ export default {
       this.waterfallCol = this.$store.getters['uiControl/waterfallCol']
       this.waterfallStride = this.$store.getters['uiControl/waterfallStride']
       this.imgTitleMaxLength = this.$store.getters['uiControl/imgTitleMaxLength']
+      this.viewerPlayInterval = this.$store.getters['uiControl/viewerPlayInterval']
       this.showImgTitle = this.$store.getters['uiControl/showImgTitle']
     },
     onSubmit: function () {
@@ -136,6 +145,7 @@ export default {
       this.$store.dispatch('uiControl/setWaterfallCol', this.waterfallCol)
       this.$store.dispatch('uiControl/setWaterfallStride', this.waterfallStride)
       this.$store.dispatch('uiControl/setImgTitleMaxLength', this.imgTitleMaxLength)
+      this.$store.dispatch('uiControl/setViewerPlayInterval', this.viewerPlayInterval)
       this.$store.dispatch('uiControl/setShowImgTitle', this.showImgTitle)
       this.$q.notify({
         message: this.$t('success'),
