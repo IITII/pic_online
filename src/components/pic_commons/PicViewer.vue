@@ -44,6 +44,11 @@ export default {
       required: true,
       default: false
     },
+    imgIndex: {
+      type: Number,
+      required: false,
+      default: 0
+    },
     images: {
       type: Array,
       required: true
@@ -53,7 +58,8 @@ export default {
     visible (v) {
       this.$log.warn(v)
       if (v) {
-        this.$viewer.show()
+        // this.$viewer.show()
+        this.$viewer.view(this.imgIndex)
       }
     }
   },

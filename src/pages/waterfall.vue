@@ -4,6 +4,7 @@
     <pic-viewer
       :images="water_fall.img_urls"
       :visible.sync="viewer.visible"
+      :img-index="viewer.imgIndex"
       @loadMore="loadMore"
     />
     <vue-waterfall-easy
@@ -51,6 +52,7 @@ export default {
   data () {
     return {
       viewer: {
+        imgIndex: 0,
         visible: false
       },
       water_fall: {
@@ -81,9 +83,12 @@ export default {
       // // Chrome requires returnValue to be set.
       // e.returnValue = '233'
     },
-    viewerNextLister () {
+    viewerNextLister (event, value) {
       this.$log.debug('clicked')
+      this.$log.warn(event)
+      this.$log.warn(value)
       this.viewer.visible = true
+      this.viewer.imgIndex = parseInt(value.index) || 0
     },
     rebuildWaterfall: function () {
       this.water_fall.show = false
