@@ -9,6 +9,11 @@ export function getDocumentHeight(win = window, doc = document) {
     : (doc.body && doc.body.clientHeight) ? doc.body.clientHeight : win.screen.availHeight
 }
 
+export function getDocumentWidth(win = window, doc = document) {
+  return win.innerWidth ? win.innerWidth
+    : (doc.body && doc.body.clientWidth) ? doc.body.clientWidth : win.screen.availWidth
+}
+
 /**
  * validate email address is valid or not
  * @param email email address

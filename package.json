@@ -16,7 +16,10 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "v-viewer": "^1.5.1",
+    "vue-i18n": "^8.0.0",
+    "vue-video-player": "^5.0.2",
+    "vue-waterfall-easy": "^2.4.4"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

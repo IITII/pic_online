@@ -2,9 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './modules/user'
 import common from './modules/common'
-import uiControl from './modules/ui_control'
-
-// import example from './module-example'
+import image from './modules/image'
+import video from './modules/video'
 
 Vue.use(Vuex)
 
@@ -19,16 +18,13 @@ Vue.use(Vuex)
 
 const moduleNames = [
   './modules/user',
-  './modules/ui_control',
   './modules/common',
+  './modules/image',
+  './modules/video',
 ]
 
 const Store = new Vuex.Store({
-  modules: {
-    user,
-    common,
-    uiControl
-  },
+  modules: {user, common, image, video},
 
   // enable strict mode (adds overhead!)
   // for dev mode only
@@ -39,14 +35,16 @@ if (module.hot) {
     // 重新获取更新后的模块对象
     const newUser = require('./modules/user').default
     const newCommon = require('./modules/common').default
-    const newUiControl = require('./modules/ui_control').default
+    const newImage = require('./modules/image').default
+    const newVideo = require('./modules/video').default
     // 热重载模块
     Store.hotUpdate({
       modules: {
         // admin: newAdmin,
         user: newUser,
         common: newCommon,
-        uiControl: newUiControl
+        image: newImage,
+        video: newVideo,
       }
     })
   })

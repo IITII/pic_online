@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production' && (isNaN(timeout) || timeout < 2000))
 }
 
 const axiosConfig = {
-  baseURL: process.env.AXIOS_BASE_URL || 'http://localhost:3000/',
+  baseURL: store.getters['common/api_base_url'],
   timeout,
   timeoutErrorMessage: '连接超时, 请检查设置'
 }

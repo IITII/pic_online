@@ -46,21 +46,22 @@ export default {
   },
   computed: {
     links() {
-      const defaultLinks = [
-        {
-          title: this.$t('image'),
-          icon: 'image',
-          link: '/user/image'
-        },
-        {
-          title: this.$t('video'),
-          icon: 'movie',
-          link: '/user/video'
-        },
-      ]
-      return this.menuLinks.length > 0
-        ? this.menuLinks
-        : defaultLinks
+      // const defaultLinks = [
+      //   {
+      //     title: this.$t('image'),
+      //     icon: 'image',
+      //     link: '/user/image'
+      //   },
+      //   {
+      //     title: this.$t('video'),
+      //     icon: 'movie',
+      //     link: '/user/video'
+      //   },
+      // ]
+      // return this.menuLinks.length > 0
+      //   ? this.menuLinks
+      //   : defaultLinks
+      return this.menuLinks
     }
   },
   methods: {

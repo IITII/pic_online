@@ -4,14 +4,12 @@
       v-model="leftDrawerSync"
       content-class="bg-grey-1"
       elevated
-      show-if-above
-    >
+      show-if-above>
       <div class="q-pa-md q-gutter-sm">
         <div style="text-align: center">
           <q-badge
             :color="badge.color"
-            :text-color="badge.text_color"
-          >
+            :text-color="badge.text_color">
             {{ selectNodeTitle }}
           </q-badge>
         </div>
@@ -21,8 +19,7 @@
             v-model="tree.filter"
             :label="$t('filter')"
             filled
-            @input="inputListener"
-          >
+            @input="inputListener">
             <template v-slot:append>
               <q-icon v-if="tree.filter !== ''" class="cursor-pointer" name="clear" @click="resetFilter"/>
             </template>
@@ -37,8 +34,7 @@
             :nodes="tree.nodes"
             :selected.sync="tree.selectedNodeSync"
             node-key="nodeKey"
-            @update:selected="update_selected"
-          >
+            @update:selected="update_selected">
             <template v-slot:header-root="prop">
               <div class="row items-center">
                 {{ prop.node.label }}
@@ -46,16 +42,14 @@
                   v-if="prop.node.children.length > 0"
                   :color="badge.color"
                   :text-color="badge.text_color"
-                  class="q-ml-sm"
-                >
+                  class="q-ml-sm">
                   {{ prop.node.children.length }}
                 </q-badge>
                 <q-badge
                   v-if="prop.node.hasOwnProperty('fileCount')"
                   :text-color="badge.text_color"
                   class="q-ml-sm"
-                  color="warning"
-                >
+                  color="warning">
                   {{ prop.node.fileCount }}
                 </q-badge>
               </div>
@@ -70,8 +64,19 @@
 <script>
 import {mapState} from 'vuex'
 
+let self = null
 export default {
-  name: 'PicWaterfallDrawer',
+  name: 'PicDrawer',
+  props: {
+    api_url: {
+      type: String,
+      required: true
+    },
+    storeName: {
+      type: String,
+      required: true
+    },
+  },
   data() {
     return {
       leftDrawerOpen: true,
@@ -91,26 +96,27 @@ export default {
   },
   computed: {
     ...mapState({
-      currentNodeKey: state => state.uiControl.nodeKey,
-      treeUrl: state => state.apiSetting.treeUrl,
-      treeMethod: state => state.apiSetting.treeMethod
+      currentNodeKey: state => state[self.storeName].node_key,
+      drawer_open: state => state[self.storeName].drawer_open,
     }),
     leftDrawerSync: {
       get: function () {
-        return this.$store.getters['uiControl/leftDrawerOpen']
+        return this.$store.getters[`${this.storeName}/drawer_open`]
       },
-      set: function () {
-        return this.$store.dispatch('uiControl/reverseLeftDrawerOpen')
+      set: function (v) {
+        // this.$log.warn(v)
+        // this.$log.warn(this.leftDrawerSync)
+        return this.$store.dispatch(`${this.storeName}/drawer_open`, v)
+        // return this.$store.dispatch(`${this.storeName}/drawer_open`, !this.drawer_open)
       }
     },
     selectNodeTitle: {
       get: function () {
-        return this.$store.getters['uiControl/selectedNodeTitle']
+        return this.$store.getters[`${this.storeName}/title`]
       },
-      set: function (nodeTitle) {
-        this.$log.debug(nodeTitle)
-        if (nodeTitle !== null || nodeTitle !== '') {
-          return this.$store.dispatch('uiControl/setSelectedNodeTitle', nodeTitle)
+      set: function (t) {
+        if (t) {
+          return this.$store.dispatch(`${this.storeName}/title`, t)
         }
       }
     }
@@ -155,71 +161,57 @@ export default {
         this.$refs.qtree.expandAll()
       }
     },
-    beforeunloadFn: function (e) {
-      this.$log.debug(`before unload function ${e}`)
-      // // Cancel the event as stated by the standard.
-      // e.preventDefault()
-      // // Chrome requires returnValue to be set.
-      // e.returnValue = '233'
-    },
-    btn_click_nextNode: function () {
-      this.update_selected(this.currentNodeKey + 1)
-    },
     update_selected: function (key) {
       this.$log.debug(key)
-      this.$log.debug(key === null)
       if (key !== null) {
-        this.$store.dispatch('uiControl/setNodeKey', key)
+        this.$store.dispatch(`${this.storeName}/node_key`, key)
         // 对应上面的 ref="qtree"
         const node = this.$refs.qtree.getNodeByKey(key)
-        this.$store.dispatch('uiControl/setSelectedNodeTitle', node.label)
+        this.$store.dispatch(`${this.storeName}/title`, node.label)
         // Update expand nodeKeys
         this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
         // update select node
         this.tree.selectedNodeSync = key
       }
+    },
+    btn_click_nextNode: function () {
+      this.update_selected(this.currentNodeKey + 1)
+    },
+    btn_click_leftDrawer() {
+      this.leftDrawerSync = !this.leftDrawerSync
+    },
+    btn_click_setting() {
     }
   },
+  beforeCreate() {
+    self = this
+  },
   created() {
-    window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
     this.$bus.$on('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.$on('btn_click_leftDrawer', this.btn_click_leftDrawer)
+    this.$bus.$on('btn_click_setting', this.btn_click_setting)
   },
   destroyed() {
-    window.removeEventListener('beforeunload', e => this.beforeunloadFn(e))
     this.$bus.$off('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.$off('btn_click_leftDrawer', this.btn_click_leftDrawer)
+    this.$bus.$off('btn_click_setting', this.btn_click_setting)
   },
   beforeMount() {
     // this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')
   },
   mounted() {
-    const url = this.treeUrl
-    let axios = null
-    switch (this.treeMethod) {
-      case 'GET':
-        axios = this.$axios.get(url)
-        break
-      case 'POST':
-        axios = this.$axios.post(url)
-        break
-      default:
-        axios = this.$axios.get(url)
-        break
-    }
-    axios.then(res => {
-      this.$log.debug(`Tree Res: ${JSON.stringify({
-        status: res.status,
-        data: res.data
-      }).slice(0, 1000)}`)
-      // Update nodes
-      this.tree.nodes = res.data
-      return res.data
-    })
-      .then(res => {
+    this.$axios({method: 'GET', url: this.api_url})
+      .then(_ => {
+        // Update nodes
+        this.tree.nodes = _
+        return _
+      })
+      .then(_ => {
         // Update nodeKeyMap
-        this.tree.nodeKeyMap = this.nodesToNodeKeyMap(res)
+        this.tree.nodeKeyMap = this.nodesToNodeKeyMap(_)
         // 避免因为后台数据更新以后，前台标题信息没有及时更新
         this.update_selected(this.currentNodeKey)
-        return res
+        return _
       })
       .then(_ => {
         // Update expand nodeKeys
