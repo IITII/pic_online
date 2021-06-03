@@ -54,7 +54,7 @@
  */
 'use strict'
 
-import PicBackground from 'components/PicBackground.vue'
+import PicBackground from 'components/commons/PicBackground.vue'
 import {afterLogin} from 'src/utils/utils'
 import {mapState} from 'vuex'
 

@@ -40,7 +40,7 @@
  */
 'use strict'
 
-import PicBackground from 'components/PicBackground.vue'
+import PicBackground from 'components/commons/PicBackground.vue'
 import {afterLogin, afterLogout, getDocumentHeight} from 'src/utils/utils'
 import {mapState} from 'vuex'
 

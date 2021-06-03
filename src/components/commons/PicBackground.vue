@@ -12,11 +12,11 @@
  */
 'use strict'
 
-import {getDocumentHeight} from 'src/utils/utils'
+import {getDocumentHeight} from 'src/utils/utils.js'
 import {mapState} from 'vuex'
 
 export default {
-  name: 'CtbBackground',
+  name: 'PicBackground',
   computed: {
     ...mapState({
       background: state => state.common.background

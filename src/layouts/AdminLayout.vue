@@ -60,6 +60,11 @@ export default {
           icon: 'movie',
           link: '/admin/video'
         },
+        {
+          title: this.$t('status'),
+          icon: 'dns',
+          link: '/admin/status'
+        },
       ]
     }
   }
