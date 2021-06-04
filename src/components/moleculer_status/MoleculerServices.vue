@@ -1,10 +1,12 @@
 <template>
   <div>
-    <q-table :columns="columns" :data="service"
-             :filter="filter" :no-data-label="$t('no_data_label')"
-             :no-results-label="$t('no_result_label')"
+    <q-table :columns="columns" :data="service" :expanded.sync='expanded'
              :title="$t('service_action')"
-             flat>
+             :filter="filter"
+             :hide-bottom="table.hide_bottom"
+             :no-data-label="$t('no_data_label')" :no-results-label="$t('no_result_label')"
+             flat
+             row-key="service_action">
       <template v-slot:top="props">
         <div class="col-2 q-table__title">{{ $t('service_action') }}</div>
         <q-space/>
@@ -17,8 +19,22 @@
                round
                @click="props.toggleFullscreen"/>
       </template>
-      <template v-slot:body="props">
+      <template v-slot:header="props">
         <q-tr :props="props">
+          <q-th auto-width/>
+          <q-th v-for="col in props.cols"
+                :key="col.name" :props="props">
+            {{ col.label }}
+          </q-th>
+        </q-tr>
+      </template>
+      <template v-slot:body="props">
+        <q-tr :key="props.row.service_action" :props="props">
+          <q-td auto-width>
+            <q-btn :icon="props.expand ? 'remove' : 'add'" color="accent" dense round
+                   size="sm"
+                   @click="props.expand = !props.expand"/>
+          </q-td>
           <q-td key="service_action" :props="props">
             <q-badge :label="props.row.service_action" color="accent"/>
             <q-badge v-if="props.row.version" :label="props.row.version"/>
@@ -40,24 +56,24 @@
         </q-tr>
         <q-tr v-for="action in getServiceActions(props.row.service_action)"
               :key="action.name"
+              v-show="props.expand"
               :props="props">
-          <q-td>
+          <q-td auto-width/>
+          <q-td key="service_action">
             {{ action.name }}
             <q-badge v-if="action.action.cache" :label="$t('cached')" color="orange"/>
           </q-td>
-          <q-td v-html="getActionRest(action)"/>
-          <q-td>
+          <q-td key="rest" v-html="getActionRest(action)"/>
+          <q-td key="parameters">
             {{ getActionParams(action, 40) }}
           </q-td>
-          <q-td/>
+          <q-td key="instances"/>
           <q-td key="status">
             <q-badge v-if="action.available" :label="$t('online')" color="green"/>
             <q-badge v-else :label="$t('offline')" color="red"/>
           </q-td>
         </q-tr>
       </template>
-      <!--      因为 q-tr 计数有问题，所以隐藏底部控件-->
-      <template v-slot:bottom style="min-height: 0; height: 0"/>
 
       <template v-slot:no-data="{ icon, message, filter }">
         <div class="full-width row flex-center text-accent q-gutter-sm">
@@ -98,18 +114,25 @@ function wrapCsvValue(val, formatFn) {
   return `"${formatted}"`
 }
 
-let timer
-
 export default {
   name: 'MoleculerServices',
   data() {
     return {
+      table: {
+        // 因为 q-tr 计数有问题，所以隐藏底部控件
+        hide_bottom: false
+      },
+      timer: null,
       filter: '',
+      expanded: [],
       service: [],
       actions: {},
     }
   },
   computed: {
+    computedExpanded() {
+      return this.service.map(_ => _.service_action)
+    },
     columns() {
       const col = 'service_action,rest,parameters,instances,status'.split(',')
       return col.map(k => {
@@ -137,7 +160,7 @@ export default {
         .catch(e => this.$q.notify({type: 'error', message: e.message}))
     },
     getService() {
-      this.$axios.get('/dev/~node/services')
+      return this.$axios.get('/dev/~node/services')
         .then(_ => _.filter(s => !s.name.startsWith('$')))
         .then(_ => {
           _.sort((a, b) => a.name.localeCompare(b.name))
@@ -214,6 +237,12 @@ export default {
   mounted() {
     this.getActions()
       .then(_ => this.getService())
+      // expand all service
+      .then(() => this.expanded = this.computedExpanded)
+      .then(() => this.timer = setInterval(() => {
+        this.getActions().then(_ => this.getService())
+      }, 1000))
+      .then(() => this.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
   }
 }
 </script>
