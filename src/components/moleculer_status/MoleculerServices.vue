@@ -40,10 +40,12 @@
             <q-badge v-if="props.row.version" :label="props.row.version"/>
           </q-td>
           <q-td key="rest" :props="props">
-            <q-badge :label="'/' + props.row.rest" color="brown"/>
+            <q-badge :label="props.row.rest" color="brown"/>
           </q-td>
           <q-td key="parameters" :props="props">
-            <q-badge :label="props.row.parameters" color="blue-grey"/>
+            <q-badge v-if="props.row.parameters"
+                     :label="props.row.parameters"
+                     color="blue-grey"/>
           </q-td>
           <q-td key="instances" :props="props">
             <q-badge v-for="id in props.row.instance" :key="id"
@@ -63,7 +65,15 @@
             {{ action.name }}
             <q-badge v-if="action.action.cache" :label="$t('cached')" color="orange"/>
           </q-td>
-          <q-td key="rest" v-html="getActionRest(action)"/>
+          <!--          <q-td key="rest" :props="getActionRest(action, props.row)">-->
+          <!--            {{ props }}-->
+          <!--          </q-td>-->
+          <q-td key="rest">
+            <q-badge v-if="getActionRest(action, props.row).method"
+                     :label="getActionRest(action, props.row).method"
+                     color="indigo"/>
+            {{ getActionRest(action, props.row).url }}
+          </q-td>
           <q-td key="parameters">
             {{ getActionParams(action, 40) }}
           </q-td>
@@ -171,7 +181,7 @@ export default {
           return {
             service_action: n.name,
             version: n.version,
-            rest: n.settings.rest ? n.settings.rest : n.fullName,
+            rest: n.settings.rest ? n.settings.rest : `/${n.fullName}`,
             parameters: undefined,
             instance: n.nodes,
             status: n.nodes.length > 0
@@ -182,31 +192,37 @@ export default {
     },
     getServiceActions(name) {
       return Object.keys(this.actions)
-        .filter(n => n.startsWith(name))
+        // 避免同名前缀导致显示问题，如 aria2 和 aria2Listener
+        .filter(n => n.startsWith(`${name}.`))
         .map(name => this.actions[name])
     },
-    getActionRest(action) {
+    getActionRest(action, service = 'test') {
+      const rest = {method: '', url: ''}
       if (action.action.rest) {
         if (typeof action.action.rest == 'string') {
           const p = action.action.rest.split(' ')
           if (p.length > 1) {
-            // return '<span class=\'badge\'>' + p[0] + '</span> ' + p[1]
-            return `<div role="alert" class="q-badge flex inline items-center no-wrap q-badge--single-line bg-indigo">${p[0]}</div> ${p[1]}`
+            rest.method = p[0]
+            rest.url = p[1]
           } else {
-            return `<div role="alert" class="q-badge flex inline items-center no-wrap q-badge--single-line bg-indigo">*</div> ${p[0]}`
+            rest.method = '*'
+            rest.url = p[0]
           }
         } else {
-          return `<div role="alert" class="q-badge flex inline items-center no-wrap q-badge--single-line bg-indigo">${action.action.rest.method || '*'}</div> action.action.rest.path`
+          rest.method = action.action.rest.method || '*'
+          rest.url = action.action.rest.path
         }
+        rest.url = service.rest + rest.url
       }
-      return '';
+      return rest
     },
     getActionParams(action, maxLen) {
       if (action.action && action.action.params) {
-        const s = Object.keys(action.action.params).join(', ');
-        return s.length > maxLen ? s.substr(0, maxLen) + '…' : s;
+        const s = Object.keys(action.action.params).join(', ')
+        return s.length > maxLen ? s.substr(0, maxLen) + '…' : s
       }
-      return '-';
+      return ''
+      // return '-'
     },
     exportTable() {
       // naive encoding to csv format
@@ -241,7 +257,7 @@ export default {
       .then(() => this.expanded = this.computedExpanded)
       .then(() => this.timer = setInterval(() => {
         this.getActions().then(_ => this.getService())
-      }, 1000))
+      }, 3000))
       .then(() => this.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
   }
 }
