@@ -23,7 +23,7 @@ const state = {
   // 每次加载手动加载数量
   waterfall_stride: parseInt(persistent.videoGet('waterfall_stride')) || 10,
   // 默认最长标题长度
-  title_max_length: parseInt(persistent.videoGet('title_max_length')) || 12,
+  title_max_length: parseInt(persistent.videoGet('title_max_length')) || 120,
 }
 
 export default function () {

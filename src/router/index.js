@@ -34,7 +34,7 @@ export default function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     // 获取或者加载 Vue Store对象
     const store = Vue.$store || VueStore
-    logger.debug(to)
+    // logger.debug(to)
     // 如果路由深度不够，无需判断
     if (to.matched.length < 2) return next()
     // 如果目标路由没有 meta 或者 roles 信息，无需判断

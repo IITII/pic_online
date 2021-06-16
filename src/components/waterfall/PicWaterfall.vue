@@ -53,24 +53,24 @@ export default {
   props: {
     api_url: {
       type: String,
-      required: true
+      required: true,
     },
     storeName: {
       type: String,
-      required: true
+      required: true,
     },
     waterfall_type: {
       type: String,
       required: false,
       default: 'image',
-      validate: v => 'video,image'.split(',').indexOf(v) >= 0
+      validate: v => 'video,image'.split(',').indexOf(v) >= 0,
     },
   },
   data() {
     return {
       viewer: {
         imgIndex: 0,
-        visible: false
+        visible: false,
       },
       water_fall: {
         // 使用 v-if 来通过重新创建和销毁组件的方式来实现类似于界面刷新的效果
@@ -103,14 +103,14 @@ export default {
       this.resetConfig()
       this.loadMore()
       // this.rebuildWaterfall()
-    }
+    },
   },
   methods: {
     imgErrorEvent: function (i) {
       return this.$q.notify({
         type: 'warning',
         message: this.$t('img_load_error') + '',
-        caption: `${i.src}`
+        caption: `${i.src}`,
       })
     },
     card_click_event(_, v) {
@@ -132,36 +132,38 @@ export default {
       const media = v.value
       return this.$q.dialog({
         component: PicVPlayer, parent: this,
-        ...media
+        ...media,
         // title: media.info, video: media.video,
         // poster: media.src,
       })
     },
     resetConfig() {
-      this.$log.debug(viewer)
-      this.$log.debug(water_fall)
+      // this.$log.debug(viewer)
+      // this.$log.debug(water_fall)
       for (const k in viewer) {
         this.viewer[k] = viewer[k]
       }
       for (const k in water_fall) {
         this.water_fall[k] = water_fall[k]
       }
+      this.water_fall.no_more = false
     },
     loadMore() {
-      if (this.no_more) {
+      if (this.water_fall.no_more) {
         return this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
       }
       const data = {
         nodeKey: this.node_key,
         page: this.water_fall.page,
-        page_size: this.waterfall_stride
+        page_size: this.waterfall_stride,
       }
       return this.$axios.post(this.api_url, data)
         .then(_ => {
           this.$log.debug(_)
           // 意味着已经没有更多的数据了
           if (_.length < data.page_size) {
-            this.no_more = true
+            this.water_fall.no_more = true
+            this.$refs.waterfall.waterfallOver && this.$refs.waterfall.waterfallOver()
           }
           return _
         })
@@ -204,12 +206,16 @@ export default {
     this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
   },
   mounted() {
+    if (this.storeName === 'video') {
+      this.$store.dispatch(`${this.storeName}/show_img_title`, true)
+    }
     this.loadMore()
   },
   destroyed() {
+    this.$log.debug('waterfall destroy')
     this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
-  }
+  },
 }
 </script>
 
