@@ -5,7 +5,7 @@
         <q-toolbar>
           <q-avatar icon="perm_media"/>
           <q-toolbar-title>
-            {{ toolbar_title }}
+            {{ toolbar_title() }}
           </q-toolbar-title>
           <pic-language-picker/>
           <pic-menu/>
@@ -36,18 +36,29 @@ export default {
   components: {PicLanguagePicker, PicMenu},
   computed: {
     ...mapState({
-      selectedNodeTitle: state => state.uiControl.selectedNodeTitle,
+      image: state => state.image.node_key,
+      video: state => state.video.node_key,
       user_type: state => state.user.user_type,
     }),
-    toolbar_title() {
-      return this.$router.currentRoute.name === 'pic_waterfall'
-        ? this.selectedNodeTitle
-        : 'Pic Online'
-    },
     toolbar_style() {
       return bgClassBaseOnRole(this.user_type)
     },
-  }
+  },
+  methods: {
+    /**
+     * 使用 computed，无法实现数据更新
+     * 可能是因为递归调用导致数据绑定失败
+     */
+    toolbar_title() {
+      const updateTitle = ['image', 'video']
+      for (let title of updateTitle) {
+        if (this.$router.currentRoute.path.endsWith(title)) {
+          return this[title] + '' || 'Pic Online'
+        }
+      }
+      return 'Pic Online'
+    },
+  },
 }
 </script>
 

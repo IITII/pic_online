@@ -138,17 +138,18 @@ export default {
       })
     },
     resetConfig() {
-      this.$log.debug(viewer)
-      this.$log.debug(water_fall)
+      // this.$log.debug(viewer)
+      // this.$log.debug(water_fall)
       for (const k in viewer) {
         this.viewer[k] = viewer[k]
       }
       for (const k in water_fall) {
         this.water_fall[k] = water_fall[k]
       }
+      this.water_fall.no_more = false
     },
     loadMore() {
-      if (this.no_more) {
+      if (this.water_fall.no_more) {
         return this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
       }
       const data = {
@@ -161,7 +162,8 @@ export default {
           this.$log.debug(_)
           // 意味着已经没有更多的数据了
           if (_.length < data.page_size) {
-            this.no_more = true
+            this.water_fall.no_more = true
+            this.$refs.waterfall.waterfallOver && this.$refs.waterfall.waterfallOver()
           }
           return _
         })
@@ -207,6 +209,7 @@ export default {
     this.loadMore()
   },
   destroyed() {
+    this.$log.debug('waterfall destroy')
     this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
   }
