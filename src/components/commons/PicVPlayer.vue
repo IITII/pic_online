@@ -116,6 +116,11 @@ export default {
     playerOpts() {
       return {
         autoplay: false,
+        languages: 'zh',
+        liveui: true,
+        html5: {
+          nativeControlsForTouch: true,
+        },
         playbackRates: [0.7, 1.0, 1.25, 1.5, 2.0],
         ...this.computedSize,
         sources: [{
@@ -123,9 +128,9 @@ export default {
           src: this.video,
           // techOrder: ['flash'],
         }],
-        poster: this.src
+        poster: this.src,
       }
-    }
+    },
   },
   data() {
     return {}
@@ -144,7 +149,7 @@ export default {
         fullscreenKey: function (event, player) {
           // override fullscreen to trigger when pressing the F key or Ctrl+Enter
           return ((event.which === 70) || (event.ctrlKey && event.which === 13))
-        }
+        },
       })
     },
     show() {
@@ -183,8 +188,8 @@ export default {
       this.$log.debug('onCancelClick')
       // we just need to hide dialog
       this.hide()
-    }
-  }
+    },
+  },
 }
 </script>
 
