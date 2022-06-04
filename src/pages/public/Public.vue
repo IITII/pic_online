@@ -66,6 +66,7 @@ export default {
     btnGroup() {
       return [
         {label: this.$t('login'), link: '/login'},
+        {label: this.$t('setting'), link: '/setting'},
         // {label: this.$t('register'), link: '/register'}
       ]
     }

@@ -46,6 +46,7 @@ export default {
   about: 'About',
   api_setting: 'API Setting',
   connection_fail: 'Connection failed...',
+  default: 'Default',
   data_validate_error: 'Invalid data...',
   do_not_touch: 'Don\'t modify this if you don\'t know what it means',
   double_click_to_clean_all: 'Double Click to Clean All Data...',

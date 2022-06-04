@@ -4,6 +4,7 @@ const publicRoutes = {
   children: [
     {path: 'home', alias: '', name: 'home', component: () => import('pages/public/Public')},
     {path: 'login', alias: '/login', name: 'login', component: () => import('pages/public/Login')},
+    {path: 'setting', alias: '/setting', name: 'setting', component: () => import('pages/public/StoreSetting')},
   ]
 }
 const userRoutes = {
