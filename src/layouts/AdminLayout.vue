@@ -3,7 +3,7 @@
     <div>
       <q-header :class="toolbar_style" elevated show-if-above>
         <q-toolbar>
-          <q-avatar icon="perm_media"/>
+          <q-avatar icon="perm_media" @click="leftDrawer"/>
           <q-toolbar-title>
             {{ toolbar_title() }}
           </q-toolbar-title>
@@ -77,6 +77,10 @@ export default {
         }
       }
       return 'Pic Online'
+    },
+    leftDrawer: function () {
+      this.$log.debug('leftDrawer')
+      this.$bus.$emit('btn_click_leftDrawer')
     },
   },
 }
