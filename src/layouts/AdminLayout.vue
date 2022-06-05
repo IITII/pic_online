@@ -61,6 +61,11 @@ export default {
           icon: 'dns',
           link: '/admin/status'
         },
+        {
+          title: this.$t('setting'),
+          icon: 'settings',
+          link: '/admin/setting'
+        },
       ]
     }
   },
