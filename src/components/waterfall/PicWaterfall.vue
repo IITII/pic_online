@@ -237,9 +237,9 @@ export default {
   },
   destroyed() {
     this.$log.debug('waterfall destroy')
-    this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
-    this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
-    this.$bus.$on('btn_click_setting', this.show)
+    this.$bus.$off('btn_click_goto_top', this.btn_click_goto_top)
+    this.$bus.$off('btn_click_loadMore', this.btn_click_loadMore)
+    this.$bus.$off('btn_click_setting', this.show)
   },
 }
 </script>
