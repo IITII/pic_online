@@ -8,7 +8,7 @@
             {{ toolbar_title() }}
           </q-toolbar-title>
           <pic-language-picker/>
-          <pic-menu/>
+          <pic-menu :menu-links="links"/>
         </q-toolbar>
       </q-header>
     </div>
@@ -43,6 +43,25 @@ export default {
     toolbar_style() {
       return bgClassBaseOnRole(this.user_type)
     },
+    links() {
+      return [
+        {
+          title: this.$t('image'),
+          icon: 'image',
+          link: '/user/image'
+        },
+        {
+          title: this.$t('video'),
+          icon: 'movie',
+          link: '/user/video'
+        },
+        {
+          title: this.$t('setting'),
+          icon: 'settings',
+          link: '/user/setting'
+        },
+      ]
+    }
   },
   methods: {
     /**

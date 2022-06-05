@@ -28,6 +28,9 @@
       </div>
     </vue-waterfall-easy>
     <tool-group/>
+    <q-dialog ref="dialog" @hide="onDialogHide">
+      <pic-store-settings class="btn-group-setting"/>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -43,13 +46,14 @@ import {getDocumentHeight} from 'src/utils/utils.js'
 
 import vueWaterfallEasy from 'vue-waterfall-easy'
 import {mapState} from 'vuex'
+import PicStoreSettings from 'components/commons/PicStoreSettings'
 
 let self = null,
   viewer = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: {ToolGroup, vueWaterfallEasy, PicViewer},
+  components: {PicStoreSettings, ToolGroup, vueWaterfallEasy, PicViewer},
   props: {
     api_url: {
       type: String,
@@ -106,6 +110,25 @@ export default {
     },
   },
   methods: {
+    show() {
+      this.$log.debug('show')
+      this.$log.debug(this.$refs)
+      this.$refs.dialog.show()
+    },
+
+    // following method is REQUIRED
+    // (don't change its name --> "hide")
+    hide() {
+      this.$log.debug('hide')
+      this.$refs.dialog.hide()
+    },
+
+    onDialogHide() {
+      this.$log.debug('hide')
+      // required to be emitted
+      // when QDialog emits "hide" event
+      this.$emit('hide')
+    },
     imgErrorEvent: function (i) {
       return this.$q.notify({
         type: 'warning',
@@ -204,6 +227,7 @@ export default {
     water_fall = JSON.parse(JSON.stringify(this.water_fall))
     this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
+    this.$bus.$on('btn_click_setting', this.show)
   },
   mounted() {
     if (this.storeName === 'video') {
@@ -215,6 +239,7 @@ export default {
     this.$log.debug('waterfall destroy')
     this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
+    this.$bus.$on('btn_click_setting', this.show)
   },
 }
 </script>
@@ -263,6 +288,12 @@ body,
     line-height: 1.6;
     text-align: center;
   }
+}
+
+.btn-group-setting {
+  margin: 0 0 0 0;
+  width: 60%;
+  min-width: 350px;
 }
 </style>
 

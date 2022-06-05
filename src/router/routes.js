@@ -14,6 +14,7 @@ const userRoutes = {
   children: [
     {path: 'image', alias: '', component: () => import('pages/user/PicImageWaterfall.vue')},
     {path: 'video', component: () => import('pages/user/PicVideoWaterfall.vue')},
+    {path: 'setting', component: () => import('pages/user/UserStoreSetting.vue')},
   ]
 }
 const adminRoutes = {
@@ -24,6 +25,7 @@ const adminRoutes = {
     {path: 'image', alias: '', component: () => import('pages/admin/PicImageWaterfall.vue')},
     {path: 'video', component: () => import('pages/admin/PicVideoWaterfall.vue')},
     {path: 'status', component: () => import('pages/admin/PicServerStatus.vue')},
+    {path: 'setting', component: () => import('pages/admin/AdminStoreSetting.vue')},
   ]
 }
 // 经测试router.addRoutes其实是一个费力不讨好的事情,

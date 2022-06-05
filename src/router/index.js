@@ -44,6 +44,11 @@ export default function (/* { store, ssrContext } */) {
     const roles = to.matched[1].meta.roles
     // 将用户类型转换为用户角色
     const userRole = store.getters['user/user_type']
+    const token = store.state.user.token
+    if (!token) {
+      logger.debug('Forbidden with empty token', token)
+      return next({name: 'home'})
+    }
     // 访问白名单路由
     if (witheList.some(white => roles.indexOf(white) >= 0)) {
       logger.debug('Get public routes,', witheList)
@@ -58,6 +63,7 @@ export default function (/* { store, ssrContext } */) {
       logger.debug('Forbidden', userRole, roles)
       // forbidden
       return next({name: 'login'})
+      // return next({name: 'home'})
       // return next({path: '/404'})
     }
   })
