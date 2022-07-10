@@ -23,7 +23,7 @@ const state = {
   // 每次加载手动加载数量
   waterfall_stride: parseInt(persistent.imageGet('waterfall_stride')) || 10,
   // 默认最长标题长度
-  title_max_length: parseInt(persistent.imageGet('title_max_length')) || 12,
+  title_max_length: parseInt(persistent.imageGet('title_max_length')) || 24,
   // v-viewer play interval (Unit: ms)
   // The amount of time to delay between automatically cycling an image when playing.
   viewer_play_interval: persistent.imageGet('viewer_play_interval') || 2000,
