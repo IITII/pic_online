@@ -25,11 +25,13 @@ export default {
       langOptions: [
         {
           value: 'en-us',
-          label: 'English'
+          // label: 'En',
+          label: 'English',
         },
         {
           value: 'zh-hans',
-          label: '简体中文'
+          label: '简体',
+          // label: '简体中文',
         }
       ]
     }
