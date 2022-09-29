@@ -45,7 +45,8 @@ export function afterLogin(user, store, router, axios, redirect = true) {
   // reset after re-create Vue instance, such as page reload
   axios.defaults.headers['authorization'] = ['Token', user.token].join(' ')
   if (redirect) {
-    router.push('/' + user.user_type)
+    // router.push('/' + user.user_type)
+    router.push(`/${user.user_type}/image`)
   }
 }
 
