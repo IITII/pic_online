@@ -36,4 +36,8 @@ export const title_max_length = ({commit}, payload) => {
   persistent.videoSet('title_max_length', payload)
   commit('title_max_length', payload)
 }
+export const auto_next = ({commit}, payload) => {
+  persistent.videoSet('auto_next', payload)
+  commit('auto_next', payload)
+}
 

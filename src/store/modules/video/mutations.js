@@ -8,3 +8,4 @@ export const show_img_title = (state, payload) => state.show_img_title = payload
 export const waterfall_col = (state, payload) => state.waterfall_col = payload
 export const waterfall_stride = (state, payload) => state.waterfall_stride = payload
 export const title_max_length = (state, payload) => state.title_max_length = payload
+export const auto_next = (state, payload) => state.auto_next = payload
