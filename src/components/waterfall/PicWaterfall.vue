@@ -176,6 +176,7 @@ export default {
       if (this.water_fall.no_more) {
         this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
         if (this.auto_next) {
+          this.$q.notify({type: 'positive', message: `auto_next success!!!`})
           this.$bus.$emit('btn_click_nextNode')
         }
         return
