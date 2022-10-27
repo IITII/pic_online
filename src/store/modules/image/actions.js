@@ -40,4 +40,8 @@ export const viewer_play_interval = ({commit}, payload) => {
   persistent.imageSet('viewer_play_interval', payload)
   commit('viewer_play_interval', payload)
 }
+export const auto_next = ({commit}, payload) => {
+  persistent.imageSet('auto_next', payload)
+  commit('auto_next', payload)
+}
 

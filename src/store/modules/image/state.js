@@ -27,6 +27,7 @@ const state = {
   // v-viewer play interval (Unit: ms)
   // The amount of time to delay between automatically cycling an image when playing.
   viewer_play_interval: persistent.imageGet('viewer_play_interval') || 2000,
+  auto_next: persistent.imageGet('auto_next') !== 'false',
 }
 
 export default function () {

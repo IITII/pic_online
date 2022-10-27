@@ -24,6 +24,7 @@ const state = {
   waterfall_stride: parseInt(persistent.videoGet('waterfall_stride')) || 10,
   // 默认最长标题长度
   title_max_length: parseInt(persistent.videoGet('title_max_length')) || 120,
+  auto_next: persistent.videoGet('auto_next') === 'true',
 }
 
 export default function () {

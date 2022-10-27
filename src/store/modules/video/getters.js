@@ -8,3 +8,4 @@ export const show_img_title = state => state.show_img_title
 export const waterfall_col = state => state.waterfall_col
 export const waterfall_stride = state => state.waterfall_stride
 export const title_max_length = state => state.title_max_length
+export const auto_next = state => state.auto_next

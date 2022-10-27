@@ -9,3 +9,4 @@ export const waterfall_col = (state, payload) => state.waterfall_col = payload
 export const waterfall_stride = (state, payload) => state.waterfall_stride = payload
 export const title_max_length = (state, payload) => state.title_max_length = payload
 export const viewer_play_interval = (state, payload) => state.viewer_play_interval = payload
+export const auto_next = (state, payload) => state.auto_next = payload

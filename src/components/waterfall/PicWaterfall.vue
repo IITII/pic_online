@@ -93,6 +93,7 @@ export default {
       skip_empty_dir: state => state[self.storeName].skip_empty_dir,
       waterfall_stride: state => state[self.storeName].waterfall_stride,
       title_max_length: state => state[self.storeName].title_max_length,
+      auto_next: state => state[self.storeName].auto_next,
     }),
     loadingDotCount: () => 3,
     loadingTimeOut: () => 500,
@@ -173,7 +174,11 @@ export default {
     },
     loadMore() {
       if (this.water_fall.no_more) {
-        return this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
+        this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
+        if (this.auto_next) {
+          this.$bus.$emit('btn_click_nextNode')
+        }
+        return
       }
       const data = {
         nodeKey: this.node_key,
