@@ -197,7 +197,8 @@ export default {
           return _
         })
         .then(_ => _.map(i => {
-          const src = i.video ? i.video : i.src
+          let src = i.video ? i.video : i.src
+          src = src.includes('%') ? decodeURI(src) : src
           let info = src.split('/').pop().split('.')
           info.pop()
           info = info.join('.').slice(0, this.title_max_length)
