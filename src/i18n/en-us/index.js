@@ -65,6 +65,7 @@ export default {
   repo_description: 'A simple web site to improve your filling...',
   reset: 'Reset',
   reload_page: 'Reload page',
+  reload_files: 'Manual Reload Files',
   submit: 'Submit',
   success: 'Action was successful',
   setting: 'Settings',

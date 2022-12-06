@@ -8,6 +8,7 @@
             {{ toolbar_title() }}
           </q-toolbar-title>
           <pic-language-picker/>
+          <pic-reload-files/>
           <pic-menu :menu-links="links"/>
         </q-toolbar>
       </q-header>
@@ -31,10 +32,11 @@ import PicMenu from 'components/commons/PicMenu.vue'
 import {mapState} from 'vuex'
 import {bgClassBaseOnRole} from 'src/utils/utils.js'
 import PicLanguagePicker from 'components/commons/PicLanguagePicker.vue'
+import PicReloadFiles from 'components/commons/PicReloadFiles.vue'
 
 export default {
   name: 'AdminLayout',
-  components: {PicLanguagePicker, PicMenu},
+  components: {PicReloadFiles, PicLanguagePicker, PicMenu},
   computed: {
     ...mapState({
       image: state => state.image.title,
