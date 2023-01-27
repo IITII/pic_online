@@ -1,6 +1,6 @@
 <template>
   <div class="full-height-width">
-    <pic-drawer :api_url="api.drawer" :store-name="storeName"/>
+    <pic-drawer :api_url="api.drawer" :store-name="storeName" :lazy_url="api.lazy"/>
     <pic-waterfall :api_url="api.waterfall"
                    :store-name="storeName"
                    :waterfall_type="waterfall_type"/>
@@ -24,6 +24,7 @@ export default {
     return {
       api: {
         drawer: '/api/file/pic_tree',
+        lazy: '/api/file/pic_lazy',
         waterfall: '/api/file/pic_map'
       },
       storeName: 'image',
