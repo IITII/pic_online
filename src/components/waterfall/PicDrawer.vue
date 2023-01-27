@@ -34,16 +34,17 @@
             :nodes="tree.nodes"
             :selected.sync="tree.selectedNodeSync"
             node-key="nodeKey"
+            @lazy-load="onLazyLoad"
             @update:selected="update_selected">
             <template v-slot:header-root="prop">
               <div class="row items-center">
                 {{ prop.node.label }}
                 <q-badge
-                  v-if="prop.node.children.length > 0"
+                  v-if="prop.node.dirCount"
                   :color="badge.color"
                   :text-color="badge.text_color"
                   class="q-ml-sm">
-                  {{ prop.node.children.length }}
+                  {{ prop.node.dirCount }}
                 </q-badge>
                 <q-badge
                   v-if="prop.node.hasOwnProperty('fileCount')"
@@ -69,6 +70,10 @@ export default {
   name: 'PicDrawer',
   props: {
     api_url: {
+      type: String,
+      required: true
+    },
+    lazy_url: {
       type: String,
       required: true
     },
@@ -161,12 +166,23 @@ export default {
         this.$refs.qtree.expandAll()
       }
     },
+    onLazyLoad: function ({node, key, done, fail}) {
+      this.$log.debug('lazy load:', node, key)
+      return this.$axios({method: 'POST', url: this.lazy_url, params: {nodeKey: key}, timeout: 2000})
+        .then(_ => done(_))
+        .catch(e => {
+          this.$log.error(e.message)
+          fail([])
+        })
+    },
     update_selected: function (key) {
       this.$log.debug(key)
       if (key !== null) {
         this.$store.dispatch(`${this.storeName}/node_key`, key)
         // 对应上面的 ref="qtree"
         const node = this.$refs.qtree.getNodeByKey(key)
+        this.$log.debug(node)
+        // lazy load 情况下 node 为 null
         this.$store.dispatch(`${this.storeName}/title`, node.label)
         // Update expand nodeKeys
         this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
@@ -220,6 +236,7 @@ export default {
         this.tree.expanded = expanded
       })
       .catch(e => {
+        this.$log.error('connection_fail', e)
         this.$q.notify({
           message: this.$t('connection_fail'),
           caption: `${e.message}`,
