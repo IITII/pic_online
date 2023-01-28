@@ -28,6 +28,7 @@
         <div>
           <q-tree
             ref="qtree"
+            no-transition
             :dark="tree.dark"
             :expanded.sync="tree.expanded"
             :filter="tree.filter"
@@ -182,12 +183,16 @@ export default {
         // 对应上面的 ref="qtree"
         const node = this.$refs.qtree.getNodeByKey(key)
         this.$log.debug(node)
-        // lazy load 情况下 node 为 null
-        this.$store.dispatch(`${this.storeName}/title`, node.label)
-        // Update expand nodeKeys
-        this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
-        // update select node
-        this.tree.selectedNodeSync = key
+        if (node) {
+          this.$store.dispatch(`${this.storeName}/title`, node.label)
+          // Update expand nodeKeys
+          this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
+          // update select node
+          this.tree.selectedNodeSync = key
+        } else {
+          // lazy load 情况下 node 为 null, 直接强制加载默认值
+          this.update_selected(1)
+        }
       }
     },
     btn_click_nextNode: function () {
