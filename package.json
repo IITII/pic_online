@@ -1,6 +1,6 @@
 {
   "name": "pic_online_front",
-  "version": "0.0.1",
+  "version": "2.0.1",
   "description": "Front for pic_online",
   "productName": "Pic Online",
   "author": "IITII <ccmejx@gmail.com>",
@@ -15,21 +15,23 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.0.0",
+    "mitt": "^3.0.0",
+    "quasar": "^2.0.0",
     "v-viewer": "^1.5.1",
     "vue-code-highlight": "^0.7.8",
-    "vue-i18n": "^8.0.0",
+    "vue-i18n": "^9.0.0-beta.0",
     "vue-video-player": "^5.0.2",
-    "vue-waterfall-easy": "^2.4.4"
+    "vue-waterfall-easy": "^2.4.4",
+    "vuex": "^4.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^7.21.0",
+    "@babel/eslint-parser": "^7.13.14",
+    "@quasar/app": "^3.0.0",
+    "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^7.7.0",
+    "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0",
-    "vuejs-logger": "^1.5.5"
+    "vuejs3-logger": "^1.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
@@ -43,7 +45,7 @@
     "last 5 Opera versions"
   ],
   "engines": {
-    "node": ">= 10.18.1",
+    "node": ">= 12.22.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }

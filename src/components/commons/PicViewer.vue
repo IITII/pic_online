@@ -117,7 +117,7 @@ export default {
     this.$log.debug(`this.viewerPlayInterval: ${this.viewerPlayInterval}`)
     this.viewer.options.interval = this.viewerPlayInterval
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$log.debug('PicViewer BeforeDestroy.')
   }
 }

@@ -7,3 +7,4 @@
 /public
 
 .eslintrc.js
+babel.config.js

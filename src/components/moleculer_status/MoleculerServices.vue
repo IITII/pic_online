@@ -258,7 +258,7 @@ export default {
       .then(() => this.timer = setInterval(() => {
         this.getActions().then(_ => this.getService())
       }, 3000))
-      .then(() => this.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
+      .then(() => this.$bus.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
   }
 }
 </script>

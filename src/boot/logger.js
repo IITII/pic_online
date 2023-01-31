@@ -1,15 +1,14 @@
-/**
- * @author iitii
- * @date 2020/12/6 17:08
- */
 'use strict'
-import Vue from 'vue'
-import VueLogger from 'vuejs-logger'
 
-const isProduction = process.env.NODE_ENV === 'production'
+import {boot} from 'quasar/wrappers'
+import logger from 'vuejs3-logger'
+
+// https://quasar.dev/quasar-cli/handling-process-env#values-supplied-by-quasar-cli
+const isProduction = process.env.PROD,
+  isDev = process.env.DEV
 
 const options = {
-  isEnabled: true,
+  isEnabled: isDev,
   logLevel: isProduction ? 'error' : 'debug',
   stringifyArguments: false,
   showLogLevel: true,
@@ -18,5 +17,8 @@ const options = {
   showConsoleColors: true
 }
 
-Vue.use(VueLogger, options)
+export default boot(({app}) => {
+  app.use(logger, options)
+})
 
+export {logger}
