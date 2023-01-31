@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-table :columns="columns" :data="service" :expanded.sync='expanded'
+    <q-table :columns="columns" :data="service" v-model:expanded='expanded'
              :title="$t('service_action')"
              :filter="filter"
              :hide-bottom="table.hide_bottom"
@@ -11,7 +11,9 @@
         <div class="col-2 q-table__title">{{ $t('service_action') }}</div>
         <q-space/>
         <q-input v-model="filter" :placeholder="$t('search')" borderless debounce="300" dense>
-          <q-icon slot="append" name="search"/>
+          <template v-slot:append>
+            <q-icon  name="search"/>
+          </template>
         </q-input>
         <q-btn class="q-ml-md" flat icon="archive" no-caps
                round @click="exportTable"/>
@@ -258,7 +260,7 @@ export default {
       .then(() => this.timer = setInterval(() => {
         this.getActions().then(_ => this.getService())
       }, 3000))
-      .then(() => this.$bus.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
+      .then(() => this.$bus.once('hook:beforeDestroy', _ => clearInterval(this.timer)))
   }
 }
 </script>

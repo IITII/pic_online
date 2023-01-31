@@ -30,14 +30,14 @@
             ref="qtree"
             no-transition
             :dark="tree.dark"
-            :expanded.sync="tree.expanded"
+            v-model:expanded="tree.expanded"
             :filter="tree.filter"
             :nodes="tree.nodes"
-            :selected.sync="tree.selectedNodeSync"
+            v-model:selected="tree.selectedNodeSync"
             node-key="nodeKey"
             @lazy-load="onLazyLoad"
             @update:selected="update_selected">
-            <template v-slot:header-root="prop">
+            <template v-slot:default-header="prop">
               <div class="row items-center">
                 {{ prop.node.label }}
                 <q-badge
@@ -208,14 +208,14 @@ export default {
     self = this
   },
   created() {
-    this.$bus.$on('btn_click_nextNode', this.btn_click_nextNode)
-    this.$bus.$on('btn_click_leftDrawer', this.btn_click_leftDrawer)
-    this.$bus.$on('btn_click_setting', this.btn_click_setting)
+    this.$bus.on('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.on('btn_click_leftDrawer', this.btn_click_leftDrawer)
+    this.$bus.on('btn_click_setting', this.btn_click_setting)
   },
-  destroyed() {
-    this.$bus.$off('btn_click_nextNode', this.btn_click_nextNode)
-    this.$bus.$off('btn_click_leftDrawer', this.btn_click_leftDrawer)
-    this.$bus.$off('btn_click_setting', this.btn_click_setting)
+  unmounted() {
+    this.$bus.off('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.off('btn_click_leftDrawer', this.btn_click_leftDrawer)
+    this.$bus.off('btn_click_setting', this.btn_click_setting)
   },
   beforeMount() {
     // this.$store.dispatch('apiSetting/setTreeUrl', 'http://localhost:3000/private/tree')

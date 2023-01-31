@@ -64,23 +64,23 @@ export default {
   methods: {
     top: function () {
       this.$log.debug('go top')
-      this.$bus.$emit('btn_click_goto_top')
+      this.$bus.emit('btn_click_goto_top')
     },
     nextNode: function () {
       this.$log.debug('nextNode')
-      this.$bus.$emit('btn_click_nextNode')
+      this.$bus.emit('btn_click_nextNode')
     },
     loadMore: function () {
       this.$log.debug('loadMore')
-      this.$bus.$emit('btn_click_loadMore')
+      this.$bus.emit('btn_click_loadMore')
     },
     leftDrawer: function () {
       this.$log.debug('leftDrawer')
-      this.$bus.$emit('btn_click_leftDrawer')
+      this.$bus.emit('btn_click_leftDrawer')
     },
     setting: function () {
       this.$log.debug('setting')
-      this.$bus.$emit('btn_click_setting')
+      this.$bus.emit('btn_click_setting')
     },
   },
   mounted() {

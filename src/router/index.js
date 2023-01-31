@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import VueStore from '../store'
-
+import { route } from 'quasar/wrappers'
+import {createApp} from 'vue'
+import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-
-Vue.use(VueRouter)
 
 /*
  * If not building with SSR mode, you can
@@ -15,25 +12,28 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function (/* { store, ssrContext } */) {
-  const logger = Vue.$log || console
-  // logger.debug(routes)
-  const Router = new VueRouter({
-    scrollBehavior: () => ({x: 0, y: 0}),
+const logger = createApp({}).$log || console
+
+export default route(function ({ store, ssrContext }) {
+  const createHistory = process.env.SERVER
+    ? createMemoryHistory
+    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
+
+  const Router = createRouter({
+    scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
-    // Leave these as they are and change in quasar.conf.js instead!
+    // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    mode: process.env.VUE_ROUTER_MODE,
-    base: process.env.VUE_ROUTER_BASE
+    // void 0 === void(0) === raw value of undefined
+    history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
-
   // 路由白名单
   const witheList = ['public']
   Router.beforeEach((to, from, next) => {
     // 获取或者加载 Vue Store对象
-    const store = Vue.$store || VueStore
+    // const store = Vue.$store || VueStore
     // logger.debug(to)
     // 如果路由深度不够，无需判断
     if (to.matched.length < 2) return next()
@@ -68,4 +68,4 @@ export default function (/* { store, ssrContext } */) {
     }
   })
   return Router
-}
+})

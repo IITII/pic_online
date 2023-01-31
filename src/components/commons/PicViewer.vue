@@ -5,7 +5,7 @@
             :options="viewer.options"
             class="viewer"
             @inited="initViewer">
-      <template slot-scope="scope">
+      <template v-slot:scope>
         <div class="hidden">
           <figure class="images">
             <div v-for="{info, src} in scope.images" :key="src" class="image-wrapper">
@@ -27,10 +27,11 @@
 import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer'
 
-import Vue from 'vue'
+import {createApp} from 'vue'
 import {mapState} from 'vuex'
 
-Vue.use(Viewer, {
+const app = createApp({})
+app.use(Viewer, {
   debug: true
 })
 

@@ -10,7 +10,9 @@
         <div class="col-2 q-table__title">{{ $t('node_status') }}</div>
         <q-space/>
         <q-input v-model="filter" :placeholder="$t('search')" borderless debounce="300" dense>
-          <q-icon slot="append" name="search"/>
+          <template v-slot:append>
+            <q-icon  name="search"/>
+          </template>
         </q-input>
         <q-btn class="q-ml-md" flat icon="archive" no-caps
                round @click="exportTable"/>
@@ -147,7 +149,7 @@ export default {
       // 而且组件也并不会完全销毁，会有重复请求的问题
       .then(() => this.timer = setInterval(this.getNodes, 3000))
       // See: https://cn.vuejs.org/v2/guide/components-edge-cases.html#%E7%A8%8B%E5%BA%8F%E5%8C%96%E7%9A%84%E4%BA%8B%E4%BB%B6%E4%BE%A6%E5%90%AC%E5%99%A8
-      .then(() => this.$bus.$once('hook:beforeDestroy', _ => clearInterval(this.timer)))
+      .then(() => this.$bus.once('hook:beforeDestroy', _ => clearInterval(this.timer)))
   },
 }
 </script>

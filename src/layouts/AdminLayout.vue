@@ -28,8 +28,10 @@
  */
 'use strict'
 
-import PicMenu from 'components/commons/PicMenu.vue'
+import {computed} from 'vue'
 import {mapState} from 'vuex'
+import {useRoute} from 'vue-router'
+import PicMenu from 'components/commons/PicMenu.vue'
 import {bgClassBaseOnRole} from 'src/utils/utils.js'
 import PicLanguagePicker from 'components/commons/PicLanguagePicker.vue'
 import PicReloadFiles from 'components/commons/PicReloadFiles.vue'
@@ -79,7 +81,8 @@ export default {
     toolbar_title() {
       const updateTitle = ['image', 'video']
       for (let title of updateTitle) {
-        if (this.$router.currentRoute.path.endsWith(title)) {
+        const curRoute = computed(() => useRoute().path).value
+        if (curRoute.endsWith(title)) {
           return this[title] + '' || 'Pic Online'
         }
       }
@@ -87,7 +90,7 @@ export default {
     },
     leftDrawer: function () {
       this.$log.debug('leftDrawer')
-      this.$bus.$emit('btn_click_leftDrawer')
+      this.$bus.emit('btn_click_leftDrawer')
     },
   },
 }

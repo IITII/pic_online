@@ -4,29 +4,29 @@
     <pic-viewer
       :images="water_fall.img_urls"
       :img-index="viewer.imgIndex"
-      :visible.sync="viewer.visible"
+      v-model:visible="viewer.visible"
       @loadMore="loadMore"/>
-    <vue-waterfall-easy
-      v-if="water_fall.show"
-      ref="waterfall"
-      :imgs-arr="water_fall.img_urls"
-      :loadingDotCount="loadingDotCount"
-      :loadingTimeOut="loadingTimeOut"
-      :maxCols="waterfall_col"
-      :reachBottomDistance="reach_bottom_distance"
-      style="text-align: center"
-      @click="card_click_event"
-      @imgError="imgErrorEvent"
-      @scrollReachBottom="loadMore">
-      <span v-if="show_img_title"
-            slot-scope="props"
-            class="some-info">
-        {{ props.value.info }}
-      </span>
-      <div slot="waterfall-over">
-        {{ $t('waterfallOver') }}
-      </div>
-    </vue-waterfall-easy>
+<!--    <vue-waterfall-easy-->
+<!--      v-if="water_fall.show"-->
+<!--      ref="waterfall"-->
+<!--      :imgs-arr="water_fall.img_urls"-->
+<!--      :loadingDotCount="loadingDotCount"-->
+<!--      :loadingTimeOut="loadingTimeOut"-->
+<!--      :maxCols="waterfall_col"-->
+<!--      :reachBottomDistance="reach_bottom_distance"-->
+<!--      style="text-align: center"-->
+<!--      @click="card_click_event"-->
+<!--      @imgError="imgErrorEvent"-->
+<!--      @scrollReachBottom="loadMore">-->
+<!--      <template v-if="show_img_title"-->
+<!--            v-slot:props-->
+<!--            class="some-info">-->
+<!--        {{ props.value.info }}-->
+<!--      </template>-->
+<!--      <template v-slot:waterfall-over>-->
+<!--        {{ $t('waterfallOver') }}-->
+<!--      </template>-->
+<!--    </vue-waterfall-easy>-->
     <tool-group/>
     <q-dialog ref="dialog" @hide="onDialogHide">
       <pic-store-settings class="btn-group-setting"/>
@@ -53,7 +53,7 @@ let self = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: {PicStoreSettings, ToolGroup, vueWaterfallEasy, PicViewer},
+  components: {PicStoreSettings, ToolGroup, PicViewer},
   props: {
     api_url: {
       type: String,
@@ -177,7 +177,7 @@ export default {
         this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
         if (this.auto_next) {
           this.$q.notify({type: 'positive', message: `auto_next success!!!`})
-          this.$bus.$emit('btn_click_nextNode')
+          this.$bus.emit('btn_click_nextNode')
         }
         return
       }
@@ -225,6 +225,7 @@ export default {
   beforeCreate() {
     // simple copy for access `props`
     self = this
+    this.$log.debug(this.$store.getters)
   },
   created() {
     // deep copy
@@ -232,9 +233,9 @@ export default {
     // this.$log.debug(this.viewer)
     viewer = JSON.parse(JSON.stringify(this.viewer))
     water_fall = JSON.parse(JSON.stringify(this.water_fall))
-    this.$bus.$on('btn_click_goto_top', this.btn_click_goto_top)
-    this.$bus.$on('btn_click_loadMore', this.btn_click_loadMore)
-    this.$bus.$on('btn_click_setting', this.show)
+    this.$bus.on('btn_click_goto_top', this.btn_click_goto_top)
+    this.$bus.on('btn_click_loadMore', this.btn_click_loadMore)
+    this.$bus.on('btn_click_setting', this.show)
   },
   mounted() {
     if (this.storeName === 'video') {
@@ -242,11 +243,11 @@ export default {
     }
     this.loadMore()
   },
-  destroyed() {
+  unmounted() {
     this.$log.debug('waterfall destroy')
-    this.$bus.$off('btn_click_goto_top', this.btn_click_goto_top)
-    this.$bus.$off('btn_click_loadMore', this.btn_click_loadMore)
-    this.$bus.$off('btn_click_setting', this.show)
+    this.$bus.off('btn_click_goto_top', this.btn_click_goto_top)
+    this.$bus.off('btn_click_loadMore', this.btn_click_loadMore)
+    this.$bus.off('btn_click_setting', this.show)
   },
 }
 </script>
