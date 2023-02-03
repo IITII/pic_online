@@ -67,9 +67,15 @@ module.exports = configure(function (ctx) {
 
       // rtl: true, // https://v2.quasar.dev/options/rtl-support
       // preloadChunks: true,
-      // showProgress: false,
-      // gzip: true,
+      showProgress: true,
+      gzip: true,
       // analyze: true,
+      // sourceMap: true,
+      // minify: false,
+      sourceMap: process.env.NODE_ENV !== 'production',
+      minify: process.env.NODE_ENV === 'production',
+      publicPath: process.env.PIC_DEPLOY_DIR || '/',
+      distDir: process.env.PIC_OUTPUT_DIR || undefined,
 
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
