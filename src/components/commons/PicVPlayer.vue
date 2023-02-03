@@ -11,6 +11,7 @@
         </q-card-section>
         <q-card-section class="player-padding">
           <video-player ref="videoPlayer"
+                        :playback-rate="playbackRate"
                         :options="playerOpts"
                         customEventName="changed"
                         @changed="playerStateChanged($event)"
@@ -30,14 +31,14 @@
 import 'video.js/dist/video-js.css'
 import 'videojs-hotkeys'
 
-
-import {videoPlayer} from 'vue-video-player'
+import {VideoPlayer} from '@videojs-player/vue'
+import { toRaw } from '@vue/reactivity'
 import {mapState} from 'vuex'
 import {getDocumentHeight, getDocumentWidth} from 'src/utils/utils.js'
 
 export default {
   name: 'PicVPlayer',
-  components: {videoPlayer},
+  components: {VideoPlayer},
   props: {
     info: {
       type: String,
@@ -103,7 +104,7 @@ export default {
       return res
     },
     computedCardStyle() {
-      this.$log.debug(this.$refs.player_title)
+      // this.$log.debug('player_title: ' + this.$refs.player_title.$el.innerText)
       const res = [],
         computed = this.computedSize
       for (const k in computed) {
@@ -116,12 +117,14 @@ export default {
     playerOpts() {
       return {
         autoplay: false,
-        languages: 'zh',
+        language: 'zh',
+        languages: ['zh', 'en'],
         liveui: true,
+        controls: true,
         html5: {
           nativeControlsForTouch: true,
         },
-        playbackRates: [0.7, 1.0, 1.25, 1.5, 2.0],
+        playbackRates: [0.7, 1.0, 1.1, 1.2, 1.5, 2.0],
         ...this.computedSize,
         sources: [{
           // type: 'video/mp4',
@@ -129,29 +132,35 @@ export default {
           // techOrder: ['flash'],
         }],
         poster: this.src,
+        plugins: {
+          hotkeys: {
+            volumeStep: 0.1,
+            seekStep: 5,
+            enableModifiersForNumbers: false,
+            // eslint-disable-next-line no-unused-vars
+            fullscreenKey: function (event, player) {
+              // override fullscreen to trigger when pressing the F key or Ctrl+Enter or Enter
+              return ((event.which === 70) || (event.ctrlKey && event.which === 13)) || event.which === 13
+            },
+          },
+        },
       }
     },
   },
   data() {
-    return {}
+    return {
+      playbackRate: 1.1,
+    }
   },
   methods: {
     playerStateChanged(playerCurrentState) {
       // this.$log.debug('player state changed', playerCurrentState)
     },
     playerIsReady(player) {
-      this.$log.debug('player ready!', player)
-      player.hotkeys({
-        volumeStep: 0.1,
-        seekStep: 5,
-        enableModifiersForNumbers: false,
-        // eslint-disable-next-line no-unused-vars
-        fullscreenKey: function (event, player) {
-          // override fullscreen to trigger when pressing the F key or Ctrl+Enter
-          return ((event.which === 70) || (event.ctrlKey && event.which === 13))
-        },
-      })
+      this.$log.debug('player ready!', player, toRaw(player), player.target.player)
+      // debugger
     },
+
     show() {
       this.$log.debug('show')
       this.$refs.player.show()
@@ -189,6 +198,28 @@ export default {
       // we just need to hide dialog
       this.hide()
     },
+  },
+  mounted() {
+    this.$log.debug('mounted', this.$refs.player.$el)
+    // support for pot player hotkeys
+    this.$refs.player.$el.onkeydown = (e) => {
+      this.$log.debug('keydown', e)
+      switch (e.key) {
+        case 'c':
+          this.playbackRate += 0.1
+          break
+        case 'x':
+          this.playbackRate -= 0.05
+          break
+        case 'z':
+          this.playbackRate = 1.0
+          break
+      }
+      this.playbackRate = +this.playbackRate.toFixed(2)
+    }
+  },
+  unmounted() {
+    this.$log.debug('unmounted')
   },
 }
 </script>

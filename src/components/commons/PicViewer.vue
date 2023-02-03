@@ -5,38 +5,29 @@
             :options="viewer.options"
             class="viewer"
             @inited="initViewer">
-      <template v-slot:scope>
+      <template #default="scope">
         <div class="hidden">
-          <figure class="images">
-            <div v-for="{info, src} in scope.images" :key="src" class="image-wrapper">
-              <img :alt="info" :src="src" class="image"/>
-            </div>
-          </figure>
+          <img v-for="{info, src} in scope.images" :src="src" :key="src" :alt="info"
+               class="image-wrapper">
         </div>
       </template>
     </viewer>
   </div>
 </template>
 
-<script>
-/**
+<script>/**
  * @author IITII <ccmejx@gmail.com>
  * @date 2021/03/30 18:39
  */
 'use strict'
-import 'viewerjs/dist/viewer.css'
-import Viewer from 'v-viewer'
-
-import {createApp} from 'vue'
 import {mapState} from 'vuex'
 
-const app = createApp({})
-app.use(Viewer, {
-  debug: true
-})
+import 'viewerjs/dist/viewer.css'
+import {component as Viewer} from 'v-viewer'
 
 export default {
   name: 'PicViewer',
+  components: {Viewer},
   props: {
     visible: {
       type: Boolean,

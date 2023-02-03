@@ -13,7 +13,7 @@ const {configure} = require('quasar/wrappers')
 module.exports = configure(function (ctx) {
   return {
     // https://v2.quasar.dev/quasar-cli/supporting-ts
-    supportTS: false,
+    supportTS: true,
 
     // https://v2.quasar.dev/quasar-cli/prefetch-feature
     // preFetch: true,
@@ -26,6 +26,9 @@ module.exports = configure(function (ctx) {
       'i18n',
       'axios',
       'eventBus',
+      'auth',
+      // 不进行全局注册
+      // 'VueViewer',
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -74,6 +77,7 @@ module.exports = configure(function (ctx) {
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack(chain) {
+        // commit below is needed to enable TS support
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{extensions: ['js', 'vue']}])
       },

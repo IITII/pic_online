@@ -77,6 +77,7 @@ export default {
   ui_setting: 'UI Setting',
   viewer_play_interval: 'Automatically Cycling Image Interval When playing (Unit: ms)',
   waterfallOver: 'No more picture...',
+  waterfall_loading: 'Loading...',
   waterfall_load_error: 'Failed to fetch images...',
   waterfall_col: 'Max col for waterfall',
   waterfall_stride: 'Stride for manual load more images count',

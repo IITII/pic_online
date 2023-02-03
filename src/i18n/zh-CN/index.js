@@ -80,6 +80,7 @@ export default {
   ui_setting: 'UI 设置',
   viewer_play_interval: '播放时自动切换图片的间隔（单位: ms）',
   waterfallOver: '都被你看光了哟～',
+  waterfall_loading: '图片加载中...',
   waterfall_load_error: '图片信息加载失败',
   waterfall_col: '瀑布流最多显示行数',
   waterfall_stride: '瀑布流每次加载手动加载数量',

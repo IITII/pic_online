@@ -177,7 +177,7 @@ export default {
         })
     },
     update_selected: function (key) {
-      this.$log.debug(key)
+      this.$log.debug(key, this.tree.selectedNodeSync)
       if (key !== null) {
         this.$store.dispatch(`${this.storeName}/node_key`, key)
         // 对应上面的 ref="qtree"

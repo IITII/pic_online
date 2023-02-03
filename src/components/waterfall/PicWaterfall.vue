@@ -1,32 +1,40 @@
 <template>
   <q-page class="full-height-width">
-    <!--    <tool-group class="tool-group"/>-->
     <pic-viewer
       :images="water_fall.img_urls"
       :img-index="viewer.imgIndex"
       v-model:visible="viewer.visible"
       @loadMore="loadMore"/>
-<!--    <vue-waterfall-easy-->
-<!--      v-if="water_fall.show"-->
-<!--      ref="waterfall"-->
-<!--      :imgs-arr="water_fall.img_urls"-->
-<!--      :loadingDotCount="loadingDotCount"-->
-<!--      :loadingTimeOut="loadingTimeOut"-->
-<!--      :maxCols="waterfall_col"-->
-<!--      :reachBottomDistance="reach_bottom_distance"-->
-<!--      style="text-align: center"-->
-<!--      @click="card_click_event"-->
-<!--      @imgError="imgErrorEvent"-->
-<!--      @scrollReachBottom="loadMore">-->
-<!--      <template v-if="show_img_title"-->
-<!--            v-slot:props-->
-<!--            class="some-info">-->
-<!--        {{ props.value.info }}-->
-<!--      </template>-->
-<!--      <template v-slot:waterfall-over>-->
-<!--        {{ $t('waterfallOver') }}-->
-<!--      </template>-->
-<!--    </vue-waterfall-easy>-->
+    <vue-waterfall
+      :list="water_fall.img_urls"
+      :cols="waterfall_col"
+      :nomore="water_fall.no_more"
+      :footerHeight="18"
+      :scrollDistance="reach_bottom_distance"
+      class="text-center"
+      @preLoaded="loadedEnd"
+      @imageError="imgErrorEvent"
+      @scrollReachBottom="loadMore">
+      <!-- Customize Image box -->
+      <template v-slot:default="{ item }">
+        <!-- <div class="img_box" @click="() => card_click_event('imgBoxClickEvent', item)">-->
+        <div class="img_box" @click="card_click_event('imgBoxClickEvent', item)">
+          <img :src="item.imgSrc" :alt="item.info">
+        </div>
+      </template>
+      <!-- Customize footer -->
+      <template v-if="show_img_title" v-slot:footer="{ item }" class="some-info">
+        <span>{{ item.info }}</span>
+      </template>
+      <template v-slot:loading>
+        <span>{{ $t('waterfall_loading') }}</span>
+      </template>
+      <template v-slot:nomore>
+        <!--        <q-separator/>-->
+        <span>{{ $t('waterfallOver') }}</span>
+        <!--        <q-separator/>-->
+      </template>
+    </vue-waterfall>
     <tool-group/>
     <q-dialog ref="dialog" @hide="onDialogHide">
       <pic-store-settings class="btn-group-setting"/>
@@ -39,21 +47,24 @@
  * @date 2021/05/24 17:26
  */
 'use strict'
-import PicViewer from 'components/commons/PicViewer'
-import PicVPlayer from 'components/commons/PicVPlayer.vue'
-import ToolGroup from 'components/pic_tools/ToolGroup.vue'
+
+import {mapState} from 'vuex'
 import {getDocumentHeight} from 'src/utils/utils.js'
 
-import vueWaterfallEasy from 'vue-waterfall-easy'
-import {mapState} from 'vuex'
+import PicVPlayer from 'components/commons/PicVPlayer.vue'
+import ToolGroup from 'components/pic_tools/ToolGroup.vue'
 import PicStoreSettings from 'components/commons/PicStoreSettings'
+import PicViewer from 'components/commons/PicViewer'
+// import VueWaterfall from 'components/waterfall/VueWaterfall.vue'
+import VueWaterfall from 'vue3-waterfall'
+// import 'vue3-waterfall/dist/style.css'
 
 let self = null,
   viewer = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: {PicStoreSettings, ToolGroup, PicViewer},
+  components: {ToolGroup, PicStoreSettings, VueWaterfall, PicViewer},
   props: {
     api_url: {
       type: String,
@@ -111,6 +122,9 @@ export default {
     },
   },
   methods: {
+    loadedEnd() {
+      this.$log.debug('loadedEnd')
+    },
     show() {
       this.$log.debug('show')
       this.$log.debug(this.$refs)
@@ -138,6 +152,7 @@ export default {
       })
     },
     card_click_event(_, v) {
+      this.$log.debug('card_click_event', _, v)
       switch (this.waterfall_type) {
         case 'video':
           return this.showVideoDialog(v)
@@ -153,10 +168,9 @@ export default {
     },
     showVideoDialog(v) {
       this.$log.debug('showVideoDialog', v)
-      const media = v.value
       return this.$q.dialog({
         component: PicVPlayer, parent: this,
-        ...media,
+        componentProps: {...v},
         // title: media.info, video: media.video,
         // poster: media.src,
       })
@@ -188,11 +202,10 @@ export default {
       }
       return this.$axios.post(this.api_url, data)
         .then(_ => {
-          this.$log.debug(_)
+          this.$log.debug('req res:', _)
           // 意味着已经没有更多的数据了
           if (_.length < data.page_size) {
             this.water_fall.no_more = true
-            this.$refs.waterfall.waterfallOver && this.$refs.waterfall.waterfallOver()
           }
           return _
         })
@@ -205,14 +218,16 @@ export default {
           i['info'] = info
           return i
         }))
+        .then(_ => _.map(i => ({...i, imgSrc: i.src})))
         .then(_ => {
-          this.$log.debug(_)
+          this.$log.debug('set waterfall urls', _)
           this.water_fall.img_urls = this.water_fall.img_urls.concat(_)
         })
         .then(() => this.water_fall.page++)
         .catch(e => {
           this.$q.notify({type: 'warn', message: e.message})
-          return this.$refs.waterfall.waterfallOver()
+          // this.$refs.waterfall.waterfallOver && this.$refs.waterfall.waterfallOver()
+          // this.water_fall.no_more = true
         })
     },
     btn_click_goto_top() {
@@ -255,47 +270,56 @@ export default {
 
 <style lang="scss">
 
-* {
+.vue3-waterfall-item {
+  position: absolute;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 10%);
+}
+
+.vue3-waterfall-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.vue3-waterfall-item_footer {
+  overflow: hidden;
+}
+
+.vue3-waterfall-item_footer .title {
   margin: 0;
-  padding: 0;
 }
 
-a {
-  color: #000;
-  text-decoration: none;
-
-  &:active {
-    color: #000;
-  }
+.vue3-waterfall-item_footer .info {
+  margin: 0;
 }
 
-html,
-body,
-.waterfall_container {
-  height: 100%;
+.vue3-waterfall-loading {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
 }
 
-.waterfall_container {
-  position: relative;
-
-  .waterfall_content {
-    position: absolute;
-    top: 3px;
-    bottom: 3px;
-    //bottom: 24px;
-    width: 100%;
-  }
+.vue3-waterfall-nomore {
+  width: 100%;
+  text-align: center;
 }
 
-.waterfall_container {
-  overflow: auto;
-  position: relative;
-  padding: 0;
+.img_box {
+  border-radius: 6px;
+  overflow: hidden;
+}
 
-  .some-info {
-    line-height: 1.6;
-    text-align: center;
-  }
+.some-info {
+  line-height: 1.6;
+  text-align: center;
+}
+
+.waterfall_space {
+  width: 100%;
+  padding-left: 1%;
+  padding-right: 1%;
 }
 
 .btn-group-setting {

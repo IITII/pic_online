@@ -24,12 +24,12 @@ export default {
     return {
       langOptions: [
         {
-          value: 'en-us',
+          value: 'en-US',
           // label: 'En',
           label: 'English',
         },
         {
-          value: 'zh-hans',
+          value: 'zh-CN',
           label: '简体',
           // label: '简体中文',
         }
@@ -40,7 +40,7 @@ export default {
     lang: {
       get: function () {
         this.$log.debug('Get language setting')
-        return this.$store.getters['user/language'] || this.$q.lang.getLocale() || 'zh-hans'
+        return this.$store.getters['user/language'] || this.$q.lang.getLocale() || 'zh-CN'
       },
       set: function (lang) {
         this.$log.debug(`Set language to ${lang}`)

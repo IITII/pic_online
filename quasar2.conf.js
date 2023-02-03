@@ -91,8 +91,8 @@ module.exports = function (/* ctx */) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       // https://quasar.dev/options/quasar-language-packs#using-quasar-language-pack-in-app-space
-      // lang: 'en-us', // Quasar language pack
-      lang: 'zh-hans', // Quasar language pack
+      // lang: 'en-US', // Quasar language pack
+      lang: 'zh-CN', // Quasar language pack
       config: {
         notify: {
           html: false,
