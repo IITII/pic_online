@@ -23,8 +23,8 @@
         </div>
       </template>
       <!-- Customize footer -->
-      <template v-if="show_img_title" v-slot:footer="{ item }" class="some-info">
-        <span>{{ item.info }}</span>
+      <template v-slot:footer="{ item }" class="some-info">
+        <span v-if="show_img_title" >{{ item.info }}</span>
       </template>
       <template v-slot:loading>
         <span>{{ $t('waterfall_loading') }}</span>
