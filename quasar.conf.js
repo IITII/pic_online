@@ -120,6 +120,9 @@ module.exports = configure(function (ctx) {
       ],
 
       config: {
+        // "auto", true, false
+        // https://quasar.dev/quasar-plugins/dark#usage
+        dark: 'auto',
         notify: {
           html: false,
           position: 'top-right',

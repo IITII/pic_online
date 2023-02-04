@@ -3,7 +3,7 @@
     <q-select
       v-model="lang" :dark="true"
       :options="langOptions"
-      :options-dark="false"
+      :options-dark="$q.dark.isActive"
       :options-dense="false"
       borderless
       color="pink" dense dropdown-icon="translate"

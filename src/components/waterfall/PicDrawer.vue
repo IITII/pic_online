@@ -29,7 +29,6 @@
           <q-tree
             ref="qtree"
             no-transition
-            :dark="tree.dark"
             v-model:expanded="tree.expanded"
             :filter="tree.filter"
             :nodes="tree.nodes"
@@ -92,7 +91,6 @@ export default {
         nodeKeyMap: new Map(),
         expanded: [],
         selectedNodeSync: 1,
-        dark: false
       },
       badge: {
         color: 'primary',
