@@ -31,9 +31,9 @@
 import 'video.js/dist/video-js.css'
 import 'videojs-hotkeys'
 
-import {VideoPlayer} from '@videojs-player/vue'
-import { toRaw } from '@vue/reactivity'
+import {toRaw} from '@vue/reactivity'
 import {mapState} from 'vuex'
+import {VideoPlayer} from '@videojs-player/vue'
 import {getDocumentHeight, getDocumentWidth} from 'src/utils/utils.js'
 
 export default {

@@ -9,7 +9,8 @@
       :list="water_fall.img_urls"
       :cols="waterfall_col"
       :nomore="water_fall.no_more"
-      :footerHeight="18"
+      :gap="5"
+      :footerHeight="footerHeight()"
       :scrollDistance="reach_bottom_distance"
       class="text-center"
       @preLoaded="loadedEnd"
@@ -24,7 +25,7 @@
       </template>
       <!-- Customize footer -->
       <template v-slot:footer="{ item }" class="some-info">
-        <span v-if="show_img_title" >{{ item.info }}</span>
+        <span>{{ item.info }}</span>
       </template>
       <template v-slot:loading>
         <span>{{ $t('waterfall_loading') }}</span>
@@ -122,6 +123,9 @@ export default {
     },
   },
   methods: {
+    footerHeight() {
+      return this.show_img_title ? 18 : 0
+    },
     loadedEnd() {
       this.$log.debug('loadedEnd')
     },
