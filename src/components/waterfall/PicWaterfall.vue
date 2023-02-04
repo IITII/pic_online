@@ -6,18 +6,23 @@
       v-model:visible="viewer.visible"
       @loadMore="loadMore"/>
 
-    <vue-waterfall ref="waterfall"
-                   :gutter="8" :lazyload="true" :delay="400"
-                   :list="water_fall.img_urls"
-                   :breakpoints="breakpoints"
-                   :backgroundColor="backgroundColor">
-      <template #item="{ item, url }">
-        <div @click="card_click_event('imgBoxClickEvent', item)">
-          <lazy-img class="img_box" :url="url"/>
-          <span v-if="show_img_title" class="some-info">{{ item.info }}</span>
-        </div>
-      </template>
-    </vue-waterfall>
+    <div style="text-align: center;">
+      <vue-waterfall ref="waterfall"
+                     :gutter="8" :lazyload="true" :delay="400"
+                     :list="water_fall.img_urls"
+                     :breakpoints="breakpoints"
+                     :backgroundColor="backgroundColor">
+        <template #item="{ item, url }">
+          <div @click="card_click_event('imgBoxClickEvent', item)">
+            <lazy-img class="img_box" :url="url"/>
+            <span v-if="show_img_title">{{ item.info }}</span>
+          </div>
+        </template>
+      </vue-waterfall>
+      <span v-if="water_fall.no_more" class="waterfall-nomore">
+        {{ $t('waterfallOver') }}
+      </span>
+    </div>
 
     <tool-group/>
     <q-dialog ref="dialog" @hide="onDialogHide">
@@ -231,8 +236,7 @@ export default {
     btn_click_goto_top() {
       this.$log.debug('waterfall', this.$refs.waterfall.$el)
       // debugger
-      this.$refs.waterfall.waterfallWrapper.scrollTop = 100
-      // this.$refs.waterfall.$refs.scrollEl.scrollTop = 0
+      document.querySelector("html").scrollTop = 0
     },
     btn_click_loadMore() {
       return this.loadMore()
@@ -290,9 +294,11 @@ export default {
   overflow: hidden;
 }
 
-.some-info {
-  line-height: 1.6;
-  text-align: center;
+.waterfall-nomore {
+  position: fixed;
+  bottom: 10px;
+  color: antiquewhite;
+  font-size: 90%;
 }
 
 .btn-group-setting {
