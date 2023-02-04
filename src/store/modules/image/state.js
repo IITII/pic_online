@@ -21,7 +21,7 @@ const state = {
   // 瀑布流最多显示行数
   waterfall_col: parseInt(persistent.imageGet('waterfall_col')) || 5,
   // 每次加载手动加载数量
-  waterfall_stride: parseInt(persistent.imageGet('waterfall_stride')) || 10,
+  waterfall_stride: parseInt(persistent.imageGet('waterfall_stride')) || 100,
   // 默认最长标题长度
   title_max_length: parseInt(persistent.imageGet('title_max_length')) || 24,
   // v-viewer play interval (Unit: ms)

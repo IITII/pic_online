@@ -5,37 +5,20 @@
       :img-index="viewer.imgIndex"
       v-model:visible="viewer.visible"
       @loadMore="loadMore"/>
-    <vue-waterfall
-      :list="water_fall.img_urls"
-      :cols="waterfall_col"
-      :nomore="water_fall.no_more"
-      :gap="5"
-      :footerHeight="footerHeight()"
-      :scrollDistance="reach_bottom_distance"
-      class="text-center"
-      @preLoaded="loadedEnd"
-      @imageError="imgErrorEvent"
-      @scrollReachBottom="loadMore">
-      <!-- Customize Image box -->
-      <template v-slot:default="{ item }">
-        <!-- <div class="img_box" @click="() => card_click_event('imgBoxClickEvent', item)">-->
-        <div class="img_box" @click="card_click_event('imgBoxClickEvent', item)">
-          <img :src="item.imgSrc" :alt="item.info">
+
+    <vue-waterfall ref="waterfall"
+                   :gutter="8" :lazyload="true" :delay="400"
+                   :list="water_fall.img_urls"
+                   :breakpoints="breakpoints"
+                   :backgroundColor="backgroundColor">
+      <template #item="{ item, url }">
+        <div @click="card_click_event('imgBoxClickEvent', item)">
+          <lazy-img class="img_box" :url="url"/>
+          <span v-if="show_img_title" class="some-info">{{ item.info }}</span>
         </div>
       </template>
-      <!-- Customize footer -->
-      <template v-slot:footer="{ item }" class="some-info">
-        <span>{{ item.info }}</span>
-      </template>
-      <template v-slot:loading>
-        <span>{{ $t('waterfall_loading') }}</span>
-      </template>
-      <template v-slot:nomore>
-        <!--        <q-separator/>-->
-        <span>{{ $t('waterfallOver') }}</span>
-        <!--        <q-separator/>-->
-      </template>
     </vue-waterfall>
+
     <tool-group/>
     <q-dialog ref="dialog" @hide="onDialogHide">
       <pic-store-settings class="btn-group-setting"/>
@@ -57,15 +40,17 @@ import ToolGroup from 'components/pic_tools/ToolGroup.vue'
 import PicStoreSettings from 'components/commons/PicStoreSettings'
 import PicViewer from 'components/commons/PicViewer'
 // import VueWaterfall from 'components/waterfall/VueWaterfall.vue'
-import VueWaterfall from 'vue3-waterfall'
+// import VueWaterfall from 'vue3-waterfall'
 // import 'vue3-waterfall/dist/style.css'
+import {LazyImg, Waterfall as VueWaterfall} from 'vue-waterfall-plugin-next'
+import 'vue-waterfall-plugin-next/style.css'
 
 let self = null,
   viewer = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: {ToolGroup, PicStoreSettings, VueWaterfall, PicViewer},
+  components: {ToolGroup, PicStoreSettings, VueWaterfall, PicViewer, LazyImg},
   props: {
     api_url: {
       type: String,
@@ -95,6 +80,15 @@ export default {
         page: 0,
         img_urls: [],
       },
+      breakpoints: {
+        1500: {rowPerView: 6},
+        1250: {rowPerView: 5},
+        1000: {rowPerView: 4,},
+        750: {rowPerView: 3,},
+        //当屏幕宽度小于等于500
+        500: {rowPerView: 2,},
+        300: {rowPerView: 1,},
+      }
     }
   },
   computed: {
@@ -107,11 +101,14 @@ export default {
       title_max_length: state => state[self.storeName].title_max_length,
       auto_next: state => state[self.storeName].auto_next,
     }),
-    loadingDotCount: () => 3,
-    loadingTimeOut: () => 500,
     reach_bottom_distance() {
       const height = getDocumentHeight()
       return Math.floor(height * 0.2)
+    },
+    backgroundColor() {
+      this.$log.debug(`dark mode: `, this.$q.dark.isActive)
+      // return this.$q.dark.isActive ? '#303133' : '#ffffff'
+      return this.$q.dark.isActive ? '#121212' : '#ffffff'
     },
   },
   watch: {
@@ -125,9 +122,6 @@ export default {
   methods: {
     footerHeight() {
       return this.show_img_title ? 18 : 0
-    },
-    loadedEnd() {
-      this.$log.debug('loadedEnd')
     },
     show() {
       this.$log.debug('show')
@@ -235,7 +229,10 @@ export default {
         })
     },
     btn_click_goto_top() {
-      this.$refs.waterfall.$refs.scrollEl.scrollTop = 0
+      this.$log.debug('waterfall', this.$refs.waterfall.$el)
+      // debugger
+      this.$refs.waterfall.waterfallWrapper.scrollTop = 100
+      // this.$refs.waterfall.$refs.scrollEl.scrollTop = 0
     },
     btn_click_loadMore() {
       return this.loadMore()
@@ -274,40 +271,18 @@ export default {
 
 <style lang="scss">
 
-.vue3-waterfall-item {
-  position: absolute;
-  box-sizing: border-box;
-  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 10%);
+.lazy__img[lazy=loading] {
+  padding: 5em 0;
+  width: 48px;
 }
 
-.vue3-waterfall-item img {
-  display: block;
+.lazy__img[lazy=loaded] {
   width: 100%;
-  height: auto;
 }
 
-.vue3-waterfall-item_footer {
-  overflow: hidden;
-}
-
-.vue3-waterfall-item_footer .title {
-  margin: 0;
-}
-
-.vue3-waterfall-item_footer .info {
-  margin: 0;
-}
-
-.vue3-waterfall-loading {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  text-align: center;
-}
-
-.vue3-waterfall-nomore {
-  width: 100%;
-  text-align: center;
+.lazy__img[lazy=error] {
+  padding: 5em 0;
+  width: 48px;
 }
 
 .img_box {
@@ -318,12 +293,6 @@ export default {
 .some-info {
   line-height: 1.6;
   text-align: center;
-}
-
-.waterfall_space {
-  width: 100%;
-  padding-left: 1%;
-  padding-right: 1%;
 }
 
 .btn-group-setting {
