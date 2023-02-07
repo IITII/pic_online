@@ -53,13 +53,15 @@
 
 ## Know issues
 
-> 还没写完, To be continue...
-
 ### 图片 CORS 问题
 
 * 注释 `node_modules/vue-waterfall-plugin-next/dist/my-lib.es.js:340` 行
 * 第三方插件问题
 * https://github.com/heikaimu/vue3-waterfall-plugin/issues/13
+
+### 服务页面 node 和 service 页不可用
+
+* 应该是升级到 Vue3 引发的问题, 数据正常加载, table 无数据, 未解决
 
 ## 预览
 
@@ -67,6 +69,8 @@
 ![alt](./docs/imgs/1.jpg)
 ![alt](./docs/imgs/2.jpg)
 ![alt](./docs/imgs/3.jpg)
+
+## To be continue...
 
 ## dev
 

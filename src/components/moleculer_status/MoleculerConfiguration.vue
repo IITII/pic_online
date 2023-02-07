@@ -18,9 +18,7 @@
       <q-btn :label="$t('show_broker_config')" class="q-ma-sm"
              @click="showBroker = !showBroker"/>
       <div v-show="showBroker">
-        <vue-code-highlight language="JavaScript">
-          {{ broker }}
-        </vue-code-highlight>
+        <pre v-highlightjs><code class="JavaScript">{{ broker }}</code></pre>
       </div>
     </div>
   </div>
@@ -32,14 +30,10 @@
  * @date 2021/06/03 10:09
  */
 'use strict'
-import 'vue-code-highlight/themes/window.css'
-// import "vue-code-highlight/themes/duotone-sea.css"
-import 'vue-code-highlight/themes/prism-tomorrow.css'
-import {component as VueCodeHighlight} from 'vue-code-highlight'
 
 export default {
   name: 'MoleculerConfiguration',
-  components: {VueCodeHighlight},
+  components: {},
   data() {
     return {
       showBroker: false,
@@ -77,6 +71,11 @@ export default {
     }
   },
   mounted() {
+    if (this.$q.dark.isActive) {
+      import('highlight.js/styles/solarized-dark.css')
+    } else {
+      import('highlight.js/styles/solarized-light.css')
+    }
     this.getConfiguration()
   }
 }
