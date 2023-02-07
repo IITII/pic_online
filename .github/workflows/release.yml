@@ -1,0 +1,61 @@
+name: Build Release
+on:
+  push:
+    tags:
+      - 'v3**'
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: pic_online/pic_online.zip
+            asset_name: pic_online.zip
+            release_name: pic_online
+    steps:
+      - name: Checkout 🛎️
+        # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      #See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
+      #      - name: Install build dependencies
+      #        run: |
+      #          sudo apt-get update
+      #          sudo apt-get install -y zip git
+
+      - name: Set Environment 🔨
+        run: |
+          sudo npm install -g @quasar/cli
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          quasar build
+      - name: Package Artifact 🎁
+        run: |
+          export RELEASE_NAME=${{ matrix.release_name }}
+          mkdir ${RELEASE_NAME}
+          zip -r ${RELEASE_NAME}/${RELEASE_NAME}.zip dist/spa/*
+          ls -alh ${RELEASE_NAME}
+      #      - name: Get package name
+      #        id: get_package
+      #        run: |
+      #          export RELEASE_NAME="release"
+      #          echo ::set-output name=NAME::$(ls . | grep ${RELEASE_NAME})
+
+      - name: Upload Artifact 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ matrix.artifact_name }}
+
+      - name: Upload binaries to release ☕
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+          overwrite: true
