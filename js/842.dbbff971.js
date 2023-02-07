@@ -1,0 +1,1 @@
+"use strict";(globalThis["webpackChunkpic_online_front"]=globalThis["webpackChunkpic_online_front"]||[]).push([[842],{36842:(n,t,e)=>{e.r(t),e.d(t,{default:()=>i});var o=e(83673);function r(n,t,e,r,u,a){const c=(0,o.up)("router-view");return(0,o.wg)(),(0,o.j4)(c)}const u={name:"EmptyLayout"};var a=e(74260);const c=(0,a.Z)(u,[["render",r]]),i=c}}]);
