@@ -42,10 +42,6 @@ jobs:
 
       - name: Set Environment 🔨
         run: |
-          echo ${{ github.workspace}}
-          echo ${{ github.workspace}}/node_modules
-          pwd
-          ls -alh
           sudo npm install -g @quasar/cli
       - name: Install dependencies 🔧
         run: |
