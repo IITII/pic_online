@@ -28,8 +28,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
-          cache: 'npm'
-          cache-dependency-path: lock.json
+          # 不缓存 node modules, 没啥提升, 时间还长了
+          # cache: 'npm'
+          # cache-dependency-path: lock.json
 
       #See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
       #      - name: Install build dependencies
