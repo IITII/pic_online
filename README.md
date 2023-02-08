@@ -28,7 +28,9 @@
 
 ## 预览
 
+### 手机截图
 ![alt](./docs/imgs/5.jpeg)
+### 桌面截图
 ![alt](./docs/imgs/4.jpg)
 ![alt](./docs/imgs/1.jpg)
 ![alt](./docs/imgs/2.jpg)
