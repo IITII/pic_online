@@ -24,11 +24,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           persist-credentials: false
-      - name: Cache dependencies ⚡️
+      - name: "Using Special Node Version"
         uses: actions/setup-node@v3
         with:
           node-version: 14
-          cache: 'npm'
+      - name: Cache Dependencies ⚡️
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace}}/node_modules
+          key: npm-cache-${{ matrix.os }}
 
       #See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
       #      - name: Install build dependencies
@@ -38,6 +42,10 @@ jobs:
 
       - name: Set Environment 🔨
         run: |
+          echo ${{ github.workspace}}
+          echo ${{ github.workspace}}/node_modules
+          pwd
+          ls -alh
           sudo npm install -g @quasar/cli
       - name: Install dependencies 🔧
         run: |
