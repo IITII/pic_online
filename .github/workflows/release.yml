@@ -21,10 +21,14 @@ jobs:
             release_name: pic_online_pic
     steps:
       - name: Checkout 🛎️
-        # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v3
         with:
           persist-credentials: false
+      - name: Cache dependencies ⚡️
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
 
       #See:// https://github.com/actions/virtual-environments/blob/ubuntu18/20201004.1/images/linux/Ubuntu1804-README.md
       #      - name: Install build dependencies
@@ -41,21 +45,25 @@ jobs:
       - name: Package Artifact 🎁
         run: |
           export PIC_DEPLOY_DIR=${{ matrix.deploy_dir }}
-          quasar build
+          npm run build
           zip -r ${{ matrix.artifact_name }} dist/spa/*
           ls -alh *.zip
 
       - name: Upload Artifact 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.asset_name }}
           path: ${{ matrix.artifact_name }}
 
       - name: Upload binaries to release ☕
-        uses: svenstaro/upload-release-action@v1-release
+        uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ matrix.artifact_name }}
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
           overwrite: true
+          body: "* release 版本
+  * `pic_online.zip`: 必须放在网站 `根目录` 下, 不能放在子目录下
+  * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下
+* gh-pages 分支版本, 必须放在网站子目录 `/pic_online` 下"
