@@ -64,7 +64,7 @@ jobs:
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
           overwrite: true
-          body: "* release 版本
-  * `pic_online.zip`: 必须放在网站 `根目录` 下, 不能放在子目录下
-  * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下
+          body: "* release 版本 \n
+  * `pic_online.zip`: 必须放在网站 `根目录` 下, 不能放在子目录下 \n
+  * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下 \n
 * gh-pages 分支版本, 必须放在网站子目录 `/pic_online` 下"
