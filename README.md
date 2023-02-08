@@ -43,7 +43,7 @@
   * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下
 * gh-pages 分支版本, 必须放在网站子目录 `/pic_online` 下
 
-* [局域网媒体浏览服务搭建](./build.md)
+* See：[局域网媒体浏览服务搭建](./build.md)
 
 ## 热键
 
