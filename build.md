@@ -1,7 +1,7 @@
 # 局域网媒体浏览服务搭建
 
 * 所有的文件都是使用者自己的文件，都是本地文件
-* 推荐使用 linux 或者 mac 系统, 作为服务端系统
+* 推荐使用 linux 或者 mac 系统, 作为服务端系统, windows 也可
 * 项目分为两个部分, 一个是服务端, 一个是客户端
   * 服务端: 用于提供服务, 服务端需要安装 nodejs, ffmpeg
   * 客户端: 浏览器即可, 无需安装任何东西.
@@ -28,6 +28,12 @@ nvm install 14.17.6
 git clone https://github.com/IITII/pic_online_backend.git
 ```
 
+#### Windows
+* 需要安装 git nodejs ffmpeg
+* 可以使用 winget， scoop，之类的包管理器进行安装。自行处理
+* 搜索下载 git，nodejs，下载后安装即可
+* GitHub 搜索 ffmpeg build，下载编译后的Windows二进制文件，并解压放到windows PATH 下面即可
+
 ### 文件结构
 ```
 public
@@ -52,6 +58,8 @@ public
 5. 服务端的 ip 是自动扫描出来的, 无需配置, 也是 DDNS 的解析地址
 6. 假设你的 JWT_TOKEN_EXPIRE 是 336, 即登陆过期时间是 336 小时
 
+#### linux、mac
+
 ```bash
 #!/bin/bash
 
@@ -75,6 +83,50 @@ npm run start
 * 将修改后的配置文件保存为 `env.sh`
 * 执行 `chmod +x env.sh`
 * 执行 `bash env.sh` 即可启动服务
+
+#### windows
+
+```powershell
+# 修改为实际的 clone 地址
+Set-Location G:\pic_online_backend
+
+$env:NAS_DOMAIN="xxx.baidu.com"
+$env:PIC_BASE_DIR="G:/pic"
+$env:MOLECULER_PORT=89
+$env:MOLECULER_DDNS_ENABLE="true"
+
+$env:PIC_DIR="$env:PIC_BASE_DIR/images"
+$env:VIDEO_DIR="$env:PIC_BASE_DIR/video"
+$env:PIC_POSTER_DIR="$env:PIC_BASE_DIR/cache"
+$env:PIC_PREFIX="http://${env:NAS_DOMAIN}:${env:MOLECULER_PORT}"
+$env:MOLECULER_DDNS_DOMAIN=$env:NAS_DOMAIN
+$env:MOLECULER_DDNS_TOKEN=$env:NAS_DOMAIN
+# 登陆过期时间, 单位小时
+$env:JWT_TOKEN_EXPIRE=336
+
+npm run start
+
+pause
+```
+
+* 将修改后的配置文件保存为 `start.ps1`
+* 右键使用 `powershell 运行` 即可启动
+
+如果使用Windows终端的话，还可以直接将这个脚本添加为标签页
+* 在 setting.json 里面新增以下内容，保存后 Windows终端会自动重载配置
+
+```jsonc
+{
+  "colorScheme": "Campbell",
+  "commandline": "pwsh.exe '实际的start.ps1路径'",
+  "guid": "{eb60e7f0-97b3-4a96-b5fb-a120e9058b55}",
+  "hidden": false,
+  # 图标可以自定义，自由发挥
+  "icon": "ms-appx:///ProfileIcons/node.png",
+  "name": "PicBackend",
+  "startingDirectory": "%USERPROFILE%"
+}
+```
 
 ## 前端部署
 
