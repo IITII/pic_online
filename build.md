@@ -128,6 +128,8 @@ pause
 }
 ```
 
+![alt](./docs/imgs/6.png)
+
 ## 前端部署
 
 1. 浏览器打开: https://github.com/IITII/pic_online/releases
