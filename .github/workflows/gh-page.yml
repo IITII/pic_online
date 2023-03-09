@@ -23,6 +23,9 @@ jobs:
         run: |
           export PIC_DEPLOY_DIR=/pic_online
           npm install
+          ls node_modules/vue-waterfall-plugin-next
+          ls node_modules/vue-waterfall-plugin-next/dist/style.css
+          cat node_modules/vue-waterfall-plugin-next/package.json
           npm run build
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.6.2
