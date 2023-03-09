@@ -46,7 +46,7 @@ import PicViewer from 'components/commons/PicViewer'
 // import VueWaterfall from 'vue3-waterfall'
 // import 'vue3-waterfall/dist/style.css'
 import {LazyImg, Waterfall as VueWaterfall} from 'vue-waterfall-plugin-next'
-import 'vue-waterfall-plugin-next/style.css'
+import 'vue-waterfall-plugin-next/dist/style.css'
 
 let self = null,
   viewer = null,

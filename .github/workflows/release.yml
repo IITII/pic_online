@@ -44,6 +44,11 @@ jobs:
       - name: Install dependencies 🔧
         run: |
           npm install
+          set -x
+          ls node_modules/vue-waterfall-plugin-next
+          ls node_modules/vue-waterfall-plugin-next/dist/style.css
+          cat node_modules/vue-waterfall-plugin-next/package.json
+          set +x
       - name: Package Artifact 🎁
         run: |
           export PIC_DEPLOY_DIR=${{ matrix.deploy_dir }}
