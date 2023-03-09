@@ -119,6 +119,8 @@ export default {
       this.$log.debug(`nodeKey updated: ${n}`)
       this.resetConfig()
       this.loadMore()
+      // gotop for lazy load imgs
+      this.btn_click_goto_top()
       // this.rebuildWaterfall()
     },
   },
