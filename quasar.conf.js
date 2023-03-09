@@ -54,7 +54,8 @@ module.exports = configure(function (ctx) {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       env: {
         AXIOS_TIMEOUT: process.env.AXIOS_TIMEOUT,
-        AXIOS_BASE_URL: process.env.AXIOS_BASE_URL || 'http://localhost:89/',
+        AXIOS_BASE_URL: process.env.AXIOS_BASE_URL,
+        // AXIOS_BASE_URL: process.env.AXIOS_BASE_URL || 'http://localhost:89/',
       },
 
       // transpile: false,

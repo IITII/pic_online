@@ -9,14 +9,10 @@ export default function () {
       if (base) {
         return base
       } else {
+        let {protocol, host} = win
         let local = new URL('http://localhost:3000/')
-        if (win.hostname.includes("github")) {
-          console.log(`window.location.href contains github, using https`)
-          local.protocol = 'https:'
-        } else {
-          console.log(`set default api to window.location.origin`)
-          local.hostname = win.hostname
-        }
+        local.protocol = protocol
+        local.host = host
         return local.origin
       }
     })(),
