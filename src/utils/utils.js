@@ -46,7 +46,7 @@ export function afterLogin(user, store, router, axios, redirect = true) {
   axios.defaults.headers['authorization'] = ['Token', user.token].join(' ')
   if (redirect) {
     // router.push('/' + user.user_type)
-    router.push(`/${user.user_type}/image`)
+    router.push({path: router.query.redirect || `/${user.user_type}/image`})
   }
 }
 
