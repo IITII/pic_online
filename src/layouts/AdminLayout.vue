@@ -79,14 +79,17 @@ export default {
      * 可能是因为递归调用导致数据绑定失败
      */
     toolbar_title() {
-      const updateTitle = ['image', 'video']
+      const updateTitle = ['image', 'video'].map(_ => ({k: `/${this.user_type}/${_}`, v: _}))
+      updateTitle.push({k: `/${this.user_type}`, v: 'image'})
+      let showTitle = 'Pic Online'
+      const curRoute = computed(() => useRoute().path).value
       for (let title of updateTitle) {
-        const curRoute = computed(() => useRoute().path).value
-        if (curRoute.endsWith(title)) {
-          return this[title] + '' || 'Pic Online'
+        if (curRoute.endsWith(title.k)) {
+          showTitle = this[title.v] + ''
+          break
         }
       }
-      return 'Pic Online'
+      return showTitle
     },
     leftDrawer: function () {
       this.$log.debug('leftDrawer')

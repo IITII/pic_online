@@ -9,7 +9,7 @@ import axios from 'axios'
 // for each client)
 let client = null
 
-export default boot(({app, store}) => {
+export default boot(({app, router, store}) => {
   if (client) return
 
   // set defaults
@@ -39,6 +39,12 @@ export default boot(({app, store}) => {
     // 在这里丢出的错误会被 axios catch，所以无需修改业务端的逻辑
     return _.errors ? Promise.reject(new Error(_.errors)) : _
   }, function (error) {
+    if (error.response.status === 401) {
+      router.push({
+        name: 'login',
+        query: {redirect: router.currentRoute.fullPath || router.currentRoute._value.fullPath || '/'}
+      })
+    }
     return Promise.reject(error)
   })
 

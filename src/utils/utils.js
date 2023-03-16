@@ -39,14 +39,14 @@ export function userTypeToRoute(userType) {
  * @param router Vue Router
  * @param axios Axios Instance
  * @param redirect {Boolean} redirect after login, default: true
+ * @param redirectPath {String} redirect path, default: `/${user.user_type}/image`
  */
-export function afterLogin(user, store, router, axios, redirect = true) {
+export function afterLogin(user, store, router, axios, redirect = true, redirectPath = '') {
   store.dispatch('user/user', user)
   // reset after re-create Vue instance, such as page reload
   axios.defaults.headers['authorization'] = ['Token', user.token].join(' ')
   if (redirect) {
-    // router.push('/' + user.user_type)
-    router.push({path: router.query.redirect || `/${user.user_type}/image`})
+    router.push({path: redirectPath || `/${user.user_type}/image`})
   }
 }
 

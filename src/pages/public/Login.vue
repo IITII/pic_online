@@ -91,9 +91,10 @@ export default {
         name: this.input.name,
         password: this.input.password,
       }
+      let redirect = this.$route.query?.redirect
       return this.$axios.post('/limit/user/login', data)
         .then(_ => _.user)
-        .then(_ => afterLogin(_, this.$store, this.$router, this.$axios))
+        .then(_ => afterLogin(_, this.$store, this.$router, this.$axios, true, redirect))
         .catch(e => this.$q.notify({type: 'error', message: e.message}))
     },
 
