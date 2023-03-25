@@ -1,10 +1,5 @@
 <template>
   <q-page class="full-height-width">
-    <pic-viewer
-      :images="water_fall.img_urls"
-      :img-index="viewer.imgIndex"
-      v-model:visible="viewer.visible"
-      @loadMore="loadMore"/>
 
     <vue-waterfall ref="waterfall"
                    :gutter="8" :lazyload="true" :delay="400"
@@ -29,7 +24,8 @@
   </q-page>
 </template>
 
-<script>/**
+<script>
+/**
  * @author IITII <ccmejx@gmail.com>
  * @date 2021/05/24 17:26
  */
@@ -47,13 +43,13 @@ import PicViewer from 'components/commons/PicViewer'
 // import 'vue3-waterfall/dist/style.css'
 import {LazyImg, Waterfall as VueWaterfall} from 'vue-waterfall-plugin-next'
 import 'vue-waterfall-plugin-next/dist/style.css'
+import 'viewerjs/dist/viewer.css'
 
 let self = null,
-  viewer = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: {ToolGroup, PicStoreSettings, VueWaterfall, PicViewer, LazyImg},
+  components: { ToolGroup, PicStoreSettings, VueWaterfall, LazyImg },
   props: {
     api_url: {
       type: String,
@@ -72,10 +68,6 @@ export default {
   },
   data() {
     return {
-      viewer: {
-        imgIndex: 0,
-        visible: false,
-      },
       water_fall: {
         // 使用 v-if 来通过重新创建和销毁组件的方式来实现类似于界面刷新的效果
         show: true,
@@ -165,9 +157,10 @@ export default {
       }
     },
     showImageViewer(v) {
-      this.$log.debug('showImageViewer')
-      this.viewer.visible = true
-      this.viewer.imgIndex = parseInt(v.index) || 0
+      let imgIndex = parseInt(v.index)
+        || Math.max(0, this.water_fall.img_urls.indexOf(v))
+      this.$log.debug('showImageViewer', imgIndex)
+      this.$viewerApi(this.viewerOpts(imgIndex))
     },
     showVideoDialog(v) {
       this.$log.debug('showVideoDialog', v)
@@ -241,6 +234,33 @@ export default {
     btn_click_loadMore() {
       return this.loadMore()
     },
+    viewerOpts(initialViewIndex = 0) {
+      let options = {
+          toolbar: true,
+          // Enable keyboard support.
+          keyboard: true,
+          // Focus the active item in the navbar when initialized.
+          /// Requires the keyboard option set to true.
+          focus: true,
+          // The amount of time to delay between
+          // automatically cycling an image when playing.
+          interval: 2000,
+          // Define where to get the original image URL for viewing.
+          /// If it is a function, it should return a valid image URL.
+          /// If string, it should be one of the attributes of each image element.
+          url: 'src',
+          // Indicate if enable loop viewing or not.
+          /// If the current image is the last one,
+          /// then the next one to view is the first one, and vice versa.
+          loop: false,
+        }
+      let opts = {images: this.water_fall.img_urls,
+      options: {
+      ...options,
+      initialViewIndex,
+      }}
+      return opts
+    },
   },
   beforeCreate() {
     // simple copy for access `props`
@@ -251,7 +271,6 @@ export default {
     // deep copy
     // store default values for reset
     // this.$log.debug(this.viewer)
-    viewer = JSON.parse(JSON.stringify(this.viewer))
     water_fall = JSON.parse(JSON.stringify(this.water_fall))
     this.$bus.on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.on('btn_click_loadMore', this.btn_click_loadMore)
@@ -274,7 +293,6 @@ export default {
 
 
 <style lang="scss">
-
 .lazy__img[lazy=loading] {
   padding: 5em 0;
   width: 48px;

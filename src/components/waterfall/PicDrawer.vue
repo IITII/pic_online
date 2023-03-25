@@ -177,8 +177,10 @@ export default {
     update_selected: function (key) {
       this.$log.debug(key, this.tree.selectedNodeSync)
       if (key !== null) {
+      // if (key !== null || key !== this.tree.selectedNodeSync) {
         this.$store.dispatch(`${this.storeName}/node_key`, key)
         // 对应上面的 ref="qtree"
+        // 这里也可能是接口数据未获取
         const node = this.$refs.qtree.getNodeByKey(key)
         this.$log.debug(node)
         if (node) {
@@ -189,6 +191,7 @@ export default {
           this.tree.selectedNodeSync = key
         } else {
           // lazy load 情况下 node 为 null, 直接强制加载默认值
+          this.$log.debug('??? unkown node, redirect to 1')
           this.update_selected(1)
         }
       }

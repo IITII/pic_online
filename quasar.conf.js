@@ -28,6 +28,7 @@ module.exports = configure(function (ctx) {
       'eventBus',
       'auth',
       'CodeHighLight',
+      'viewer',
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
