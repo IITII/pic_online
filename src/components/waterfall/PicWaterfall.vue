@@ -172,11 +172,7 @@ export default {
       })
     },
     resetConfig() {
-      // this.$log.debug(viewer)
       // this.$log.debug(water_fall)
-      for (const k in viewer) {
-        this.viewer[k] = viewer[k]
-      }
       for (const k in water_fall) {
         this.water_fall[k] = water_fall[k]
       }
@@ -270,7 +266,6 @@ export default {
   created() {
     // deep copy
     // store default values for reset
-    // this.$log.debug(this.viewer)
     water_fall = JSON.parse(JSON.stringify(this.water_fall))
     this.$bus.on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.on('btn_click_loadMore', this.btn_click_loadMore)
