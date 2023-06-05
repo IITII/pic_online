@@ -29,8 +29,11 @@
 ## 预览
 
 ### 手机截图
+
 ![alt](./docs/imgs/5.jpeg)
+
 ### 桌面截图
+
 ![alt](./docs/imgs/4.jpg)
 ![alt](./docs/imgs/1.jpg)
 ![alt](./docs/imgs/2.jpg)
@@ -48,6 +51,7 @@
 ## 热键
 
 ### viewer 打开时
+
 > https://github.com/fengyuanchen/viewerjs#keyboard-support
 
 * Esc: 退出全屏或者关闭查看器或者退出 `modal mode` 或者停止播放
@@ -85,7 +89,6 @@
 
 * 应该是升级到 Vue3 引发的问题, 数据正常加载, table 无数据, 未解决
 
-
 ## To be continue...
 
 ## dev
@@ -117,3 +120,10 @@ quasar build
 ### Customize the configuration
 
 See [Configuring quasar.conf.js](https://v1.quasar.dev/quasar-cli/quasar-conf-js).
+
+## Thanks
+
+<a href="https://jb.gg/OpenSourceSupport">
+<img height="100px" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo.">
+</a>
+
