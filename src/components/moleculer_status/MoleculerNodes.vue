@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-table :columns="getCols" :data="nodes"
+    <q-table :columns="getCols" :rows="nodes"
              :filter="filter" :loading="firstLoad && loading"
              :no-data-label="$t('no_data_label')"
              :no-results-label="$t('no_result_label')"
