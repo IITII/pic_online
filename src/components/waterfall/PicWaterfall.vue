@@ -4,7 +4,7 @@
     <vue-waterfall ref="waterfall"
                    :gutter="8" :lazyload="true" :delay="400"
                    :list="water_fall.img_urls"
-                   :breakpoints="breakpoints"
+                   :breakpoints="breakpoints" :crossOrigin="false"
                    :backgroundColor="backgroundColor">
       <template #item="{ item, url }">
         <div class="text-center" @click="card_click_event('imgBoxClickEvent', item)">
