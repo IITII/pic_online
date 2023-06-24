@@ -48,6 +48,11 @@
 
 * See：[局域网媒体浏览服务搭建](./build.md)
 
+```
+wget https://github.com/IITII/pic_online_backend/blob/main/docker-compose.yml
+docker-compose up -d
+```
+
 ## 热键
 
 ### viewer 打开时
