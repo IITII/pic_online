@@ -26,6 +26,18 @@
 * 文件数多时, 支持手动重新扫描底层文件, 刷新即可重新获取文件列表
 * 文件树展开优化, 默认展开当前目录及父节点, 其他节点自动折叠
 
+## 部署
+
+* [docker-compose](./docker.md)
+
+* 手动部署
+  * release 版本
+    * `pic_online.zip`: 必须放在网站 `根目录` 下, 不能放在子目录下
+    * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下
+  * gh-pages 分支版本, 必须放在网站子目录 `/pic_online` 下
+
+* See：[局域网媒体浏览服务搭建](./build.md)
+
 ## 预览
 
 ### 手机截图
@@ -38,20 +50,6 @@
 ![alt](./docs/imgs/1.jpg)
 ![alt](./docs/imgs/2.jpg)
 ![alt](./docs/imgs/3.jpg)
-
-## 部署
-
-* release 版本
-  * `pic_online.zip`: 必须放在网站 `根目录` 下, 不能放在子目录下
-  * `pic_online_pic.zip`: 必须放在网站子目录 `/pic` 下
-* gh-pages 分支版本, 必须放在网站子目录 `/pic_online` 下
-
-* See：[局域网媒体浏览服务搭建](./build.md)
-
-```
-wget https://raw.githubusercontent.com/IITII/pic_online_backend/main/docker-compose.yml
-docker-compose up -d
-```
 
 ## 热键
 
