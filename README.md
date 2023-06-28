@@ -49,7 +49,7 @@
 * See：[局域网媒体浏览服务搭建](./build.md)
 
 ```
-wget https://github.com/IITII/pic_online_backend/blob/main/docker-compose.yml
+wget https://raw.githubusercontent.com/IITII/pic_online_backend/main/docker-compose.yml
 docker-compose up -d
 ```
 
