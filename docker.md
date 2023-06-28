@@ -53,4 +53,11 @@ docker-compose up -d
 3. `docker-compose up -d`
 3. 其他同上
 
+## 扫描性能相关
+
+* 貌似 Windows docker desktop + wsl2 文件夹遍历性能非常低下，实测扫描时候的速度差了大约 30 倍。Mac docker desktop 好点，但差不多。
+* 特别是在文件夹多的时候这个启动耗时非常离谱，不过启动后内存占用不高，81w 文件大约 250MB（还有可优化空间）。
+* 使用 linux 扫描性能应该基本不会损耗。
+
+* https://github.com/docker/for-win/issues/188
 
