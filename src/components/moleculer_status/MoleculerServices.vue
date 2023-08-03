@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-table :columns="columns" :data="service" v-model:expanded='expanded'
+    <q-table :columns="columns" :rows="service" v-model:expanded='expanded'
              :title="$t('service_action')"
              :filter="filter"
              :hide-bottom="table.hide_bottom"
