@@ -9,8 +9,18 @@
  */
 'use strict'
 
+import {mapState} from 'vuex'
+
 export default {
-  name: 'EmptyLayout'
+  name: 'EmptyLayout',
+  computed: {
+    ...mapState({
+      title: state => state.common.title,
+    }),
+  },
+  mounted() {
+    document.title = this.title
+  },
 }
 </script>
 
