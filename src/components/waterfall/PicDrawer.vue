@@ -75,7 +75,7 @@ export default {
     },
     lazy_url: {
       type: String,
-      required: true
+      required: false
     },
     storeName: {
       type: String,
