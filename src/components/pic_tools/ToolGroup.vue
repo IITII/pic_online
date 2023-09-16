@@ -109,6 +109,12 @@ export default {
     },
     shortcut: function(event) {
       const keyName = event.key
+      this.$log.debug(`keyName: ${keyName}`)
+      const viewer = document.getElementsByClassName('viewer-open')
+      if (viewer.length > 0) {
+        this.$log.debug('viewer-open, ignore shortcut')
+        return
+      }
       for (const k in keymap) {
         if (keymap[k].indexOf(keyName) >= 0) {
           this.$log.debug(`find ${keyName} in keymap[${k}] -> ${keymap[k]}, call...`)
