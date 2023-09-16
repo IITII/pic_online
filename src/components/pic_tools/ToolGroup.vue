@@ -11,9 +11,26 @@
 import ToolButton from 'components/pic_tools/ToolButton'
 import {mapState} from 'vuex'
 
+const scrollDistance = window.innerHeight * 3 / 4
+const keymap = {
+  scrollUp: ['w','ArrowUp'],
+  scrollDown: ['s', 'ArrowDown'],
+  leftDrawer: ['a','ArrowLeft'],
+  loadMore: ['d','ArrowRight'],
+  top: ['q'],
+  nextNode: ['e'],
+}
+
 export default {
   name: 'ToolGroup',
   components: {ToolButton},
+  props: {
+    enableShortcut: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data() {
     return {
       show: true,
@@ -82,6 +99,24 @@ export default {
       this.$log.debug('setting')
       this.$bus.emit('btn_click_setting')
     },
+    scrollUp(event) {
+      event.preventDefault()
+      window.scrollBy({ top: -scrollDistance, behavior: 'smooth' })
+    },
+    scrollDown(event) {
+      event.preventDefault()
+      window.scrollBy({ top: scrollDistance, behavior: 'smooth' })
+    },
+    shortcut: function(event) {
+      const keyName = event.key
+      for (const k in keymap) {
+        if (keymap[k].indexOf(keyName) >= 0) {
+          this.$log.debug(`find ${keyName} in keymap[${k}] -> ${keymap[k]}, call...`)
+          this[k](event)
+          break
+        }
+      }
+    }
   },
   mounted() {
     // this.$log.debug(this.$q.platform.is.mobile)
@@ -98,6 +133,14 @@ export default {
     const isMobile = this.$q.platform.is.mobile && !this.tool_group_force_right ? 'mobile' : 'web'
     for (const s in style[isMobile]) {
       this.$refs.tools.style[s] = style[isMobile][s]
+    }
+    if (this.enableShortcut) {
+      window.addEventListener('keyup', this.shortcut)
+    }
+  },
+  unmounted() {
+    if (this.enableShortcut) {
+      window.removeEventListener('keyup', this.shortcut)
     }
   },
 }

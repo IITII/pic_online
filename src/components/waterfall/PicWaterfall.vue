@@ -17,7 +17,7 @@
       {{ $t('waterfallOver') }}
     </span>
 
-    <tool-group/>
+    <tool-group :enable-shortcut="waterfall_type === 'image'"/>
     <q-dialog ref="dialog" @hide="onDialogHide">
       <pic-store-settings class="btn-group-setting"/>
     </q-dialog>
