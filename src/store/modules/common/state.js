@@ -19,5 +19,6 @@ export default function () {
     description: persistent.commonGet('description') || 'Github@IITII',
     background: persistent.commonGet('background') || './images/1.webp',
     tool_group_force_right: persistent.commonGet('tool_group_force_right') === 'true',
+    image_shortcut: persistent.commonGet('image_shortcut') !== 'false',
   }
 }

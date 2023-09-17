@@ -23,3 +23,7 @@ export const tool_group_force_right = ({commit}, payload) => {
   persistent.commonSet('tool_group_force_right', payload)
   commit('tool_group_force_right', payload)
 }
+export const image_shortcut = ({commit}, payload) => {
+  persistent.commonSet('image_shortcut', payload)
+  commit('image_shortcut', payload)
+}

@@ -1,56 +1,34 @@
 <template>
   <div>
-    <q-drawer
-      v-model="leftDrawerSync"
-      content-class="bg-grey-1"
-      elevated
-      show-if-above>
+    <q-drawer v-model="leftDrawerSync" content-class="bg-grey-1" elevated show-if-above>
       <div class="q-pa-md q-gutter-sm">
         <div style="text-align: center">
-          <q-badge
-            :color="badge.color"
-            :text-color="badge.text_color">
+          <q-badge :color="badge.color" :text-color="badge.text_color">
             {{ selectNodeTitle }}
           </q-badge>
         </div>
         <div>
-          <q-input
-            ref="filter"
-            v-model="tree.filter"
-            :label="$t('filter')"
-            filled
-            @input="inputListener">
+          <q-input ref="filter" v-model="tree.filter" :label="$t('filter')" filled
+            @input="inputListener" @focusin="filterFocusIn" @focusout="filterFocusOut">
             <template v-slot:append>
               <q-icon v-if="tree.filter !== ''" class="cursor-pointer" name="clear" @click="resetFilter"/>
             </template>
           </q-input>
         </div>
         <div>
-          <q-tree
-            ref="qtree"
-            no-transition
-            v-model:expanded="tree.expanded"
-            :filter="tree.filter"
-            :nodes="tree.nodes"
-            v-model:selected="tree.selectedNodeSync"
-            node-key="nodeKey"
-            @lazy-load="onLazyLoad"
+          <q-tree ref="qtree" no-transition v-model:expanded="tree.expanded"
+            :filter="tree.filter" :nodes="tree.nodes"
+            v-model:selected="tree.selectedNodeSync" node-key="nodeKey" @lazy-load="onLazyLoad"
             @update:selected="update_selected">
             <template v-slot:default-header="prop">
               <div class="row items-center">
                 {{ prop.node.label }}
-                <q-badge
-                  v-if="prop.node.dirCount"
-                  :color="badge.color"
-                  :text-color="badge.text_color"
-                  class="q-ml-sm">
+                <q-badge v-if="prop.node.dirCount" :color="badge.color"
+                  :text-color="badge.text_color" class="q-ml-sm">
                   {{ prop.node.dirCount }}
                 </q-badge>
-                <q-badge
-                  v-if="prop.node.hasOwnProperty('fileCount')"
-                  :text-color="badge.text_color"
-                  class="q-ml-sm"
-                  color="warning">
+                <q-badge v-if="prop.node.hasOwnProperty('fileCount')" :text-color="badge.text_color"
+                  class="q-ml-sm" color="warning">
                   {{ prop.node.fileCount }}
                 </q-badge>
               </div>
@@ -85,6 +63,7 @@ export default {
   data() {
     return {
       leftDrawerOpen: true,
+      image_shortcut: false,
       tree: {
         filter: '',
         nodes: [],
@@ -126,6 +105,15 @@ export default {
     }
   },
   methods: {
+    filterFocusIn: function () {
+      this.$log.debug('filterFocusIn')
+      this.image_shortcut = this.$store.getters['common/image_shortcut']
+      this.$store.dispatch('common/image_shortcut', false)
+    },
+    filterFocusOut: function () {
+      this.$log.debug('filterFocusOut')
+      this.$store.dispatch('common/image_shortcut', this.image_shortcut)
+    },
     // Convert nodes to map
     nodesToNodeKeyMap: function (nodes) {
       const hashMap = new Map()
@@ -196,6 +184,9 @@ export default {
         }
       }
     },
+    btn_click_preNode: function () {
+      this.update_selected(this.currentNodeKey - 1)
+    },
     btn_click_nextNode: function () {
       this.update_selected(this.currentNodeKey + 1)
     },
@@ -209,11 +200,13 @@ export default {
     self = this
   },
   created() {
+    this.$bus.on('btn_click_preNode', this.btn_click_preNode)
     this.$bus.on('btn_click_nextNode', this.btn_click_nextNode)
     this.$bus.on('btn_click_leftDrawer', this.btn_click_leftDrawer)
     this.$bus.on('btn_click_setting', this.btn_click_setting)
   },
   unmounted() {
+    this.$bus.off('btn_click_preNode', this.btn_click_preNode)
     this.$bus.off('btn_click_nextNode', this.btn_click_nextNode)
     this.$bus.off('btn_click_leftDrawer', this.btn_click_leftDrawer)
     this.$bus.off('btn_click_setting', this.btn_click_setting)

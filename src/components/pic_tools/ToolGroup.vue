@@ -11,14 +11,17 @@
 import ToolButton from 'components/pic_tools/ToolButton'
 import {mapState} from 'vuex'
 
-const scrollDistance = window.innerHeight * 3 / 4
+const scrollDistance = window.innerHeight
+// const scrollDistance = window.innerHeight * 3 / 4
 const keymap = {
   scrollUp: ['w','ArrowUp'],
   scrollDown: ['s', 'ArrowDown'],
-  leftDrawer: ['a','ArrowLeft'],
+  btn_click_preNode: ['a','ArrowLeft'],
+  // leftDrawer: ['a','ArrowLeft'],
   loadMore: ['d','ArrowRight'],
   top: ['q'],
   nextNode: ['e'],
+  reloadPage: ['r'],
 }
 
 export default {
@@ -30,6 +33,10 @@ export default {
       required: false,
       default: false,
     },
+    shortcutElement: {
+      type: Object,
+      required: false,
+    },
   },
   data() {
     return {
@@ -39,7 +46,12 @@ export default {
   computed: {
     ...mapState({
       tool_group_force_right: state => state.common.tool_group_force_right,
+      image_shortcut: state => state.common.image_shortcut,
     }),
+    shortcutEle() {
+      // 尝试使用 refs 绑定, 但是失败了
+      return this.shortcutElement || document
+    },
 
     // Color See: https://quasar.dev/style/color-palette
     // Icons See: https://material.io/resources/icons/?style=baseline
@@ -87,6 +99,14 @@ export default {
       this.$log.debug('nextNode')
       this.$bus.emit('btn_click_nextNode')
     },
+    reloadPage: function () {
+      this.$log.debug('reloadPage')
+      location.reload()
+    },
+    btn_click_preNode() {
+      this.$log.debug('preNode')
+      this.$bus.emit('btn_click_preNode')
+    },
     loadMore: function () {
       this.$log.debug('loadMore')
       this.$bus.emit('btn_click_loadMore')
@@ -108,6 +128,10 @@ export default {
       window.scrollBy({ top: scrollDistance, behavior: 'smooth' })
     },
     shortcut: function(event) {
+      if (!this.image_shortcut) {
+        return
+      }
+      // this.$log.debug('enableShortcut', this.shortcutEle)
       const keyName = event.key
       this.$log.debug(`keyName: ${keyName}`)
       const viewer = document.getElementsByClassName('viewer-open')
@@ -141,12 +165,12 @@ export default {
       this.$refs.tools.style[s] = style[isMobile][s]
     }
     if (this.enableShortcut) {
-      window.addEventListener('keyup', this.shortcut)
+      this.shortcutEle.addEventListener('keyup', this.shortcut)
     }
   },
   unmounted() {
     if (this.enableShortcut) {
-      window.removeEventListener('keyup', this.shortcut)
+      this.shortcutEle.removeEventListener('keyup', this.shortcut)
     }
   },
 }

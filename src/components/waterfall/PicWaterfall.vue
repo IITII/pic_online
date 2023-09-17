@@ -139,6 +139,7 @@ export default {
       // when QDialog emits "hide" event
       this.$emit('hide')
     },
+    // TODO: 图片加载失败提示
     imgErrorEvent: function (i) {
       return this.$q.notify({
         type: 'warning',
