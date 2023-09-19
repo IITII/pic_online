@@ -57,6 +57,7 @@ export default {
   img_title_max_length: 'Default max length for image title',
   loadManual: 'Load Manually',
   next_one: 'Next',
+  btn_click_preNode: 'Previous',
   no_more_pic: 'Nothing...',
   node_key_value: 'NodeKey Value',
   delete_forever: 'Delete Forever',

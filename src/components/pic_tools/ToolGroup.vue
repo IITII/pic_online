@@ -65,6 +65,12 @@ export default {
           tooltipMessage: this.$t('top'),
         },
         {
+          btnOnClick: this.btn_click_preNode,
+          btnIcon: 'undo',
+          btnColor: 'cyan-5',
+          tooltipMessage: this.$t('btn_click_preNode'),
+        },
+        {
           btnOnClick: this.nextNode,
           btnIcon: 'redo',
           btnColor: 'cyan-5',

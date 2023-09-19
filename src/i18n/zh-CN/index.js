@@ -59,6 +59,7 @@ export default {
   img_title_max_length: '默认最长图片标题长度',
   loadManual: '手动加载',
   next_one: '下一个',
+  btn_click_preNode: '上一个',
   no_more_pic: '真的一张也没有了～',
   node_key_value: 'NodeKey 的值',
   open_drawer: '打开侧栏',
