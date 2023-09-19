@@ -8,7 +8,7 @@
                    :backgroundColor="backgroundColor">
       <template #item="{ item, url }">
         <div class="text-center" @click="card_click_event('imgBoxClickEvent', item)">
-          <lazy-img class="img_box" :url="url" @error="imgErrorEvent" />
+          <lazy-img class="img_box" :url="url"/>
           <span v-if="show_img_title">{{ item.info }}</span>
         </div>
       </template>
@@ -152,7 +152,6 @@ export default {
     },
     // TODO: 图片加载失败提示
     imgErrorEvent: function (i) {
-      debugger
       return this.$q.notify({
         type: 'warning',
         message: this.$t('img_load_error') + '',
