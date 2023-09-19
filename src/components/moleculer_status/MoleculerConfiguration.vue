@@ -67,7 +67,7 @@ export default {
       this.$axios.get('/dev/~node/options')
         .then(_ => this.broker = _)
         .then(() => this.loading = false)
-        .catch(e => this.$q.notify({type: 'error', message: e.message}))
+        .catch(e => this.$q.notify({type: 'error', message: e.response?.data?.message || e.message}))
     }
   },
   mounted() {

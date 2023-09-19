@@ -81,7 +81,7 @@ export default {
         .then(_ => afterLogin(_, this.$store, this.$router, this.$axios, false))
         .catch(e => {
           this.$log.debug(e)
-          this.$q.notify({type: 'error', message: e.message})
+          this.$q.notify({type: 'error', message: e.response?.data?.message || e.message})
           afterLogout(this.$store, this.$axios)
         })
     }

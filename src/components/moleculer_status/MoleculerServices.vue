@@ -169,7 +169,7 @@ export default {
           }, {})
         })
         .then(_ => this.actions = _)
-        .catch(e => this.$q.notify({type: 'error', message: e.message}))
+        .catch(e => this.$q.notify({type: 'error', message: e.response?.data?.message || e.message}))
     },
     getService() {
       return this.$axios.get('/dev/~node/services')
@@ -190,7 +190,7 @@ export default {
           }
         }))
         .then(_ => this.service = _)
-        .catch(e => this.$q.notify({type: 'error', message: e.message}))
+        .catch(e => this.$q.notify({type: 'error', message: e.response?.data?.message || e.message}))
     },
     getServiceActions(name) {
       return Object.keys(this.actions)

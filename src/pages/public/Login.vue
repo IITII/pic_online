@@ -95,7 +95,7 @@ export default {
       return this.$axios.post('/limit/user/login', data)
         .then(_ => _.user)
         .then(_ => afterLogin(_, this.$store, this.$router, this.$axios, true, redirect))
-        .catch(e => this.$q.notify({type: 'error', message: e.message}))
+        .catch(e => this.$q.notify({type: 'error', message: e.response?.data?.message || e.message}))
     },
 
     onReset() {

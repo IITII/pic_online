@@ -14,6 +14,7 @@ const state = {
   title: persistent.videoGet('title') || 'Pic Online',
   // nodeKey 的值
   node_key: parseInt(persistent.videoGet('node_key')) || 1,
+  node_dir: persistent.videoGet('node_dir'),
 
   // 瀑布流属性
   // 是否显示图片标题

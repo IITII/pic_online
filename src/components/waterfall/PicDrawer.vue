@@ -80,6 +80,7 @@ export default {
   computed: {
     ...mapState({
       currentNodeKey: state => state[self.storeName].node_key,
+      node_dir: state => state[self.storeName].node_dir,
       drawer_open: state => state[self.storeName].drawer_open,
     }),
     leftDrawerSync: {
@@ -158,7 +159,7 @@ export default {
       return this.$axios({method: 'POST', url: this.lazy_url, params: {nodeKey: key}, timeout: 2000})
         .then(_ => done(_))
         .catch(e => {
-          this.$log.error(e.message)
+          this.$log.error(e.response?.data?.message || e.message)
           fail([])
         })
     },
@@ -173,6 +174,7 @@ export default {
         this.$log.debug(node)
         if (node) {
           this.$store.dispatch(`${this.storeName}/title`, node.label)
+          this.$store.dispatch(`${this.storeName}/node_dir`, node.dir)
           // Update expand nodeKeys
           this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
           // update select node
@@ -238,7 +240,7 @@ export default {
         this.$log.error('connection_fail', e)
         this.$q.notify({
           message: this.$t('connection_fail'),
-          caption: `${e.message}`,
+          caption: `${e.response?.data?.message || e.message}`,
           type: 'negative'
         })
       })

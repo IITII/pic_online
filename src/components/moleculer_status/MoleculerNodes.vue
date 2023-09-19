@@ -115,7 +115,7 @@ export default {
           this.firstLoad = false
           this.loading = false
         })
-        .catch(e => this.$q.notify({type: 'error', message: e.message}))
+        .catch(e => this.$q.notify({type: 'error', message: e.response?.data?.message || e.message}))
     },
     exportTable() {
       // naive encoding to csv format

@@ -22,6 +22,7 @@ const keymap = {
   top: ['q'],
   nextNode: ['e'],
   reloadPage: ['r'],
+  btnClickDelDirs: ['Delete'],
 }
 
 export default {
@@ -82,6 +83,12 @@ export default {
           tooltipMessage: this.$t('open_drawer'),
         },
         {
+          btnOnClick: this.btnClickDelDirs,
+          btnIcon: 'delete_forever',
+          btnColor: 'pink-14',
+          tooltipMessage: this.$t('delete_forever'),
+        },
+        {
           btnOnClick: this.setting,
           btnIcon: 'settings',
           btnColor: 'secondary',
@@ -110,6 +117,10 @@ export default {
     loadMore: function () {
       this.$log.debug('loadMore')
       this.$bus.emit('btn_click_loadMore')
+    },
+    btnClickDelDirs: function () {
+      this.$log.debug('btnClickDelDirs')
+      this.$bus.emit('btnClickDelDirs')
     },
     leftDrawer: function () {
       this.$log.debug('leftDrawer')

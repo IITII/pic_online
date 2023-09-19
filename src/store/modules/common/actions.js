@@ -27,3 +27,7 @@ export const image_shortcut = ({commit}, payload) => {
   persistent.commonSet('image_shortcut', payload)
   commit('image_shortcut', payload)
 }
+export const reload_timeout = ({commit}, payload) => {
+  persistent.commonSet('reload_timeout', payload)
+  commit('reload_timeout', payload)
+}

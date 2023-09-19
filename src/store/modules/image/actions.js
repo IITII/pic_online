@@ -44,4 +44,8 @@ export const auto_next = ({commit}, payload) => {
   persistent.imageSet('auto_next', payload)
   commit('auto_next', payload)
 }
+export const node_dir = ({commit}, payload) => {
+  persistent.imageSet('node_dir', payload)
+  commit('node_dir', payload)
+}
 

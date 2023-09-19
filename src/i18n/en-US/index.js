@@ -59,7 +59,7 @@ export default {
   next_one: 'Next',
   no_more_pic: 'Nothing...',
   node_key_value: 'NodeKey Value',
-  open_drawer: 'Open Drawer',
+  delete_forever: 'Delete Forever',
   pic_request_method: 'Pic Api Request Method',
   pic_request_url: 'Pic Api URL',
   repo_description: 'A simple web site to improve your filling...',

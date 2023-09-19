@@ -62,6 +62,7 @@ export default {
   no_more_pic: '真的一张也没有了～',
   node_key_value: 'NodeKey 的值',
   open_drawer: '打开侧栏',
+  delete_forever: '永久删除',
   pic_request_method: 'Pic Api 请求方式',
   pic_request_url: 'Pic Api 请求地址',
   repo_description: '一个简单的看图网站',

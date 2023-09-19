@@ -37,7 +37,6 @@ import {getDocumentHeight} from 'src/utils/utils.js'
 import PicVPlayer from 'components/commons/PicVPlayer.vue'
 import ToolGroup from 'components/pic_tools/ToolGroup.vue'
 import PicStoreSettings from 'components/commons/PicStoreSettings'
-import PicViewer from 'components/commons/PicViewer'
 // import VueWaterfall from 'components/waterfall/VueWaterfall.vue'
 // import VueWaterfall from 'vue3-waterfall'
 // import 'vue3-waterfall/dist/style.css'
@@ -49,9 +48,13 @@ let self = null,
   water_fall = null
 export default {
   name: 'PicWaterfall',
-  components: { ToolGroup, PicStoreSettings, VueWaterfall, LazyImg },
+  components: {ToolGroup, PicStoreSettings, VueWaterfall, LazyImg},
   props: {
     api_url: {
+      type: String,
+      required: true,
+    },
+    del_url: {
       type: String,
       required: true,
     },
@@ -88,7 +91,10 @@ export default {
   },
   computed: {
     ...mapState({
+      reload_timeout: state => state.common.reload_timeout,
+      node_title: state => state[self.storeName].title,
       node_key: state => state[self.storeName].node_key,
+      node_dir: state => state[self.storeName].node_dir,
       waterfall_col: state => state[self.storeName].waterfall_col,
       show_img_title: state => state[self.storeName].show_img_title,
       skip_empty_dir: state => state[self.storeName].skip_empty_dir,
@@ -218,44 +224,87 @@ export default {
         })
         .then(() => this.water_fall.page++)
         .catch(e => {
-          this.$q.notify({type: 'warn', message: e.message})
+          this.$q.notify({type: 'warn', message: e.response?.data?.message || e.message})
           // this.$refs.waterfall.waterfallOver && this.$refs.waterfall.waterfallOver()
           // this.water_fall.no_more = true
         })
     },
+    tryDelDirs(nodeKey, dir) {
+      if (!nodeKey || !dir) return
+      const data = {
+        nodeKey,
+        dir,
+        recursive: false,
+      }
+      return this.$axios.post(this.del_url, data)
+        .then(_ => {
+          this.$log.debug('req res:', _)
+          return _
+        })
+        .then(_ => {
+          this.$q.notify({
+            type: 'positive', message: this.$t('success'),
+            caption: `共删除 ${_.dirs} 个目录，${_.files} 个文件`
+          })
+          return _
+        })
+        .then(_ => {
+          this.$log.info(`delete success, reload page after ${this.reload_timeout}ms, -1 for disable`)
+          if (this.reload_timeout < 0) return
+          setTimeout(_ => {
+            window.location.reload()
+          }, this.reload_timeout)
+        })
+        .catch(e => {
+          this.$q.notify({
+            type: 'warn', message: this.$t('failed'),
+            caption: e.response?.data?.message || e.message
+          })
+          return e
+        })
+    },
+    async btnClickDelDirs() {
+      if (window.confirm(`确定要删除 ${this.node_title} 吗？`)) {
+        await this.tryDelDirs(this.node_key, this.node_dir)
+      } else {
+        this.$log.debug('cancel delete')
+      }
+    },
     btn_click_goto_top() {
       this.$log.debug('waterfall', this.$refs.waterfall.$el)
       // debugger
-      document.querySelector("html").scrollTop = 0
+      document.querySelector('html').scrollTop = 0
     },
     btn_click_loadMore() {
       return this.loadMore()
     },
     viewerOpts(initialViewIndex = 0) {
       let options = {
-          toolbar: true,
-          // Enable keyboard support.
-          keyboard: true,
-          // Focus the active item in the navbar when initialized.
-          /// Requires the keyboard option set to true.
-          focus: true,
-          // The amount of time to delay between
-          // automatically cycling an image when playing.
-          interval: 2000,
-          // Define where to get the original image URL for viewing.
-          /// If it is a function, it should return a valid image URL.
-          /// If string, it should be one of the attributes of each image element.
-          url: 'src',
-          // Indicate if enable loop viewing or not.
-          /// If the current image is the last one,
-          /// then the next one to view is the first one, and vice versa.
-          loop: false,
+        toolbar: true,
+        // Enable keyboard support.
+        keyboard: true,
+        // Focus the active item in the navbar when initialized.
+        /// Requires the keyboard option set to true.
+        focus: true,
+        // The amount of time to delay between
+        // automatically cycling an image when playing.
+        interval: 2000,
+        // Define where to get the original image URL for viewing.
+        /// If it is a function, it should return a valid image URL.
+        /// If string, it should be one of the attributes of each image element.
+        url: 'src',
+        // Indicate if enable loop viewing or not.
+        /// If the current image is the last one,
+        /// then the next one to view is the first one, and vice versa.
+        loop: false,
+      }
+      let opts = {
+        images: this.water_fall.img_urls,
+        options: {
+          ...options,
+          initialViewIndex,
         }
-      let opts = {images: this.water_fall.img_urls,
-      options: {
-      ...options,
-      initialViewIndex,
-      }}
+      }
       return opts
     },
   },
@@ -271,6 +320,7 @@ export default {
     this.$bus.on('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.on('btn_click_loadMore', this.btn_click_loadMore)
     this.$bus.on('btn_click_setting', this.show)
+    this.$bus.on('btnClickDelDirs', this.btnClickDelDirs)
   },
   mounted() {
     if (this.storeName === 'video') {
@@ -283,6 +333,7 @@ export default {
     this.$bus.off('btn_click_goto_top', this.btn_click_goto_top)
     this.$bus.off('btn_click_loadMore', this.btn_click_loadMore)
     this.$bus.off('btn_click_setting', this.show)
+    this.$bus.off('btnClickDelDirs', this.btnClickDelDirs)
   },
 }
 </script>
