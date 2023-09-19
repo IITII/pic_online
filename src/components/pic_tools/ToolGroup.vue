@@ -83,16 +83,16 @@ export default {
           tooltipMessage: this.$t('open_drawer'),
         },
         {
-          btnOnClick: this.btnClickDelDirs,
-          btnIcon: 'delete_forever',
-          btnColor: 'pink-14',
-          tooltipMessage: this.$t('delete_forever'),
-        },
-        {
           btnOnClick: this.setting,
           btnIcon: 'settings',
           btnColor: 'secondary',
           tooltipMessage: this.$t('setting'),
+        },
+        {
+          btnOnClick: this.btnClickDelDirs,
+          btnIcon: 'delete_forever',
+          btnColor: 'pink-14',
+          tooltipMessage: this.$t('delete_forever'),
         },
       ]
     },
