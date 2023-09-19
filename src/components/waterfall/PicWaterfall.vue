@@ -3,12 +3,12 @@
 
     <vue-waterfall ref="waterfall"
                    :gutter="8" :lazyload="true" :delay="400"
-                   :list="water_fall.img_urls"
+                   :list="water_fall.img_urls" :loadProps="loadProps"
                    :breakpoints="breakpoints" :crossOrigin="false"
                    :backgroundColor="backgroundColor">
       <template #item="{ item, url }">
         <div class="text-center" @click="card_click_event('imgBoxClickEvent', item)">
-          <lazy-img class="img_box" :url="url"/>
+          <lazy-img class="img_box" :url="url" @error="imgErrorEvent" />
           <span v-if="show_img_title">{{ item.info }}</span>
         </div>
       </template>
@@ -43,6 +43,8 @@ import PicStoreSettings from 'components/commons/PicStoreSettings'
 import {LazyImg, Waterfall as VueWaterfall} from 'vue-waterfall-plugin-next'
 import 'vue-waterfall-plugin-next/dist/style.css'
 import 'viewerjs/dist/viewer.css'
+import loading from 'assets/Spinner-1s-200px.svg'
+import loadError from 'assets/failed-1.1s-200px.svg'
 
 let self = null,
   water_fall = null
@@ -111,6 +113,9 @@ export default {
       // return this.$q.dark.isActive ? '#303133' : '#ffffff'
       return this.$q.dark.isActive ? '#121212' : '#ffffff'
     },
+    loadProps() {
+      return {loading, error: loadError}
+    }
   },
   watch: {
     node_key(n) {
@@ -147,6 +152,7 @@ export default {
     },
     // TODO: 图片加载失败提示
     imgErrorEvent: function (i) {
+      debugger
       return this.$q.notify({
         type: 'warning',
         message: this.$t('img_load_error') + '',
