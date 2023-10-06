@@ -9,7 +9,7 @@
         </div>
         <div>
           <q-input ref="filter" v-model="tree.filter" :label="$t('filter')" filled
-            @input="inputListener" @focusin="filterFocusIn" @focusout="filterFocusOut">
+                   @input="inputListener" @focusin="filterFocusIn" @focusout="filterFocusOut">
             <template v-slot:append>
               <q-icon v-if="tree.filter !== ''" class="cursor-pointer" name="clear" @click="resetFilter"/>
             </template>
@@ -17,18 +17,18 @@
         </div>
         <div>
           <q-tree ref="qtree" no-transition v-model:expanded="tree.expanded"
-            :filter="tree.filter" :nodes="tree.nodes"
-            v-model:selected="tree.selectedNodeSync" node-key="nodeKey" @lazy-load="onLazyLoad"
-            @update:selected="update_selected">
+                  :filter="tree.filter" :nodes="tree.nodes"
+                  v-model:selected="tree.selectedNodeSync" node-key="nodeKey" @lazy-load="onLazyLoad"
+                  @update:selected="update_selected">
             <template v-slot:default-header="prop">
-              <div class="row items-center">
-                {{ prop.node.label }}
+              <div :id="prop.node.nodeKey" class="row items-center">
+                <span :class="currentNodeKey === prop.node.nodeKey ? 'text-pink-4' : ''">{{ prop.node.label }}</span>
                 <q-badge v-if="prop.node.dirCount" :color="badge.color"
-                  :text-color="badge.text_color" class="q-ml-sm">
+                         :text-color="badge.text_color" class="q-ml-sm">
                   {{ prop.node.dirCount }}
                 </q-badge>
                 <q-badge v-if="prop.node.hasOwnProperty('fileCount')" :text-color="badge.text_color"
-                  class="q-ml-sm" color="warning">
+                         class="q-ml-sm" color="warning">
                   {{ prop.node.fileCount }}
                 </q-badge>
               </div>
@@ -166,7 +166,7 @@ export default {
     update_selected: function (key) {
       this.$log.debug(key, this.tree.selectedNodeSync)
       if (key !== null) {
-      // if (key !== null || key !== this.tree.selectedNodeSync) {
+        // if (key !== null || key !== this.tree.selectedNodeSync) {
         this.$store.dispatch(`${this.storeName}/node_key`, key)
         // 对应上面的 ref="qtree"
         // 这里也可能是接口数据未获取
@@ -194,6 +194,10 @@ export default {
     },
     btn_click_leftDrawer() {
       this.leftDrawerSync = !this.leftDrawerSync
+      if (this.leftDrawerSync) {
+        // 将当前节点滚动到可视区域
+        document.getElementById(this.currentNodeKey).scrollIntoView()
+      }
     },
     btn_click_setting() {
     }

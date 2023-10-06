@@ -20,7 +20,7 @@ const keymap = {
   // leftDrawer: ['a','ArrowLeft'],
   loadMore: ['d','ArrowRight'],
   top: ['q'],
-  nextNode: ['e'],
+  nextNode: ['e', '0'],
   reloadPage: ['r'],
   btnClickDelDirs: ['Delete'],
 }
@@ -184,6 +184,54 @@ export default {
     if (this.enableShortcut) {
       this.shortcutEle.addEventListener('keyup', this.shortcut)
     }
+
+    // window.addEventListener('volumechange', e => {
+    //   this.$q.notify({
+    //     message: `volumechange: ${e}`,
+    //     color: 'warning',
+    //     position: 'top',
+    //     timeout: 1000,
+    //   })
+    //   alert(`volumechange: ${e}`)
+    // });
+    // if ('mediaSession' in navigator) {
+    //   navigator.mediaSession.setActionHandler('volumeup', () => {
+    //     this.$q.notify({
+    //       message: `volumeup`,
+    //       color: 'warning',
+    //       position: 'top',
+    //       timeout: 1000,
+    //     })
+    //   });
+    //
+    //   navigator.mediaSession.setActionHandler('volumedown', () => {
+    //     this.$q.notify({
+    //       message: `volumedown`,
+    //       color: 'warning',
+    //       position: 'top',
+    //       timeout: 1000,
+    //     })
+    //   });
+    // }
+    // document.addEventListener('volumeupbutton', e =>  {
+    //   this.$log.debug('volumeupbutton', e)
+    //   alert('volumeupbutton')
+    //   this.scrollUp(e)
+    // })
+    // document.addEventListener('volumedownbutton', e => {
+    //   this.$log.debug('volumedownbutton', e)
+    //   alert('volumedownbutton')
+    //   this.scrollDown(e)
+    // })
+    // document.addEventListener('volumechange', e => {
+    //   this.$q.notify({
+    //     message: `volumechange: ${e}`,
+    //     color: 'warning',
+    //     position: 'top',
+    //     timeout: 1000,
+    //   })
+    //   alert(`volumechange: ${e}`)
+    // })
   },
   unmounted() {
     if (this.enableShortcut) {
