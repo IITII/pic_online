@@ -163,7 +163,7 @@ export default {
           fail([])
         })
     },
-    update_selected: function (key) {
+    update_selected: function (key, autoNext = undefined) {
       this.$log.debug(key, this.tree.selectedNodeSync)
       if (key !== null) {
         // if (key !== null || key !== this.tree.selectedNodeSync) {
@@ -175,6 +175,9 @@ export default {
         if (node) {
           this.$store.dispatch(`${this.storeName}/title`, node.label)
           this.$store.dispatch(`${this.storeName}/node_dir`, node.dir)
+          if (autoNext !== undefined) {
+            this.$store.dispatch(`${this.storeName}/auto_next`, autoNext)
+          }
           // Update expand nodeKeys
           this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
           // update select node
@@ -187,10 +190,10 @@ export default {
       }
     },
     btn_click_preNode: function () {
-      this.update_selected(this.currentNodeKey - 1)
+      this.update_selected(this.currentNodeKey - 1, false)
     },
     btn_click_nextNode: function () {
-      this.update_selected(this.currentNodeKey + 1)
+      this.update_selected(this.currentNodeKey + 1, true)
     },
     btn_click_leftDrawer() {
       this.leftDrawerSync = !this.leftDrawerSync

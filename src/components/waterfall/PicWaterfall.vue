@@ -194,13 +194,16 @@ export default {
       }
       this.water_fall.no_more = false
     },
+    autoNext() {
+      if (this.auto_next) {
+        this.$q.notify({type: 'positive', message: `auto_next success!!!`})
+        this.$bus.emit('btn_click_nextNode')
+      }
+    },
     loadMore() {
       if (this.water_fall.no_more) {
         this.$q.notify({type: 'warn', message: this.$t('no_more_pic') + ''})
-        if (this.auto_next) {
-          this.$q.notify({type: 'positive', message: `auto_next success!!!`})
-          this.$bus.emit('btn_click_nextNode')
-        }
+        this.autoNext()
         return
       }
       const data = {
@@ -230,6 +233,10 @@ export default {
         .then(_ => {
           this.$log.debug('set waterfall urls', _)
           this.water_fall.img_urls = this.water_fall.img_urls.concat(_)
+          // 加载后仍然为 0，说明没有数据
+          if (this.water_fall.img_urls.length === 0) {
+            this.autoNext()
+          }
         })
         .then(() => this.water_fall.page++)
         .catch(e => {
@@ -285,6 +292,7 @@ export default {
       document.querySelector('html').scrollTop = 0
     },
     btn_click_loadMore() {
+      this.$store.dispatch(`${this.storeName}/auto_next`, true)
       return this.loadMore()
     },
     viewerOpts(initialViewIndex = 0) {
