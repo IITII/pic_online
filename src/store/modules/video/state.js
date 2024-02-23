@@ -26,6 +26,8 @@ const state = {
   // 默认最长标题长度
   title_max_length: parseInt(persistent.videoGet('title_max_length')) || 120,
   auto_next: persistent.videoGet('auto_next') === 'true',
+  // 默认最长标题长度
+  drawer_width: parseInt(persistent.imageGet('drawer_width')) || 300,
 }
 
 export default function () {

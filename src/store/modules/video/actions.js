@@ -44,4 +44,8 @@ export const node_dir = ({commit}, payload) => {
   persistent.videoSet('node_dir', payload)
   commit('node_dir', payload)
 }
+export const drawer_width = ({commit}, payload) => {
+  persistent.videoSet('drawer_width', payload)
+  commit('drawer_width', payload)
+}
 

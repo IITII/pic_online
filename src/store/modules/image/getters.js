@@ -11,3 +11,4 @@ export const title_max_length = state => state.title_max_length
 export const viewer_play_interval = state => state.viewer_play_interval
 export const auto_next = state => state.auto_next
 export const node_dir = state => state.node_dir
+export const drawer_width = state => state.drawer_width

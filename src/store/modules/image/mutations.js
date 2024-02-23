@@ -11,3 +11,4 @@ export const title_max_length = (state, payload) => state.title_max_length = pay
 export const viewer_play_interval = (state, payload) => state.viewer_play_interval = payload
 export const auto_next = (state, payload) => state.auto_next = payload
 export const node_dir = (state, payload) => state.node_dir = payload
+export const drawer_width = (state, payload) => state.drawer_width = payload

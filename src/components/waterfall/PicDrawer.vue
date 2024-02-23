@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-drawer v-model="leftDrawerSync" content-class="bg-grey-1" elevated show-if-above>
+    <q-drawer v-model="leftDrawerSync" content-class="bg-grey-1" elevated show-if-above :width="drawer_width">
       <div class="q-pa-md q-gutter-sm">
         <div style="text-align: center">
           <q-badge :color="badge.color" :text-color="badge.text_color">
@@ -82,6 +82,7 @@ export default {
       currentNodeKey: state => state[self.storeName].node_key,
       node_dir: state => state[self.storeName].node_dir,
       drawer_open: state => state[self.storeName].drawer_open,
+      drawer_width: state => state[self.storeName].drawer_width,
     }),
     leftDrawerSync: {
       get: function () {
