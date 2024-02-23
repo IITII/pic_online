@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js & Cache Dependencies ⚡️
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
           # 不缓存 node modules, 没啥提升, 时间还长了
           # cache: 'npm'
           # cache-dependency-path: lock.json
