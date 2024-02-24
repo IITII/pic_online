@@ -18,9 +18,9 @@ const keymap = {
   scrollDown: ['s', 'ArrowDown'],
   btn_click_preNode: ['a','ArrowLeft'],
   // leftDrawer: ['a','ArrowLeft'],
-  loadMore: ['d','ArrowRight'],
+  loadMore: ['d'],
   top: ['q'],
-  nextNode: ['e', '0'],
+  nextNode: ['e', '0','ArrowRight'],
   reloadPage: ['r'],
   btnClickDelDirs: ['Delete'],
 }
