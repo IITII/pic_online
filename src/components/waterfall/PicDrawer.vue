@@ -71,6 +71,8 @@ export default {
         nodeKeyMap: new Map(),
         expanded: [],
         selectedNodeSync: 1,
+        resetViewTimeout: 600,
+        resetViewTimer: null,
       },
       badge: {
         color: 'primary',
@@ -165,6 +167,12 @@ export default {
           fail([])
         })
     },
+    highlightNodeInViewTimer: function (nodeKey) {
+      clearTimeout(this.tree.resetViewTimer)
+      this.tree.resetViewTimer = setTimeout(() => {
+        this.highlightNodeInView(nodeKey)
+      }, this.tree.resetViewTimeout)
+    },
     highlightNodeInView: function (nodeKey) {
       const scroll = document.querySelector("#drawer")
       const allNodes = Array.from(document.querySelectorAll('#drawer_tree .q-tree__node .row')).filter(_ => _.id)
@@ -200,7 +208,7 @@ export default {
           this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
           // update select node
           this.tree.selectedNodeSync = key
-          this.highlightNodeInView(key)
+          this.highlightNodeInViewTimer(key)
         } else {
           // lazy load 情况下 node 为 null, 直接强制加载默认值
           this.$log.debug('??? unkown node, redirect to 1')
@@ -263,7 +271,7 @@ export default {
         this.tree.expanded = expanded
       })
       .then(_ => {
-        this.highlightNodeInView(this.currentNodeKey)
+        this.highlightNodeInViewTimer(this.currentNodeKey)
       })
       .catch(e => {
         this.$log.error('connection_fail', e)
