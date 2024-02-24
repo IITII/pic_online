@@ -1,6 +1,7 @@
 <template>
   <div>
-    <q-drawer v-model="leftDrawerSync" content-class="bg-grey-1" elevated show-if-above :width="drawer_width">
+    <q-drawer v-model="leftDrawerSync" content-class="bg-grey-1" elevated
+              show-if-above id="drawer" :width="drawer_width">
       <div class="q-pa-md q-gutter-sm">
         <div style="text-align: center">
           <q-badge :color="badge.color" :text-color="badge.text_color">
@@ -15,7 +16,7 @@
             </template>
           </q-input>
         </div>
-        <div>
+        <div id="drawer_tree">
           <q-tree ref="qtree" no-transition v-model:expanded="tree.expanded"
                   :filter="tree.filter" :nodes="tree.nodes"
                   v-model:selected="tree.selectedNodeSync" node-key="nodeKey" @lazy-load="onLazyLoad"
@@ -164,6 +165,22 @@ export default {
           fail([])
         })
     },
+    highlightNodeInView: function (nodeKey) {
+      const scroll = document.querySelector("#drawer")
+      const allNodes = Array.from(document.querySelectorAll('#drawer_tree .q-tree__node .row')).filter(_ => _.id)
+      let nodes = allNodes.map(_ => ({id: parseInt(_.id), top: _.offsetTop, height: _.offsetHeight, bottom: _.offsetBlockEnd}))
+      // 标题和输入框高度
+      let height = 4 + 21 + 4 + 56 + 4
+      for (const node of nodes) {
+        // padding + 每个节点高度
+        height += node.top + node.height
+        if (node.id === nodeKey) {
+          break
+        }
+      }
+      this.$log.debug(`scroll drawer to ${height}`)
+      scroll.scrollTop = height
+    },
     update_selected: function (key, autoNext = undefined) {
       this.$log.debug(key, this.tree.selectedNodeSync)
       if (key !== null) {
@@ -183,6 +200,7 @@ export default {
           this.tree.expanded = this.nodeKeyMapToExpandNodes(key)
           // update select node
           this.tree.selectedNodeSync = key
+          this.highlightNodeInView(key)
         } else {
           // lazy load 情况下 node 为 null, 直接强制加载默认值
           this.$log.debug('??? unkown node, redirect to 1')
@@ -243,6 +261,9 @@ export default {
         const expanded = this.nodeKeyMapToExpandNodes(this.currentNodeKey)
         this.$log.debug(`expandedNodes: ${expanded}`)
         this.tree.expanded = expanded
+      })
+      .then(_ => {
+        this.highlightNodeInView(this.currentNodeKey)
       })
       .catch(e => {
         this.$log.error('connection_fail', e)
