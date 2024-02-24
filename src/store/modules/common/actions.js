@@ -35,3 +35,7 @@ export const delete_confirm = ({commit}, payload) => {
   persistent.commonSet('delete_confirm', payload)
   commit('delete_confirm', payload)
 }
+export const recursive_delete = ({commit}, payload) => {
+  persistent.commonSet('recursive_delete', payload)
+  commit('recursive_delete', payload)
+}

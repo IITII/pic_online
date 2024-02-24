@@ -22,5 +22,6 @@ export default function () {
     image_shortcut: persistent.commonGet('image_shortcut') !== 'false',
     reload_timeout: parseInt(persistent.commonGet('reload_timeout')) || 300,
     delete_confirm: persistent.commonGet('delete_confirm') !== 'false',
+    recursive_delete: persistent.commonGet('recursive_delete') === 'true',
   }
 }

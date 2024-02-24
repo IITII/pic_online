@@ -6,3 +6,4 @@ export const tool_group_force_right = state => state.tool_group_force_right
 export const image_shortcut = state => state.image_shortcut
 export const reload_timeout = state => state.reload_timeout
 export const delete_confirm = state => state.delete_confirm
+export const recursive_delete = state => state.recursive_delete

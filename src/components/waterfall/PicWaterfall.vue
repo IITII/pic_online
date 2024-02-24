@@ -95,6 +95,7 @@ export default {
     ...mapState({
       reload_timeout: state => state.common.reload_timeout,
       delete_confirm: state => state.common.delete_confirm,
+      recursive_delete: state => state.common.recursive_delete,
       node_title: state => state[self.storeName].title,
       node_key: state => state[self.storeName].node_key,
       node_dir: state => state[self.storeName].node_dir,
@@ -249,9 +250,8 @@ export default {
     tryDelDirs(nodeKey, dir) {
       if (!nodeKey || !dir) return
       const data = {
-        nodeKey,
-        dir,
-        recursive: false,
+        nodeKey, dir,
+        recursive: this.recursive_delete,
       }
       return this.$axios.post(this.del_url, data)
         .then(_ => {
