@@ -94,6 +94,7 @@ export default {
   computed: {
     ...mapState({
       reload_timeout: state => state.common.reload_timeout,
+      delete_confirm: state => state.common.delete_confirm,
       node_title: state => state[self.storeName].title,
       node_key: state => state[self.storeName].node_key,
       node_dir: state => state[self.storeName].node_dir,
@@ -280,10 +281,14 @@ export default {
         })
     },
     async btnClickDelDirs() {
-      if (window.confirm(`确定要删除 ${this.node_title} 吗？`)) {
-        await this.tryDelDirs(this.node_key, this.node_dir)
+      if (this.delete_confirm) {
+        if (window.confirm(`确定要删除 ${this.node_title} 吗？`)) {
+          await this.tryDelDirs(this.node_key, this.node_dir)
+        } else {
+          this.$log.debug('cancel delete')
+        }
       } else {
-        this.$log.debug('cancel delete')
+        await this.tryDelDirs(this.node_key, this.node_dir)
       }
     },
     btn_click_goto_top() {

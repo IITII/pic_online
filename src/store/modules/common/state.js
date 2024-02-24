@@ -20,6 +20,7 @@ export default function () {
     background: persistent.commonGet('background') || './images/1.webp',
     tool_group_force_right: persistent.commonGet('tool_group_force_right') === 'true',
     image_shortcut: persistent.commonGet('image_shortcut') !== 'false',
-    reload_timeout: parseInt(persistent.commonGet('reload_timeout')) || 500,
+    reload_timeout: parseInt(persistent.commonGet('reload_timeout')) || 300,
+    delete_confirm: persistent.commonGet('delete_confirm') !== 'false',
   }
 }

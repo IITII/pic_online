@@ -31,3 +31,7 @@ export const reload_timeout = ({commit}, payload) => {
   persistent.commonSet('reload_timeout', payload)
   commit('reload_timeout', payload)
 }
+export const delete_confirm = ({commit}, payload) => {
+  persistent.commonSet('delete_confirm', payload)
+  commit('delete_confirm', payload)
+}
