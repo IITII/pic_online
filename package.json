@@ -12,12 +12,12 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "1.11.4",
     "@videojs-player/vue": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "mitt": "^3.0.0",
-    "quasar": "^2.6.0",
+    "quasar": "2.11.5",
     "v-viewer": "^3.0.11",
     "video.js": "^7.21.2",
     "videojs-hotkeys": "^0.2.28",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app": "^3.0.0",
+    "@quasar/app": "3.3.3",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
