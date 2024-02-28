@@ -11,8 +11,6 @@
 import ToolButton from 'components/pic_tools/ToolButton'
 import {mapState} from 'vuex'
 
-const scrollDistance = window.innerHeight
-// const scrollDistance = window.innerHeight * 3 / 4
 const keymap = {
   scrollUp: ['w','ArrowUp'],
   scrollDown: ['s', 'ArrowDown'],
@@ -136,13 +134,20 @@ export default {
       this.$log.debug('setting')
       this.$bus.emit('btn_click_setting')
     },
+    scroll: function () {
+      return document.querySelector("#waterfall_page")
+    },
+    scrollDistance: function () {
+      return this.scroll().clientHeight
+      // return this.scroll().clientHeight * 3 / 4
+    },
     scrollUp(event) {
       event.preventDefault()
-      window.scrollBy({ top: -scrollDistance, behavior: 'smooth' })
+      this.scroll().scrollBy({ top: -this.scrollDistance(), behavior: 'smooth' })
     },
     scrollDown(event) {
       event.preventDefault()
-      window.scrollBy({ top: scrollDistance, behavior: 'smooth' })
+      this.scroll().scrollBy({ top: this.scrollDistance(), behavior: 'smooth' })
     },
     shortcut: function(event) {
       if (!this.image_shortcut) {

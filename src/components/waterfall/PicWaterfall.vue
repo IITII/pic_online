@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-height-width">
+  <q-page id="waterfall_page" class="full-height-width" style="height: 95vh; overflow-y: auto;">
 
     <vue-waterfall ref="waterfall"
                    :gutter="8" :lazyload="true" :delay="400"
@@ -294,7 +294,7 @@ export default {
     btn_click_goto_top() {
       this.$log.debug('waterfall', this.$refs.waterfall.$el)
       // debugger
-      document.querySelector('html').scrollTop = 0
+      document.querySelector("#waterfall_page").scrollTop = 0
     },
     btn_click_loadMore() {
       this.$store.dispatch(`${this.storeName}/auto_next`, true)
