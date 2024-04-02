@@ -176,14 +176,20 @@ export default {
     highlightNodeInView: function (nodeKey) {
       const scroll = document.querySelector("#drawer")
       const allNodes = Array.from(document.querySelectorAll('#drawer_tree .q-tree__node .row')).filter(_ => _.id)
-      let nodes = allNodes.map(_ => ({id: parseInt(_.id), top: _.offsetTop, height: _.offsetHeight, bottom: _.offsetBlockEnd}))
+      let nodes = allNodes.map(_ => ({id: parseInt(_.id), top: _.offsetTop, height: _.offsetHeight}))
       // 标题和输入框高度
       let height = 4 + 21 + 4 + 56 + 4
       for (const node of nodes) {
+        // 一个 .q-tree__node 是 32px, 一个 .q-tree__node .row 是 21px, 差值为 11px
+        // 而且这个并不是整数!!! 差不多得了
+        height += 11 + node.height
         // padding + 每个节点高度
-        height += node.top + node.height
+        // height += node.top + node.height
         if (node.id === nodeKey) {
+          // this.$log.debug(`find ${node.id} height: ${node.height} -> ${height}`)
           break
+        } else {
+          // this.$log.debug(`add ${node.id} height: ${node.height} -> ${height}`)
         }
       }
       this.$log.debug(`scroll drawer to ${height}`)
