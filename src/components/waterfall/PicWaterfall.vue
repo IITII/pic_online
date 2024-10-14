@@ -289,6 +289,8 @@ export default {
         }
       } else {
         await this.tryDelDirs(this.node_key, this.node_dir)
+        // 删除后自动跳转下一页
+        this.$bus.emit('btn_click_nextNode')
       }
     },
     btn_click_goto_top() {
