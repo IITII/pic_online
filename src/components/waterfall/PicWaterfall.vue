@@ -6,7 +6,7 @@
                    :list="water_fall.img_urls" :loadProps="loadProps"
                    :breakpoints="breakpoints" :crossOrigin="false"
                    :backgroundColor="backgroundColor">
-      <template #item="{ item, url }">
+      <template #default="{ item, url }">
         <div class="text-center" @click="card_click_event('imgBoxClickEvent', item)">
           <lazy-img class="img_box" :url="url" @error="imgErrorEvent"/>
           <span v-if="show_img_title">{{ item.info }}</span>
@@ -81,10 +81,10 @@ export default {
         img_urls: [],
       },
       breakpoints: {
-        1500: {rowPerView: 6},
-        1250: {rowPerView: 5},
-        1000: {rowPerView: 4,},
-        750: {rowPerView: 3,},
+        2000: {rowPerView: 6},
+        1500: {rowPerView: 5},
+        1200: {rowPerView: 4},
+        900: {rowPerView: 3},
         //当屏幕宽度小于等于500
         500: {rowPerView: 2,},
         300: {rowPerView: 1,},
