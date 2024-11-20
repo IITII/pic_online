@@ -14,6 +14,7 @@ const state = {
   title: persistent.imageGet('title') || 'Pic Online',
   // nodeKey 的值
   node_key: parseInt(persistent.imageGet('node_key')) || 1,
+  pre_node_key: parseInt(persistent.imageGet('pre_node_key')) || 1,
   node_dir: persistent.imageGet('node_dir'),
 
   // 瀑布流属性

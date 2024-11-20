@@ -83,6 +83,7 @@ export default {
   computed: {
     ...mapState({
       currentNodeKey: state => state[self.storeName].node_key,
+      preNodeKey: state => state[self.storeName].pre_node_key,
       node_dir: state => state[self.storeName].node_dir,
       drawer_open: state => state[self.storeName].drawer_open,
       drawer_width: state => state[self.storeName].drawer_width,
@@ -226,7 +227,15 @@ export default {
       this.update_selected(this.currentNodeKey - 1, false)
     },
     btn_click_nextNode: function () {
+      // this.$store.dispatch(`${this.storeName}/pre_node_key`, this.currentNodeKey)
       this.update_selected(this.currentNodeKey + 1, true)
+    },
+    btn_click_randomNode: function () {
+      // this.$store.dispatch(`${this.storeName}/pre_node_key`, this.currentNodeKey)
+      let total = this.tree.nodeKeyMap.size
+      let randomNode = Math.round(Math.random() * total)
+      this.$log.debug(`randomNode cur ${this.currentNodeKey} goto ${randomNode}, total ${total}`)
+      this.update_selected(randomNode, true)
     },
     btn_click_leftDrawer() {
       this.leftDrawerSync = !this.leftDrawerSync
@@ -244,12 +253,14 @@ export default {
   created() {
     this.$bus.on('btn_click_preNode', this.btn_click_preNode)
     this.$bus.on('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.on('btn_click_randomNode', this.btn_click_randomNode)
     this.$bus.on('btn_click_leftDrawer', this.btn_click_leftDrawer)
     this.$bus.on('btn_click_setting', this.btn_click_setting)
   },
   unmounted() {
     this.$bus.off('btn_click_preNode', this.btn_click_preNode)
     this.$bus.off('btn_click_nextNode', this.btn_click_nextNode)
+    this.$bus.off('btn_click_randomNode', this.btn_click_randomNode)
     this.$bus.off('btn_click_leftDrawer', this.btn_click_leftDrawer)
     this.$bus.off('btn_click_setting', this.btn_click_setting)
   },

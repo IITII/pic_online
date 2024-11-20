@@ -20,6 +20,10 @@ export const node_key = ({commit}, payload) => {
   persistent.videoSet('node_key', payload)
   commit('node_key', payload)
 }
+export const pre_node_key = ({commit}, payload) => {
+  persistent.videoSet('pre_node_key', payload)
+  commit('pre_node_key', payload)
+}
 export const show_img_title = ({commit}, payload) => {
   persistent.videoSet('show_img_title', payload)
   commit('show_img_title', payload)

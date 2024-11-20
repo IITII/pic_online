@@ -20,6 +20,10 @@ export const node_key = ({commit}, payload) => {
   persistent.imageSet('node_key', payload)
   commit('node_key', payload)
 }
+export const pre_node_key = ({commit}, payload) => {
+  persistent.imageSet('pre_node_key', payload)
+  commit('pre_node_key', payload)
+}
 export const show_img_title = ({commit}, payload) => {
   persistent.imageSet('show_img_title', payload)
   commit('show_img_title', payload)

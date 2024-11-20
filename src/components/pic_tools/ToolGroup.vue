@@ -12,15 +12,20 @@ import ToolButton from 'components/pic_tools/ToolButton'
 import {mapState} from 'vuex'
 
 const keymap = {
-  scrollUp: ['w','ArrowUp'],
-  scrollDown: ['s', 'ArrowDown'],
-  btn_click_preNode: ['a','ArrowLeft'],
-  // leftDrawer: ['a','ArrowLeft'],
-  loadMore: ['d'],
-  top: ['q'],
-  nextNode: ['e', '0','ArrowRight'],
-  reloadPage: ['r'],
+  // scrollUp: ['w','ArrowUp'],
+  // scrollDown: ['s', 'ArrowDown'],
+  // btn_click_preNode: ['a','ArrowLeft'],
+  // // leftDrawer: ['a','ArrowLeft'],
+  // loadMore: ['d'],
+  // top: ['q'],
+  // nextNode: ['e', '0','ArrowRight'],
+  // reloadPage: ['r'],
   btnClickDelDirs: ['Delete'],
+  scrollUp: ['ArrowUp'],
+  scrollDown: ['ArrowDown'],
+  btn_click_preNode: ['ArrowLeft'],
+  nextNode: ['ArrowRight'],
+  randomNode: ['ControlRight'],
 }
 
 export default {
@@ -110,6 +115,10 @@ export default {
       this.$log.debug('nextNode')
       this.$bus.emit('btn_click_nextNode')
     },
+    randomNode: function () {
+      this.$log.debug('randomNode')
+      this.$bus.emit('btn_click_randomNode')
+    },
     reloadPage: function () {
       this.$log.debug('reloadPage')
       location.reload()
@@ -154,16 +163,16 @@ export default {
         return
       }
       // this.$log.debug('enableShortcut', this.shortcutEle)
-      const keyName = event.key
-      this.$log.debug(`keyName: ${keyName}`)
+      const keyCode = event.code
+      this.$log.debug(`keyCode: ${keyCode}`, event)
       const viewer = document.getElementsByClassName('viewer-open')
       if (viewer.length > 0) {
         this.$log.debug('viewer-open, ignore shortcut')
         return
       }
       for (const k in keymap) {
-        if (keymap[k].indexOf(keyName) >= 0) {
-          this.$log.debug(`find ${keyName} in keymap[${k}] -> ${keymap[k]}, call...`)
+        if (keymap[k].indexOf(keyCode) >= 0) {
+          this.$log.debug(`find ${keyCode} in keymap[${k}] -> ${keymap[k]}, call...`)
           this[k](event)
           break
         }
