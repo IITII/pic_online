@@ -58,6 +58,7 @@ export default {
   loadManual: 'Load Manually',
   next_one: 'Next',
   btn_click_preNode: 'Previous',
+  btn_click_randomNode: 'Random',
   no_more_pic: 'Nothing...',
   node_key_value: 'NodeKey Value',
   delete_forever: 'Delete Forever',

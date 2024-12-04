@@ -74,6 +74,12 @@ export default {
           tooltipMessage: this.$t('btn_click_preNode'),
         },
         {
+          btnOnClick: this.randomNode,
+          btnIcon: 'shuffle',
+          btnColor: 'yellow',
+          tooltipMessage: this.$t('btn_click_randomNode'),
+        },
+        {
           btnOnClick: this.nextNode,
           btnIcon: 'redo',
           btnColor: 'cyan-5',
